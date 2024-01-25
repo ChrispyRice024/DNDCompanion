@@ -1,6 +1,7 @@
 import react from 'react'
 import {useState} from 'react'
 import Stats from '../components/Stats'
+import Combat from '../components/Combat'
 export default function CharCreator () {
 
     const [stats, setStats] = useState({})
@@ -11,6 +12,11 @@ export default function CharCreator () {
     const getMods = (data) => {
         setMods(data)
     }
+    const [pro, setPro] = useState({})
+    const getPro = (data) => {
+        setPro(data)
+    }
+    console.log('proficiency parent', pro)
     console.log('mod parent', mods)
     console.log('parent', stats)
 
@@ -23,7 +29,7 @@ export default function CharCreator () {
         <div>
             <form>
                 <div>
-                    <Stats functions={{sendStats:getStats, sendMods:getMods}}/>
+                    <Stats functions={{sendStats:getStats, sendMods:getMods, sendPro: getPro}}/>
                 </div>
 
                 <div>
