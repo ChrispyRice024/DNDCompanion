@@ -4,27 +4,36 @@ import Stats from '../components/Stats'
 import Combat from '../components/Combat'
 export default function CharCreator () {
 
+
+    //STATS
     const [stats, setStats] = useState({})
     const getStats = (data) => {
         setStats(data)
     }
+    //STAT MODS
     const [mods, setMods] = useState({})
     const getMods = (data) => {
         setMods(data)
     }
+    //PROFICIENCIES
     const [pro, setPro] = useState({})
     const getPro = (data) => {
         setPro(data)
     }
-    console.log('proficiency parent', pro)
-    console.log('mod parent', mods)
-    console.log('parent', stats)
-
+    //COMBAT
     const [combat, setCombat] = useState({})
     const getCombat = (data) => {
         setCombat(data)
     }
+    const character = {
+        stats: stats,
+        mods:mods,
+        proficiencies:pro,
+        combat: combat,
+    }
 
+    console.log('parent', combat)
+    console.log('character parent', character)
     return(
         <div>
             <form>
@@ -33,7 +42,7 @@ export default function CharCreator () {
                 </div>
 
                 <div>
-                    {/* <Combat sendCombat={getCombat}/> */}
+                    <Combat sendCombat={getCombat}/>
                 </div>
             </form>
         </div>

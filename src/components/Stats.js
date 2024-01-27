@@ -16,7 +16,7 @@ export default function Stats({functions}) {
     })
     const [mods, setMods] = useState({
         strMod:0,
-        deMod:0,
+        dexMod:0,
         conMod:0,
         intMod:0,
         wisMod:0,
