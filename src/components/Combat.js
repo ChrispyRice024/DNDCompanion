@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react'
 export default function Combat ({sendCombat}) {
 
     const [combat, setCombat] = useState({
+        hp:'',
         ac:'',
         proBonus:'',
         initBonus:'',
@@ -11,12 +12,11 @@ export default function Combat ({sendCombat}) {
         atkPerRound:'',
         resistances:['']
     })
+
     useEffect(() => {
         sendCombat(combat)
     })
 
-    const newResist = document.createElement('input')
-    var resistCount = 1
     const handleAdd = (e) => {
         e.preventDefault()
 
@@ -46,6 +46,10 @@ export default function Combat ({sendCombat}) {
     return(
         <div>
             <p>
+                <label htmlFor='hp'>HP</label>
+                <input name='hp' type='number' onChange={handleChange} placeholder='Max Hit Points'/>
+            </p>
+            <p>
                 <label htmlFor='ac'>Armor Class</label>
                 <input name='ac' type="number" onChange={handleChange} defaultValue='0'/>
             </p>
@@ -73,7 +77,6 @@ export default function Combat ({sendCombat}) {
                         <input
                             key={i}
                             type='text'
-                            // value={resist}
                             onChange={(e) => handleResistChange(i, e.target.value)}
                             placeholder='Resistance'
                             />
