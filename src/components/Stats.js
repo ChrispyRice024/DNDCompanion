@@ -22,7 +22,7 @@ export default function Stats({functions}) {
         performance:{value:0, stat:'cha'},
         persuassion:{value:0, stat:'cha'},
         religion:{value:0, stat:'int'},
-        slightOfHand:{value:0, stat:'dex'},
+        sleightOfHand:{value:0, stat:'dex'},
         stealth:{value:0, stat:'dex'},
         survival:{value:0, stat:'wis'}
     })
@@ -56,6 +56,7 @@ export default function Stats({functions}) {
         sendStats(stats)
         sendMods(mods)
         sendPro(pro)
+        sendSkills(skills)
     })
     const findMod = (stat) => {
         return Math.ceil((stat - 10) / 2);
@@ -70,42 +71,48 @@ export default function Stats({functions}) {
 
         setMods({...mods, [`${e.target.name}Mod`]:findMod(statValue) })
 
-        setSkills((prevSkills) => {
-            const updatedSkills = { ...prevSkills }
+        setSkills(prevSkills => {
+            const updatedSkills = {...prevSkills}
+            console.log(e.target.name)
             for (const skillName in updatedSkills){
                 const skill = updatedSkills[skillName]
-                const statMod = mods[`${skill.stat}Mod`]
+                // console.log('checkedPro', skill)
 
-                const isProficient = pro[`${skill.stat}Pro`]
-                const proficiencyBonus = isProficient === true ? proBonus : 0
-                // console.log('isProficient', proficiencyBonus)
-                updatedSkills[skillName] = {
-                    ...skill,
-                    value: statMod + 3
+                if(skill.stat === e.target.name){
+                    const statMod = mods[`${e.target.name}Mod`]
+                    const isPro = pro[`${e.target.name}Pro`]
+                    // console.log(e.target.checked)
+                    const proficiencyBonus = isPro ? proBonus : 0
+                    console.log(statMod)
+
+                    updatedSkills[skillName] = {
+                        ...skill,
+                        value: statMod + proficiencyBonus
+                    }
                 }
             }
-            // console.log(updatedSkills)
+            console.log('updatedSkills', updatedSkills)
             return updatedSkills
         })
 
+
+    }
+
+    const handleInput = (e) => {
+        console.log('value', e.target.value)
+        console.log('checked', e.target.checked)
+        console.log('pro', pro)
+        console.log('skills', skills)
+        console.log('mods', mods)
     }
     const handleProChange = (e) => {
-        e.preventDefault()
-        
-        const isChecked = e.target.checked
 
-        if(isChecked === false){
-
-        }
         setPro((prevPro) => {
-            return {...prevPro, [e.target.name]: isChecked}
+            return {...prevPro, [e.target.name]: e.target.checked}
         })
-        // if(e.target.value === 'on'){
-        //     setPro({...pro, [e.target.name]: true})
-        // }else{
-        //     setPro({...pro, [e.target.name]: false})
-        // }
-        console.log(pro)
+        console.log('pro', pro)
+
+        console.log(e.target.checked)
     }
 
 
@@ -116,17 +123,17 @@ export default function Stats({functions}) {
 
             <p className="str">
                 <label className="str" htmlFor="str">STR</label>
-                <input name="str" id="str" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
+                <input name="str" id="str" type="number" className="stat" defaultValue="10" onInput={handleChange}/>
                 <input  id="strMod"  readOnly value={findMod(stats.str)} className="mod str"/>
-                <input type="checkbox" onChange={handleProChange} checked={pro.strPro} name="strPro"/>
+                <input type="checkbox" onInput={handleProChange}  checked={pro.str} name="strPro"/>
                 <label htmlFor="strPro">Proficient</label>
             </p>
 
             <p className="dex">
                 <label className="dex" htmlFor="dex">DEX</label>
-                <input name="dex" id="dex" type="number" defaultValue="10" className="stat"  onChange={handleChange} />
+                <input name="dex" id="dex" type="number" defaultValue="10" className="stat"  onInput={handleChange} />
                 <input  readOnly id='dexMod' value={findMod(stats.dex)} className="mod dex"/>
-                <input type="checkbox" onChange={handleProChange} checked={pro.dexPro} name="dexPro"/>
+                <input type="checkbox" onChange={handleProChange} onInput={handleInput} checked={pro.dex} name="dexPro"/>
                 <label htmlFor="dexPro">Proficient</label>
             </p>
 
@@ -134,7 +141,7 @@ export default function Stats({functions}) {
                 <label className="con" htmlFor="con">CON</label>
                 <input name="con" id="con" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
                 <input id="conMod"  readOnly value={findMod(stats.con)} className="mod con"/>
-                <input type="checkbox" onChange={handleProChange} checked={pro.conPro} name="conPro"/>
+                <input type="checkbox" onChange={handleProChange} checked={pro.con} name="conPro"/>
                 <label htmlFor="conPro">Proficient</label>
             </p>
 
@@ -142,7 +149,7 @@ export default function Stats({functions}) {
                 <label className="int" htmlFor="int">INT</label>
                 <input name="int" id="int" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
                 <input id="intMod" readOnly className="mod int" value={findMod(stats.int)} />
-                <input type="checkbox" onChange={handleProChange} checked={pro.intPro} name="intPro"/>
+                <input type="checkbox" onChange={handleProChange} checked={pro.int} name="intPro"/>
                 <label htmlFor="intPro">Proficient</label>
             </p>
 
@@ -150,7 +157,7 @@ export default function Stats({functions}) {
                 <label className="wis" htmlFor="wis">WIS</label>
                 <input type="number" id="wis" className="stat" name="wis" defaultValue="10" onChange={handleChange} />
                 <input  readOnly id="wisMod" value={findMod(stats.wis)} className="mod wis"/>
-                <input type="checkbox" onChange={handleProChange} checked={pro.wisPro} name="wisPro"/>
+                <input type="checkbox" onChange={handleProChange} checked={pro.wis} name="wisPro"/>
                 <label htmlFor="wisPro">Proficient</label>
             </p>
 
@@ -158,7 +165,7 @@ export default function Stats({functions}) {
                 <label className="cha" htmlFor="cha">CHA</label>
                 <input name="cha" id="cha" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
                 <input  id="chaMod" readOnly value={findMod(stats.cha)} className="mod cha"/>
-                <input type="checkbox" onChange={handleProChange} checked={pro.chaPro} name="chaPro"/>
+                <input type="checkbox" onChange={handleProChange} checked={pro.cha} name="chaPro"/>
                 <label htmlFor="chaPro">Proficient</label>
             </p>
         </div>

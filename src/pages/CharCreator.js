@@ -1,11 +1,90 @@
 import react from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Stats from '../components/Stats'
 import Combat from '../components/Combat'
 import Skills from '../components/Skills'
 import SavingThrows from '../components/SavingThrows'
 export default function CharCreator () {
 
+    // const seedData = {
+    //     'hit_die': 8,
+    //     proficencyChoices: [
+    //         {
+    //             "desc": "Choose two from Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, and Survival",
+    //             "choose": 2,
+    //             "type": "proficiencies",
+    //             "from": {
+    //                 "option_set_type": "options_array",
+    //                 "options": [
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-arcana",
+    //                             "name": "Skill: Arcana",
+    //                             "url": "/api/proficiencies/skill-arcana"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-animal-handling",
+    //                             "name": "Skill: Animal Handling",
+    //                             "url": "/api/proficiencies/skill-animal-handling"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-insight",
+    //                             "name": "Skill: Insight",
+    //                             "url": "/api/proficiencies/skill-insight"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-medicine",
+    //                             "name": "Skill: Medicine",
+    //                             "url": "/api/proficiencies/skill-medicine"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-nature",
+    //                             "name": "Skill: Nature",
+    //                             "url": "/api/proficiencies/skill-nature"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-perception",
+    //                             "name": "Skill: Perception",
+    //                             "url": "/api/proficiencies/skill-perception"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-religion",
+    //                             "name": "Skill: Religion",
+    //                             "url": "/api/proficiencies/skill-religion"
+    //                         }
+    //                     },
+    //                     {
+    //                         "option_type": "reference",
+    //                         "item": {
+    //                             "index": "skill-survival",
+    //                             "name": "Skill: Survival",
+    //                             "url": "/api/proficiencies/skill-survival"
+    //                         }
+    //                     }
+    //                 ]
+    //             }
+    //         }
+    //     ]
+    // }
     const proBonus = 3
 
     //STATS
@@ -49,13 +128,14 @@ export default function CharCreator () {
         performance:{value:0, stat:'cha'},
         persuassion:{value:0, stat:'cha'},
         religion:{value:0, stat:'int'},
-        slightOfHand:{value:0, stat:'dex'},
+        sleightOfHand:{value:0, stat:'dex'},
         stealth:{value:0, stat:'dex'},
-        survival:{value:0, stat:'wis'}
+        survival:{value:7, stat:'wis'}
     })
     const getSkills = (data) => {
         setSkills(data)
     }
+    console.log(skills)
     // const updateSkillValues = () => {
     //     setSkills((prevSkills) => {
     //         const updatedSkills = { ...prevSkills }
@@ -89,13 +169,16 @@ export default function CharCreator () {
         combat: combat,
     }
 
+    // useEffect(() => {
+    //     console.log('skills changed', skills)
+    // }, [skills])
 
 
     return(
         <div>
             <form>
                 <div>
-                    <Stats functions={{sendStats:getStats, sendMods:getMods, sendPro: getPro, sendSkills:getSkills}}/>
+                    <Stats functions={{sendStats:getStats, sendMods:getMods, sendPro: getPro, sendSkills:getSkills, proBonus:proBonus}}/>
                 </div>
 
                 <div>
@@ -103,10 +186,10 @@ export default function CharCreator () {
                 </div>
 
                 <div>
-                    <Skills functions={{sendSkills: getSkills, mods: mods, pro:pro, proBonus: proBonus, skills: skills, setSkills:setSkills}}/>
+                    <Skills functions={{pro:pro, proBonus: proBonus, skills: skills}}/>
                 </div>
                 <div>
-                    <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/>
+                    {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
                 </div>
             </form>
         </div>

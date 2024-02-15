@@ -45,6 +45,7 @@ export default function Combat ({sendCombat}) {
     
     return(
         <div>
+            <h2>Combat</h2>
             <p>
                 <label htmlFor='hp'>HP</label>
                 <input name='hp' type='number' onChange={handleChange} placeholder='Max Hit Points'/>
