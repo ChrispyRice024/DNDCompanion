@@ -3,39 +3,15 @@ import {useState, useEffect} from 'react'
 
 export default function Skills ({functions}) {
 
-    const {pro, proBonus, skills} = functions
-
-    // const strSkills = Object.keys(skills).filter(
-    //   (skill) => skills[skill].stat === "str"
-    // ).map((skill) => {
-    //     if(pro.strPro === true){
-    //         return skills[skill].value + proBonus
-    //     }
-    // })
-    // const dexSkills = Object.keys(skills).filter(
-    //   (skill) => skills[skill].stat === "dex"
-    // ).map((skill) => {
-    //     if(pro.dexPro === true){
-    //         return skills[skill].value + proBonus
-    //     }
-    // })
-    // const intSkills = Object.keys(skills).filter(
-    //   (skill) => skills[skill].stat === "int"
-    // );
-    // const wisSkills = Object.keys(skills).filter(
-    //   (skill) => skills[skill].stat === "wis"
-    // );
-    // const chaSkills = Object.keys(skills).filter(
-    //   (skill) => skills[skill].stat === "cha"
-    // );
-
+    const {character} = functions
+    const skills = character.skills
 
     return(
         <div>
             <h2>Skills</h2>
              <p>
                 <label htmlFor='acrobatics'>Acrobatics</label>
-                <input name='acrobatics' value={skills.acrobatics.value} readOnly data-stat='dex'/>
+                <input name='acrobatics' value={skills.acrobatics.value} data-stat='dex'/>
             </p>
 
             <p>

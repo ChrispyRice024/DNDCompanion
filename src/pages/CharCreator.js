@@ -87,106 +87,70 @@ export default function CharCreator () {
     // }
     const proBonus = 3
 
-    //STATS
-    const [stats, setStats] = useState({})
-    const getStats = (data) => {
-        setStats(data)
+    const [character, setCharacter] = useState({
+        stats: {
+            str:10,
+            dex:10,
+            con:10,
+            int:10,
+            wis:10,
+            cha:10
+        },
+        mods:{
+            strMod:0,
+            dexMod:0,
+            conMod:0,
+            intMod:0,
+            wisMod:0,
+            chaMod:0
+        },
+        proficiencies:{
+            strPro:false,
+            dexPro:false,
+            conPro:false,
+            intPro:false,
+            wisPro:false,
+            chaPro:false
+        },
+        combat: {},
+        skills:{
+            acrobatics:{value:0, stat:'dex'},
+            animalHandling:{value:0, stat:'wis'},
+            arcana:{value:0, stat:'int'},
+            athletics:{value:0, stat:'str'},
+            deception:{value:0, stat:'cha'},
+            history:{value:0, stat:'int'},
+            insight:{value:0, stat:'wis'},
+            intimidation:{value:0, stat:'cha'},
+            investigation:{value:0, stat:'int'},
+            medicine:{value:0, stat:'wis'},
+            nature:{value:0, stat:'int'},
+            perception:{value:0, stat:'wis'},
+            performance:{value:0, stat:'cha'},
+            persuassion:{value:0, stat:'cha'},
+            religion:{value:0, stat:'int'},
+            sleightOfHand:{value:0, stat:'dex'},
+            stealth:{value:0, stat:'dex'},
+            survival:{value:0, stat:'wis'}
+            }
+        })
+    const getCharacter = (data) => {
+        setCharacter(data)
     }
-
-    //STAT MODS
-    const [mods, setMods] = useState({})
-    const getMods = (data) => {
-        setMods(data)
-    }
-
-    //PROFICIENCIES
-    const [pro, setPro] = useState({})
-    const getPro = (data) => {
-        setPro(data)
-    }
-
-    //COMBAT
-    const [combat, setCombat] = useState({})
-    const getCombat = (data) => {
-        setCombat(data)
-    }
-
-    //Skills
-    const [skills, setSkills] =useState({
-        acrobatics:{value:0, stat:'dex'},
-        animalHandling:{value:0, stat:'wis'},
-        arcana:{value:0, stat:'int'},
-        athletics:{value:0, stat:'str'},
-        deception:{value:0, stat:'cha'},
-        history:{value:0, stat:'int'},
-        insight:{value:0, stat:'wis'},
-        intimidation:{value:0, stat:'cha'},
-        investigation:{value:0, stat:'int'},
-        medicine:{value:0, stat:'wis'},
-        nature:{value:0, stat:'int'},
-        perception:{value:0, stat:'wis'},
-        performance:{value:0, stat:'cha'},
-        persuassion:{value:0, stat:'cha'},
-        religion:{value:0, stat:'int'},
-        sleightOfHand:{value:0, stat:'dex'},
-        stealth:{value:0, stat:'dex'},
-        survival:{value:7, stat:'wis'}
-    })
-    const getSkills = (data) => {
-        setSkills(data)
-    }
-    console.log(skills)
-    // const updateSkillValues = () => {
-    //     setSkills((prevSkills) => {
-    //         const updatedSkills = { ...prevSkills }
-    //         for (const skillName in updatedSkills){
-    //             const skill = updatedSkills[skillName]
-    //             const statMod = mods[`${skill.stat}Mod`]
-
-    //             const isProficient = pro[`${skill.stat}Pro`]
-    //             const proficiencyBonus = isProficient ? proBonus : 0
-
-    //             updatedSkills[skillName] = {
-    //                 ...skill,
-    //                 value: statMod + proficiencyBonus
-    //             }
-    //         }
-    //         console.log(updatedSkills)
-    //         // return updatedSkills
-    //     })
-    // }
-// updateSkillValues()
-    //Saving Throws
-    const [savingThrow, setSavingThrow] = useState({})
-    const getSavingThrow = (data) => {
-        setSavingThrow(data)
-    }
-
-    const character = {
-        stats: stats,
-        mods:mods,
-        proficiencies:pro,
-        combat: combat,
-    }
-
-    // useEffect(() => {
-    //     console.log('skills changed', skills)
-    // }, [skills])
-
 
     return(
         <div>
             <form>
                 <div>
-                    <Stats functions={{sendStats:getStats, sendMods:getMods, sendPro: getPro, sendSkills:getSkills, proBonus:proBonus}}/>
+                    <Stats functions={{setCharacter: setCharacter, sendCharacter: getCharacter, proBonus: proBonus, character:character}} />
                 </div>
 
                 <div>
-                    <Combat sendCombat={getCombat}/>
+                    {/* <Combat sendCombat={getCombat}/> */}
                 </div>
 
                 <div>
-                    <Skills functions={{pro:pro, proBonus: proBonus, skills: skills}}/>
+                    <Skills functions={{character:character}}/>
                 </div>
                 <div>
                     {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
