@@ -112,7 +112,15 @@ export default function CharCreator () {
             wisPro:false,
             chaPro:false
         },
-        combat: {},
+        combat: {
+            hp:'',
+            ac:'',
+            proBonus:'',
+            initBonus:'',
+            speed:'',
+            atkPerRound:'',
+            resistances:['']
+        },
         skills:{
             acrobatics:{value:0, stat:'dex'},
             animalHandling:{value:0, stat:'wis'},
@@ -146,7 +154,7 @@ export default function CharCreator () {
                 </div>
 
                 <div>
-                    {/* <Combat sendCombat={getCombat}/> */}
+                    <Combat functions={{setCharacter: setCharacter, character:character, proBonus: proBonus, sendCharacter: getCharacter}} />
                 </div>
 
                 <div>

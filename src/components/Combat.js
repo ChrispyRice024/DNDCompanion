@@ -1,48 +1,83 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
 
-export default function Combat ({sendCombat}) {
+export default function Combat ({functions}) {
 
-    const [combat, setCombat] = useState({
-        hp:'',
-        ac:'',
-        proBonus:'',
-        initBonus:'',
-        speed:'',
-        atkPerRound:'',
-        resistances:['']
-    })
+const {setCharacter, proBonus, character, sendCharacter} = functions
+    // const [combat, setCombat] = useState({
+    //     hp:'',
+    //     ac:'',
+    //     proBonus:'',
+    //     initBonus:'',
+    //     speed:'',
+    //     atkPerRound:'',
+    //     resistances:['']
+    // })
 
-    useEffect(() => {
-        sendCombat(combat)
-    })
+    // useEffect(() => {
+    //     sendCombat(combat)
+    // })
+
+    // const handleAdd = (e) => {
+    //     e.preventDefault()
+
+    //     setCharacter((prevCharacter) => ({
+    //         ...prevCharacter,
+    //         resistances: [...prevCharacter.combat.resistances, '']
+    //     }))
+    // }
+
+    // const handleResistChange = (i, value) => {
+
+    //     setCharacter((prevCharacter) => {
+    //         const updatedResistances = [...prevCharacter.combat.resistances]
+    //         updatedResistances[i] = value
+    //         return {...prevCharacter.combat, resistances: updatedResistances}
+    //     })
+
+    //     return false
+    // }
+
+    // const handleChange = (e) => {
+    //     e.preventDefault()
+
+    //     setCharacter({...character.combat, [e.target.name]: e.target.value})
+    // }
+
+    const handleResistChange = (i, value) => {
+
+        setCharacter((prevCharacter => {
+        
+            const updatedResistances = [...prevCharacter.combat.resistances]
+            updatedResistances[i] = value
+            return{...prevCharacter, combat:{...prevCharacter.combat, resistances:updatedResistances}}
+        }))
+    }
 
     const handleAdd = (e) => {
         e.preventDefault()
 
-        setCombat((prevCombat) => ({
-            ...prevCombat,
-            resistances: [...prevCombat.resistances, '']
+        setCharacter((prevCharacter) => ({
+            ...prevCharacter,
+            combat:{
+                ...prevCharacter.combat,
+                resistances: [...prevCharacter.combat.resistances, '']
+            }
+        }))
+    }
+    
+    const handleChange = (e) => {
+        const statValue = parseInt(e.target.value, 10)
+
+        setCharacter(prevCharacter => ({
+            ...prevCharacter,
+            combat: {
+                ...prevCharacter.combat,
+                [e.target.name]: statValue
+            }
         }))
     }
 
-    const handleResistChange = (i, value) => {
-
-        setCombat((prevCombat) => {
-            const updatedResistances = [...prevCombat.resistances]
-            updatedResistances[i] = value
-            return {...prevCombat, resistances: updatedResistances}
-        })
-
-        return false
-    }
-
-    const handleChange = (e) => {
-        e.preventDefault()
-
-        setCombat({...combat, [e.target.name]: e.target.value})
-    }
-    
     return(
         <div>
             <h2>Combat</h2>
@@ -74,7 +109,7 @@ export default function Combat ({sendCombat}) {
                 <label htmlFor='resist'>Resistances</label>
                 {/* <input name='resist' type='text' onChange={handleChange} placeholder='Resistances'/> */}
                 <span id='newResistList'>
-                    {combat.resistances.map((resist, i) => (
+                    {character.combat.resistances.map((resist, i) => (
                         <input
                             key={i}
                             type='text'

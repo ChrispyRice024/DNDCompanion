@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 import {debounce} from 'lodash' 
 
 export default function Stats({functions}) {
-    const {sendCharacter,setCharacter, proBonus, character} = functions
+    const {sendCharacter, setCharacter, proBonus, character} = functions
 
     const findMod = (stat) => {
         return Math.ceil((stat - 10) / 2);
@@ -36,7 +36,7 @@ export default function Stats({functions}) {
                 ...prevCharacter.proficiencies,
                 [e.target.name]: e.target.checked
             }
-        }))
+        })) 
         console.log(character)
     }
     console.log(character?.mods)
