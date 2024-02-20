@@ -4,6 +4,8 @@ import Stats from '../components/Stats'
 import Combat from '../components/Combat'
 import Skills from '../components/Skills'
 import SavingThrows from '../components/SavingThrows'
+import Race from '../components/Race'
+
 export default function CharCreator () {
 
     // const seedData = {
@@ -85,6 +87,7 @@ export default function CharCreator () {
     //         }
     //     ]
     // }
+
     const proBonus = 3
 
     const [character, setCharacter] = useState({
@@ -113,6 +116,8 @@ export default function CharCreator () {
             chaPro:false
         },
         combat: {
+            size:'',
+            hitDie:'',
             hp:'',
             ac:'',
             proBonus:'',
@@ -140,7 +145,14 @@ export default function CharCreator () {
             sleightOfHand:{value:0, stat:'dex'},
             stealth:{value:0, stat:'dex'},
             survival:{value:0, stat:'wis'}
-            }
+            },
+        misc:{
+            primaryClass:'',
+            secondaryClass:'',
+            primaryRace:'',
+            secondaryRace:'',
+            characterName:''
+        }
         })
     const getCharacter = (data) => {
         setCharacter(data)
@@ -149,6 +161,10 @@ export default function CharCreator () {
     return(
         <div>
             <form>
+                <div>
+                    <Race functions={{setCharacter: setCharacter, character:character, proBonus}} />
+                </div>
+
                 <div>
                     <Stats functions={{setCharacter: setCharacter, sendCharacter: getCharacter, proBonus: proBonus, character:character}} />
                 </div>

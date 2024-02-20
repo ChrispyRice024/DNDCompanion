@@ -11,7 +11,7 @@ export default function Skills ({functions}) {
             <h2>Skills</h2>
              <p>
                 <label htmlFor='acrobatics'>Acrobatics</label>
-                <input name='acrobatics' value={skills.acrobatics.value} data-stat='dex'/>
+                <input name='acrobatics' value={skills.acrobatics.value} readOnly data-stat='dex'/>
             </p>
 
             <p>
