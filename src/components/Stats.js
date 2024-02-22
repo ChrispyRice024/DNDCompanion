@@ -39,7 +39,7 @@ export default function Stats({functions}) {
         })) 
         console.log(character)
     }
-    console.log(character?.mods)
+
 
     useEffect(() => {
             const updatedSkills = {...character.skills}

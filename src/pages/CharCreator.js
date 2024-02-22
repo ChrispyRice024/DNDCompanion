@@ -5,88 +5,9 @@ import Combat from '../components/Combat'
 import Skills from '../components/Skills'
 import SavingThrows from '../components/SavingThrows'
 import Race from '../components/Race'
+import RaceInfo from '../components/RaceInfo'
 
 export default function CharCreator () {
-
-    // const seedData = {
-    //     'hit_die': 8,
-    //     proficencyChoices: [
-    //         {
-    //             "desc": "Choose two from Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, and Survival",
-    //             "choose": 2,
-    //             "type": "proficiencies",
-    //             "from": {
-    //                 "option_set_type": "options_array",
-    //                 "options": [
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-arcana",
-    //                             "name": "Skill: Arcana",
-    //                             "url": "/api/proficiencies/skill-arcana"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-animal-handling",
-    //                             "name": "Skill: Animal Handling",
-    //                             "url": "/api/proficiencies/skill-animal-handling"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-insight",
-    //                             "name": "Skill: Insight",
-    //                             "url": "/api/proficiencies/skill-insight"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-medicine",
-    //                             "name": "Skill: Medicine",
-    //                             "url": "/api/proficiencies/skill-medicine"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-nature",
-    //                             "name": "Skill: Nature",
-    //                             "url": "/api/proficiencies/skill-nature"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-perception",
-    //                             "name": "Skill: Perception",
-    //                             "url": "/api/proficiencies/skill-perception"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-religion",
-    //                             "name": "Skill: Religion",
-    //                             "url": "/api/proficiencies/skill-religion"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-survival",
-    //                             "name": "Skill: Survival",
-    //                             "url": "/api/proficiencies/skill-survival"
-    //                         }
-    //                     }
-    //                 ]
-    //             }
-    //         }
-    //     ]
-    // }
 
     const proBonus = 3
 
@@ -147,22 +68,26 @@ export default function CharCreator () {
             survival:{value:0, stat:'wis'}
             },
         misc:{
-            primaryClass:'',
-            secondaryClass:'',
-            primaryRace:'',
-            secondaryRace:'',
-            characterName:''
+            primaryClass:{},
+            secondaryClass:{},
+            primaryRace:{},
+            secondaryRace:{},
+            characterName:{}
         }
         })
     const getCharacter = (data) => {
         setCharacter(data)
     }
-
+console.log(character)
     return(
         <div>
             <form>
                 <div>
                     <Race functions={{setCharacter: setCharacter, character:character, proBonus}} />
+                </div>
+                
+                <div>
+                    <RaceInfo functions={{setCharacter: setCharacter, character:character}} />
                 </div>
 
                 <div>
