@@ -144,6 +144,7 @@ const highestAbilityBonus = (character) => {
 
 useEffect(() => {
    highestAbilityBonus(character)
+   console.log('character', character)
 }, [character?.misc?.primaryRace, character?.misc?.secondaryRace])
 
 console.log(character)
