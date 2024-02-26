@@ -103,6 +103,8 @@ export default function Race({functions}) {
             input = ''
         }
 
+        // decidceBonus(e)
+
         console.log(primaryRaceData)
     }
     

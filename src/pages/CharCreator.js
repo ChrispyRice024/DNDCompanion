@@ -9,7 +9,12 @@ import RaceInfo from '../components/RaceInfo'
 
 export default function CharCreator () {
 
-    const proBonus = 3
+    const [proBonus, setProBonus] = useState('')
+
+    // const decideBonus = () => {
+    //     const primaryBonus = character?.misc?.primaryRace?.
+    // }
+
 
     const [character, setCharacter] = useState({
         stats: {
@@ -72,12 +77,75 @@ export default function CharCreator () {
             secondaryClass:{},
             primaryRace:{},
             secondaryRace:{},
-            characterName:{}
+            characterName:{},
+            racialAbilityBonus:{}
         }
         })
     const getCharacter = (data) => {
         setCharacter(data)
     }
+    // const abilityBonus = () => {
+        // const primaryRace = character?.misc?.primaryRace?.ability_bonuses
+        //for the bonus appllied to the ability. replace primaryRace with secondaryRace to get the secondaryRace 
+        // const secondaryRace = character?.misc?.primaryRace?.ability_bonuses[i].bonus
+
+        // for(let i= 0; 1 < primaryRace.length; i++){
+        //     for(let i=0; i< secondaryRace.length; i++){
+        //         if(primaryRace[i].index === secondaryRace[i].index){
+        //             math.max
+        //         }
+        //     }
+        // }
+        // console.log(Math.max(...primaryRace, ...secondaryRace))
+// console.log(primaryRace)
+
+// }
+
+
+const highestAbilityBonus = (character) => {
+    const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+    const highestBonuses = {}
+    
+    const primaryBonus = character?.misc?.primaryRace?.ability_bonuses
+    const secondaryBonus = character?.misc?.secondaryRace?.ability_bonuses
+
+    abilities.forEach(ability => {
+        let highestBonus = 0
+
+        if(primaryBonus){
+            primaryBonus.forEach(bonus => {
+                if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+                    highestBonus = bonus.bonus
+                }
+                console.log('bonus', highestBonus)
+            })
+        }
+
+        if(secondaryBonus) {
+            secondaryBonus.forEach(bonus => {
+                if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+                    highestBonus = bonus.bonus
+                }
+            })
+        }
+    highestBonuses[ability] = highestBonus
+    console.log('highestBonuses', highestBonuses)
+    console.log(primaryBonus?.[0]?.bonus)
+    })
+    setCharacter(prevCharacter => ({
+        ...prevCharacter,
+        misc:{
+            ...prevCharacter.misc,
+            racialAbilityBonus: highestBonuses
+        }
+    }))
+
+}
+
+useEffect(() => {
+   highestAbilityBonus(character)
+}, [character?.misc?.primaryRace, character?.misc?.secondaryRace])
+
 console.log(character)
     return(
         <div>

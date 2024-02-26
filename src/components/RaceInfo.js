@@ -12,6 +12,10 @@ export default function RaceInfo({functions}) {
 
     const primaryStyle = primaryRaceEmpty ? 'none' : ''
 
+    useEffect(() => {
+
+    }, [character])
+
     const renderRaceInfo = (race) => {
         return Object.entries(race).map(([key, val]) => {
             if(typeof val === 'object'){

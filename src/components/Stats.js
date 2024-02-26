@@ -23,11 +23,27 @@ export default function Stats({functions}) {
                 ...prevCharacter.mods,
                 [`${e.target.name}Mod`]: modValue
             },
-        }));
-
+        }))
 
         console.log(character)
     };
+    
+    
+    const decideBonus = (e) => {
+        const proChoicePrimary = character?.misc?.primaryRace?.ability_bonuses
+        console.log('proChoicePrimary', proChoicePrimary)
+        
+        for(let i=0; i < proChoicePrimary.length; i++){
+            
+            const primaryChoice = proChoicePrimary[i].ability_score.index
+            console.log('primaryChoice', primaryChoice)
+
+            if(e.target.name === primaryChoice){
+                return 'hidden'
+            }
+            
+        }
+    }
 
     const handleProChange = (e) => {
         setCharacter(prevCharacter => ({
@@ -70,8 +86,8 @@ export default function Stats({functions}) {
                 <label className="str" htmlFor="str">STR</label>
                 <input name="str" id="str" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
                 <input  id="strMod"  readOnly value={character.mods.strMod} className="mod str"/>
-                <input type="checkbox" onInput={handleProChange}  name="strPro"/>
-                <label htmlFor="strPro">Proficient</label>
+                {/* <input type="checkbox" onInput={decideBonus}  name="strPro"/> */}
+                {/* <label style={{decidePro}} htmlFor="strPro">Proficient</label> */}
             </p>
 
             <p className="dex">
