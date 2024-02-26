@@ -4,88 +4,17 @@ import Stats from '../components/Stats'
 import Combat from '../components/Combat'
 import Skills from '../components/Skills'
 import SavingThrows from '../components/SavingThrows'
+import Race from '../components/Race'
+import RaceInfo from '../components/RaceInfo'
+
 export default function CharCreator () {
 
-    // const seedData = {
-    //     'hit_die': 8,
-    //     proficencyChoices: [
-    //         {
-    //             "desc": "Choose two from Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, and Survival",
-    //             "choose": 2,
-    //             "type": "proficiencies",
-    //             "from": {
-    //                 "option_set_type": "options_array",
-    //                 "options": [
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-arcana",
-    //                             "name": "Skill: Arcana",
-    //                             "url": "/api/proficiencies/skill-arcana"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-animal-handling",
-    //                             "name": "Skill: Animal Handling",
-    //                             "url": "/api/proficiencies/skill-animal-handling"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-insight",
-    //                             "name": "Skill: Insight",
-    //                             "url": "/api/proficiencies/skill-insight"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-medicine",
-    //                             "name": "Skill: Medicine",
-    //                             "url": "/api/proficiencies/skill-medicine"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-nature",
-    //                             "name": "Skill: Nature",
-    //                             "url": "/api/proficiencies/skill-nature"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-perception",
-    //                             "name": "Skill: Perception",
-    //                             "url": "/api/proficiencies/skill-perception"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-religion",
-    //                             "name": "Skill: Religion",
-    //                             "url": "/api/proficiencies/skill-religion"
-    //                         }
-    //                     },
-    //                     {
-    //                         "option_type": "reference",
-    //                         "item": {
-    //                             "index": "skill-survival",
-    //                             "name": "Skill: Survival",
-    //                             "url": "/api/proficiencies/skill-survival"
-    //                         }
-    //                     }
-    //                 ]
-    //             }
-    //         }
-    //     ]
+    const [proBonus, setProBonus] = useState('')
+
+    // const decideBonus = () => {
+    //     const primaryBonus = character?.misc?.primaryRace?.
     // }
-    const proBonus = 3
+
 
     const [character, setCharacter] = useState({
         stats: {
@@ -112,7 +41,17 @@ export default function CharCreator () {
             wisPro:false,
             chaPro:false
         },
-        combat: {},
+        combat: {
+            size:'',
+            hitDie:'',
+            hp:'',
+            ac:'',
+            proBonus:'',
+            initBonus:'',
+            speed:'',
+            atkPerRound:'',
+            resistances:['']
+        },
         skills:{
             acrobatics:{value:0, stat:'dex'},
             animalHandling:{value:0, stat:'wis'},
@@ -132,21 +71,99 @@ export default function CharCreator () {
             sleightOfHand:{value:0, stat:'dex'},
             stealth:{value:0, stat:'dex'},
             survival:{value:0, stat:'wis'}
-            }
+            },
+        misc:{
+            primaryClass:{},
+            secondaryClass:{},
+            primaryRace:{},
+            secondaryRace:{},
+            characterName:{},
+            racialAbilityBonus:{}
+        }
         })
     const getCharacter = (data) => {
         setCharacter(data)
     }
+    // const abilityBonus = () => {
+        // const primaryRace = character?.misc?.primaryRace?.ability_bonuses
+        //for the bonus appllied to the ability. replace primaryRace with secondaryRace to get the secondaryRace 
+        // const secondaryRace = character?.misc?.primaryRace?.ability_bonuses[i].bonus
 
+        // for(let i= 0; 1 < primaryRace.length; i++){
+        //     for(let i=0; i< secondaryRace.length; i++){
+        //         if(primaryRace[i].index === secondaryRace[i].index){
+        //             math.max
+        //         }
+        //     }
+        // }
+        // console.log(Math.max(...primaryRace, ...secondaryRace))
+// console.log(primaryRace)
+
+// }
+
+
+const highestAbilityBonus = (character) => {
+    const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+    const highestBonuses = {}
+    
+    const primaryBonus = character?.misc?.primaryRace?.ability_bonuses
+    const secondaryBonus = character?.misc?.secondaryRace?.ability_bonuses
+
+    abilities.forEach(ability => {
+        let highestBonus = 0
+
+        if(primaryBonus){
+            primaryBonus.forEach(bonus => {
+                if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+                    highestBonus = bonus.bonus
+                }
+                console.log('bonus', highestBonus)
+            })
+        }
+
+        if(secondaryBonus) {
+            secondaryBonus.forEach(bonus => {
+                if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+                    highestBonus = bonus.bonus
+                }
+            })
+        }
+    highestBonuses[ability] = highestBonus
+    console.log('highestBonuses', highestBonuses)
+    console.log(primaryBonus?.[0]?.bonus)
+    })
+    setCharacter(prevCharacter => ({
+        ...prevCharacter,
+        misc:{
+            ...prevCharacter.misc,
+            racialAbilityBonus: highestBonuses
+        }
+    }))
+
+}
+
+useEffect(() => {
+   highestAbilityBonus(character)
+}, [character?.misc?.primaryRace, character?.misc?.secondaryRace])
+
+console.log(character)
     return(
         <div>
             <form>
+                <div>
+                    <Race functions={{setCharacter: setCharacter, character:character, proBonus}} />
+                </div>
+                
+                <div>
+                    <RaceInfo functions={{setCharacter: setCharacter, character:character}} />
+                </div>
+
                 <div>
                     <Stats functions={{setCharacter: setCharacter, sendCharacter: getCharacter, proBonus: proBonus, character:character}} />
                 </div>
 
                 <div>
-                    {/* <Combat sendCombat={getCombat}/> */}
+                    <Combat functions={{setCharacter: setCharacter, character:character, proBonus: proBonus, sendCharacter: getCharacter}} />
                 </div>
 
                 <div>
