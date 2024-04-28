@@ -14,7 +14,18 @@ export default function CharCreator () {
     // const decideBonus = () => {
     //     const primaryBonus = character?.misc?.primaryRace?.
     // }
+    //holds the race data from race.js
+    const [primaryRaceData, setPrimaryRaceData] = useState({})
+    const [secondaryRaceData, setSecondaryRaceData] = useState({})
 
+    const getPrimaryRaceData = (data) => {
+        setPrimaryRaceData(data)
+        console.log(primaryRaceData)
+    }
+    const getSecondaryRaceData = (data) => {
+        setSecondaryRaceData(data)
+        console.log(secondaryRaceData)
+    }
 
     const [character, setCharacter] = useState({
         stats: {
@@ -66,24 +77,32 @@ export default function CharCreator () {
             nature:{value:0, stat:'int'},
             perception:{value:0, stat:'wis'},
             performance:{value:0, stat:'cha'},
-            persuassion:{value:0, stat:'cha'},
+            persuasion:{value:0, stat:'cha'},
             religion:{value:0, stat:'int'},
             sleightOfHand:{value:0, stat:'dex'},
             stealth:{value:0, stat:'dex'},
             survival:{value:0, stat:'wis'}
             },
+        race:{},
+        class:{},
         misc:{
             primaryClass:{},
             secondaryClass:{},
             primaryRace:{},
             secondaryRace:{},
             characterName:{},
-            racialAbilityBonus:{}
+            racialAbilityBonus:{},
+            size:{}
         }
         })
     const getCharacter = (data) => {
         setCharacter(data)
     }
+
+    const getRaceData = (data) => {
+        
+    }
+
     // const abilityBonus = () => {
         // const primaryRace = character?.misc?.primaryRace?.ability_bonuses
         //for the bonus appllied to the ability. replace primaryRace with secondaryRace to get the secondaryRace 
@@ -129,8 +148,8 @@ const highestAbilityBonus = (character) => {
             })
         }
     highestBonuses[ability] = highestBonus
-    console.log('highestBonuses', highestBonuses)
-    console.log(primaryBonus?.[0]?.bonus)
+    // console.log('highestBonuses', highestBonuses)
+    // console.log(primaryBonus?.[0]?.bonus)
     })
     setCharacter(prevCharacter => ({
         ...prevCharacter,

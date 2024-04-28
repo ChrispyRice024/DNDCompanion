@@ -83,7 +83,8 @@ export default function Skills ({functions}) {
 
             <p>
                 <label htmlFor='persuasion'>Persuasion</label>
-                <input name='persuasion' value={skills.persuassion.value + chaBonus} type='number' readOnly data-stat='cha' />
+                <input name='persuasion' value={skills.persuasion.value + chaBonus} type='number' readOnly data-stat='cha' />
+
             </p>
 
             <p>

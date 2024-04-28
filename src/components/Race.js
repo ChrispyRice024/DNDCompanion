@@ -5,11 +5,16 @@ export default function Race({functions}) {
 
     const {setCharacter, character, proBonus} = functions
     // const racesFetch = fetch('https://www.dnd5eapi.co/api/classes').then((res) =>res.json()).then((res) => console.log(res.results))
+    //Holds the names of the races for the datalist
     const [raceList, setRaceList] = useState([])
-    const [primaryRaceData, setPrimaryRaceData] = useState('')
-    const [secondaryRaceData, setSecondaryRaceData] = useState('')
+    //holds the name of the chosen races for the fetch request
+    const [primaryRace, setPrimaryRace] = useState('')
+    const [secondaryRace, setSecondaryRace] = useState('')
+    //holds the actual data from the race
+    const [primaryRaceData, setPrimaryRaceData] = useState({})
+    const [secondaryRaceData, setSecondaryRaceData] = useState({})
 
-    //this should set only the raceList variable
+    //Sets the raceList which populates the dropdown boxs
     useEffect(() => {
         fetch('https://www.dnd5eapi.co/api/races')
         .then((res) => res.json())
@@ -26,45 +31,52 @@ export default function Race({functions}) {
         console.log(character.misc.primaryRace)
     }, [])
 
+    //Sets the character race value
     useEffect(() => {
-        if(primaryRaceData !== ''){
-        fetch(`https://www.dnd5eapi.co/api/races/${primaryRaceData}`)
+        if(primaryRace !== ''){
+        fetch(`https://www.dnd5eapi.co/api/races/${primaryRace}`)
             .then(res => res.json())
             .then(data => {
-                setCharacter(prevCharacter => ({
-                    ...prevCharacter,
-                    misc:{
-                        ...prevCharacter.misc,
-                        primaryRace: data
-                    }
-                }))
+                setPrimaryRaceData(data)
+                // setCharacter(prevCharacter => ({
+                //     ...prevCharacter,
+                //     misc:{
+                //         ...prevCharacter.misc,
+                //         primaryRace: data
+                //     }
+                // }))
                 console.log(data)
             }).catch(err => {
                 console.error('Error ', err)
             })
         }
-
-    }, [primaryRaceData])
+    }, [primaryRace])
 
     useEffect(() => {
-        if(primaryRaceData !== ''){
-        fetch(`https://www.dnd5eapi.co/api/races/${secondaryRaceData}`)
+        if(secondaryRace !== ''){
+        fetch(`https://www.dnd5eapi.co/api/races/${secondaryRace}`)
         .then(res => res.json())
         .then(data => {
-            setCharacter(prevCharacter => ({
-                ...prevCharacter,
-                misc:{
-                    ...prevCharacter.misc,
-                    secondaryRace: data
-                }
-            }))
+            setSecondaryRaceData(data)
+            // setCharacter(prevCharacter => ({
+            //     ...prevCharacter,
+            //     misc:{
+            //         ...prevCharacter.misc,
+            //         secondaryRace: data
+            //     }
+            // }))
         }).catch(err => {
             console.error('Error ', err)
         })
     }
-    }, [secondaryRaceData])
+    }, [secondaryRace])
 
-
+useEffect(() => {
+    console.log('primaryRace', primaryRace)
+    console.log('secondaryRace', secondaryRace)
+    console.log('primaryRaceData', primaryRaceData)
+    console.log('secondaryRaceValue', secondaryRaceData)
+}, [primaryRace, secondaryRace, primaryRaceData, secondaryRaceData])
 
     // const verifyInput = (e) => {
     //     let input = e.target.value
@@ -94,20 +106,23 @@ export default function Race({functions}) {
         const compare = raceList.some(element => element.name === input) || raceList.some(element => element.name.toLowerCase() === input)
 
         if(inputName === 'primaryRace' && compare){
-            setPrimaryRaceData(input.toLowerCase())
+            setPrimaryRace(input.toLowerCase())
         
         }else if(inputName === 'secondaryRace' && compare){
-            setSecondaryRaceData(input.toLowerCase())
+            setSecondaryRace(input.toLowerCase())
         
         }else{
             input = ''
         }
 
         // decidceBonus(e)
-
-        console.log(primaryRaceData)
+        console.log(character)
+        console.log(secondaryRace)
     }
     
+    const handleSendRaceData = (data) => {
+        sendRaceData(data)
+    }
 
     return(
         <div>

@@ -12,16 +12,22 @@ export default function Stats({functions}) {
     const handleChange = (e) => {
         const statValue = parseInt(e.target.value, 10);
         const modValue = Math.ceil((statValue - 10) / 2);
+
+        const modifiedStatValue = statValue
+
+        if(character?.misc?.racialAbilityBonus && e.target.value === character.misc.racialAbilityBonus){
+            modifiedStatValue += character.misc.racialAbilityBonus.bonus
+        }
     
         setCharacter(prevCharacter => ({
             ...prevCharacter,
             stats: {
                 ...prevCharacter.stats,
-                [e.target.name]: statValue
+                [e.target.name]: modifiedStatValue
             },
             mods: {
                 ...prevCharacter.mods,
-                [`${e.target.name}Mod`]: modValue
+                [`${e.target.name}Mod`]: modifiedStatValue
             },
         }))
 
@@ -58,6 +64,8 @@ export default function Stats({functions}) {
 
 
     useEffect(() => {
+
+        
             const updatedSkills = {...character.skills}
 
             for(const skillName in updatedSkills){
@@ -79,6 +87,7 @@ export default function Stats({functions}) {
 
     return(
         <div>
+            {/* {`{${JSON.stringify(character, null, 4)}}`} */}
             
                 <h2>Stats</h2>
 
