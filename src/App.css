@@ -17,9 +17,22 @@
 }
 
 #proficiencies{
+  text-align:center;
   display:flex;
+  flex-wrap: wrap;
+  width:100%;
+}
+
+#proficiencies0 > div{
+  background-color:blue;
+  display:flex;
+  width:50%;
 }
 
 #primaryPro{
   background-color:green;
+}
+
+.title{
+  display:grid;
 }

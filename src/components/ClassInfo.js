@@ -44,14 +44,21 @@ export default function ClassInfo ({functions}) {
 
         const getClassStats = () => {
 
+            const divsToDisplay = []
+
             const primary = character?.class?.primary
             const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
     
             const secondary = character?.class?.secondary
             const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
-            console.log({primary})
-    
+            
+            const decideStyle = !isPrimaryEmpty || !isSecondaryEmpty ? '' : 'none'
+            console.log({decideStyle})
             const getProficiencies = () => {
+                
+                const proDivs = []
+                
+                console.log({divsToDisplay})
 
                 const getName = (div) => {
                     if(div === 0){
@@ -60,10 +67,7 @@ export default function ClassInfo ({functions}) {
                         return `${secondary.name}`
                     }
                 }
-                const proDivs = []
-                {
 
-                }
 
                 if(!isPrimaryEmpty && isSecondaryEmpty){                
                     proDivs.push(primary?.proficiencies.map((proficiencies, i) =>(
@@ -90,13 +94,24 @@ export default function ClassInfo ({functions}) {
                         </p>
                     )))
                 }
-                console.log({isSecondaryEmpty})
-                return proDivs.map((element, i) => (
-                    <div id={`proficiencies${i}`} key={i}>
-                        <strong>{getName(i)}</strong>
-                        {element}
+
+                return (
+                    <div>
+                        <div id='proficiencies'>
+                            <strong className='title'>Proficiencies</strong>
+                        </div>
+                        {
+                            proDivs.map((element, i) => (
+                                <div id={`proficiencies${i}`} key={i}>
+                                    <strong>{getName(i)}</strong>
+                                        {element}
+                                </div>
+                            ))
+                        }
                     </div>
-                ))
+                )
+                console.log({isSecondaryEmpty})
+
             }
         
             const getProChoices = () => {
@@ -124,11 +139,10 @@ export default function ClassInfo ({functions}) {
             }
     
             return(
-                <div id='proficiencies'>
-                    <p>
-                        <strong className='title'>Proficiencies</strong>
+                <div style={{display: decideStyle}} id='proficiencies'>
+                    <div>
                         {getProficiencies()}
-                    </p>
+                    </div>
                     
                 </div>
             )
