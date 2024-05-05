@@ -6,7 +6,7 @@ export default function Skills ({functions}) {
     const {character} = functions
     const skills = character.skills
     
-    const racialBonus = character?.misc?.racialAbilityBonus
+    const racialBonus = character?.race?.racialAbilityBonus
     const strBonus = racialBonus?.str
     const dexBonus = racialBonus?.dex
     const intBonus = racialBonus?.int
