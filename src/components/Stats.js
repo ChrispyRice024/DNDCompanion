@@ -30,7 +30,7 @@ export default function Stats({functions}) {
     
     
     const decideBonus = (e) => {
-        const proChoicePrimary = character?.misc?.primaryRace?.ability_bonuses
+        const proChoicePrimary = character?.race?.primary?.ability_bonuses
         console.log('proChoicePrimary', proChoicePrimary)
         
         for(let i=0; i < proChoicePrimary.length; i++){
@@ -44,6 +44,7 @@ export default function Stats({functions}) {
             
         }
     }
+    console.log('ability Bonus', character?.race?.primary?.ability_bonuses)
 
     const handleProChange = (e) => {
         setCharacter(prevCharacter => ({
@@ -85,6 +86,7 @@ export default function Stats({functions}) {
             <p className="str">
                 <label className="str" htmlFor="str">STR</label>
                 <input name="str" id="str" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
+                <input name='strCharBonus' class='charBonus' type='number' value='0' readonly />
                 <input  id="strMod"  readOnly value={character.mods.strMod} className="mod str"/>
                 {/* <input type="checkbox" onInput={decideBonus}  name="strPro"/> */}
                 {/* <label style={{decidePro}} htmlFor="strPro">Proficient</label> */}

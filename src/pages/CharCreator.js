@@ -6,6 +6,8 @@ import Skills from '../components/Skills'
 import SavingThrows from '../components/SavingThrows'
 import Race from '../components/Race'
 import RaceInfo from '../components/RaceInfo'
+import Class from '../components/Class'
+import ClassInfo from '../components/ClassInfo'
 
 export default function CharCreator () {
 
@@ -17,6 +19,15 @@ export default function CharCreator () {
 
 
     const [character, setCharacter] = useState({
+        race:{
+            primary:{},
+            secondary:{},
+            racialAbilityBonus:{}
+        },
+        class:{
+            primary:{},
+            secondary:{}
+        },
         stats: {
             str:10,
             dex:10,
@@ -72,14 +83,14 @@ export default function CharCreator () {
             stealth:{value:0, stat:'dex'},
             survival:{value:0, stat:'wis'}
             },
-        misc:{
-            primaryClass:{},
-            secondaryClass:{},
-            primaryRace:{},
-            secondaryRace:{},
-            characterName:{},
-            racialAbilityBonus:{}
-        }
+        // misc:{
+            // primaryClass:{},
+            // secondaryClass:{},
+            // primaryRace:{},
+            // secondaryRace:{},
+            // characterName:{},
+            
+        // }
         })
     const getCharacter = (data) => {
         setCharacter(data)
@@ -106,8 +117,8 @@ const highestAbilityBonus = (character) => {
     const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
     const highestBonuses = {}
     
-    const primaryBonus = character?.misc?.primaryRace?.ability_bonuses
-    const secondaryBonus = character?.misc?.secondaryRace?.ability_bonuses
+    const primaryBonus = character?.race?.primary?.ability_bonuses
+    const secondaryBonus = character?.race?.secondary?.ability_bonuses
 
     abilities.forEach(ability => {
         let highestBonus = 0
@@ -134,8 +145,8 @@ const highestAbilityBonus = (character) => {
     })
     setCharacter(prevCharacter => ({
         ...prevCharacter,
-        misc:{
-            ...prevCharacter.misc,
+        race:{
+            ...prevCharacter.race,
             racialAbilityBonus: highestBonuses
         }
     }))
@@ -144,7 +155,8 @@ const highestAbilityBonus = (character) => {
 
 useEffect(() => {
    highestAbilityBonus(character)
-}, [character?.misc?.primaryRace, character?.misc?.secondaryRace])
+   console.log('character', character)
+}, [character?.race?.primary, character?.race?.secondary])
 
 console.log(character)
     return(
@@ -156,6 +168,14 @@ console.log(character)
                 
                 <div>
                     <RaceInfo functions={{setCharacter: setCharacter, character:character}} />
+                </div>
+
+                <div>
+                    <Class functions={{character:character, setCharacter: setCharacter}} />
+                </div>
+
+                <div>
+                    <ClassInfo functions={{character: character}} />
                 </div>
 
                 <div>

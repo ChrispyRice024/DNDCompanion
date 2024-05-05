@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+#raceInfo{
+  display:flex;
+  text-align:center;
+}
+
+#primaryRaceInfo{
+  background-color:green;
+  border-style:solid;
+}
+
+#secondaryRaceInfo{
+  background-color:blue;
+}
+
+#proficiencies{
+  display:flex;
+}
+
+#primaryPro{
+  background-color:green;
+}

@@ -23,7 +23,7 @@ export default function Race({functions}) {
             console.error('Error fetching data: ', err)
         })
         //this loggs an empty object, which is correct
-        console.log(character.misc.primaryRace)
+        console.log(character.race.primaryRace)
     }, [])
 
     useEffect(() => {
@@ -33,9 +33,9 @@ export default function Race({functions}) {
             .then(data => {
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
-                    misc:{
-                        ...prevCharacter.misc,
-                        primaryRace: data
+                    race:{
+                        ...prevCharacter.race,
+                        primary: data
                     }
                 }))
                 console.log(data)
@@ -47,65 +47,47 @@ export default function Race({functions}) {
     }, [primaryRaceData])
 
     useEffect(() => {
-        if(primaryRaceData !== ''){
+        if(secondaryRaceData !== ''){
         fetch(`https://www.dnd5eapi.co/api/races/${secondaryRaceData}`)
         .then(res => res.json())
         .then(data => {
             setCharacter(prevCharacter => ({
                 ...prevCharacter,
-                misc:{
-                    ...prevCharacter.misc,
-                    secondaryRace: data
+                race:{
+                    ...prevCharacter.race,
+                    secondary: data
                 }
             }))
         }).catch(err => {
             console.error('Error ', err)
         })
+        console.log(secondaryRaceData)
     }
     }, [secondaryRaceData])
 
-
-
-    // const verifyInput = (e) => {
-    //     let input = e.target.value
-    //     const compare = raceList.some(element => element.name === input) || raceList.some(element => element.name.toLowerCase() === input)
-    //     console.log(raceList)
-    //     if(compare){
-    //         setCharacter(prevCharacter => ({
-    //             ...prevCharacter,
-    //             misc:{
-    //                 ...prevCharacter.misc,
-    //                 [e.target.name]: input.charAt(0).toUpperCase() + input.slice(1)
-    //             }
-    //         }
-    //         ))
-    //     setChosenRace(input.toLowerCase())
-    //     console.log(chosenRace)
-    //     }else{
-    //         input = ''
-    //     }
-    //     console.log(compare)
-    //     console.log(character.misc)
-    // }
+useEffect(() => {
+    setTimeout(5000, )
+}, [secondaryRaceData])
 
     const verifyInput = (e) => {
-        let input = e.target.value
+        const input = e.target.value
         const inputName = e.target.name
         const compare = raceList.some(element => element.name === input) || raceList.some(element => element.name.toLowerCase() === input)
-
+console.log({compare, inputName})
         if(inputName === 'primaryRace' && compare){
             setPrimaryRaceData(input.toLowerCase())
-        
+            
         }else if(inputName === 'secondaryRace' && compare){
             setSecondaryRaceData(input.toLowerCase())
         
-        }else{
+        }
+        else{
             input = ''
         }
 
         // decidceBonus(e)
 
-        console.log(primaryRaceData)
+        console.log({primaryRaceData, secondaryRaceData})
     }
     
 
@@ -120,7 +102,7 @@ export default function Race({functions}) {
             <p>
                 {/* needs to be added to the character model */}
                 <label htmlFor='primaryRace'>Primary Race</label>
-                <input name='primaryRace' list='primaryRaceList' autoComplete='on' onChange={verifyInput} id='primaryRace' className='classRace' placeholder='Race'/>
+                <input name='primaryRace' list='primaryRaceList' autoComplete='on' onChange={verifyInput} id='primaryRace' className='race' placeholder='Race'/>
                 <datalist id='primaryRaceList'>
                     {raceList.map((race, i) => (
                         <option
@@ -131,7 +113,7 @@ export default function Race({functions}) {
             </p>
             <p>
                 <label htmlFor='secondaryRace'>Secondary Race</label>
-                <input name='secondaryRace' list='secondaryRaceList' onChange={verifyInput} id='secondaryRace' className='race' placeholder='Race'/>
+                <input name='secondaryRace' list='secondaryRaceList' autoComplete='on' onInput={verifyInput} id='secondaryRace' className='race' placeholder='Race'/>
                 <datalist id='secondaryRaceList'>
                     {raceList.map((race, i) => (
                         <option
