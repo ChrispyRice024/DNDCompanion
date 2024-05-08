@@ -86,8 +86,8 @@ export default function Stats({functions}) {
             <p className="str">
                 <label className="str" htmlFor="str">STR</label>
                 <input name="str" id="str" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
-                <input name='strCharBonus' class='charBonus' type='number' value='0' readonly />
-                <input  id="strMod"  readOnly value={character.mods.strMod} className="mod str"/>
+                <input name='strCharBonus' className='charBonus' type='number' value='0' readOnly />
+                <input  id="strMod"  readOnly value={character?.mods?.strMod} className="mod str"/>
                 {/* <input type="checkbox" onInput={decideBonus}  name="strPro"/> */}
                 {/* <label style={{decidePro}} htmlFor="strPro">Proficient</label> */}
             </p>
@@ -95,7 +95,7 @@ export default function Stats({functions}) {
             <p className="dex">
                 <label className="dex" htmlFor="dex">DEX</label>
                 <input name="dex" id="dex" type="number" defaultValue="10" className="stat"  onInput={handleChange} />
-                <input  readOnly id='dexMod' value={character.mods.dexMod} className="mod dex"/>
+                <input  readOnly id='dexMod' value={character?.mods?.dexMod} className="mod dex"/>
                 <input type="checkbox" onChange={handleProChange} checked={character.proficiencies.dex} name="dexPro"/>
                 <label htmlFor="dexPro">Proficient</label>
             </p>
@@ -111,7 +111,7 @@ export default function Stats({functions}) {
             <p className="int">
                 <label className="int" htmlFor="int">INT</label>
                 <input name="int" id="int" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
-                <input id="intMod" readOnly className="mod int" value={character.mods.intMod} />
+                <input id="intMod" readOnly className="mod int" value={character?.mods?.intMod} />
                 <input type="checkbox" onChange={handleProChange} checked={character.proficiencies.int} name="intPro"/>
                 <label htmlFor="intPro">Proficient</label>
             </p>
