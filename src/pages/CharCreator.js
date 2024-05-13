@@ -7,7 +7,7 @@ import SavingThrows from '../components/SavingThrows'
 import Race from '../components/Race'
 import RaceInfo from '../components/RaceInfo'
 import Class from '../components/Class'
-import ClassInfo from '../components/ClassInfo'
+import ClassInfo from '../components/ClassInfo1'
 
 export default function CharCreator () {
 
