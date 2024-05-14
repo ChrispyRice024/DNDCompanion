@@ -31,12 +31,46 @@ export default function Class ({functions}) {
             .then(data => {
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
+                    proficiencies:{
+                        ...prevCharacter.proficiencies,
+                        classProficiencies:{
+                            ...prevCharacter.proficiencies.classProficiencies,
+                            primary:{
+                                name:data.name,
+                                classProficiencies: data.proficiencies,
+                                availableOptions: data.proficiency_choices
+                            }    
+                            
+                        }
+                        
+                    },
+                    equipment:{
+                        ...character.equipment,
+                        startingEquipment:data.starting_equipment,
+                        equipmentOptions: data.starting_equipment_options
+                    },
+                    combat:{
+                        ...prevCharacter.combat,
+                        savingThrows: {
+                            savingThrows: data.saving_throws
+                        }
+                        
+                    },
                     class:{
                         ...prevCharacter.class,
-                        primary: data
+                        primary:{
+                            name:data.name,
+                            className:data.name,
+                            url: data.url,
+                            combat:{
+                                hitDie: data.hit_die
+                            },
+                            multiClassing: data.multi_classing
+                        }
+                        
                     }
                 }))
-                console.log(data)
+                console.log('data', data)
             }).catch(err => {
                 console.error('Error ', err)
             })

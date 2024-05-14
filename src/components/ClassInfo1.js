@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react'
 import { Children } from 'react';
 
-export default function ClassInfo ({functions, children}) {
+export default function ClassInfo ({functions}) {
 
-    const {character} = functions
+    const {character, setCharacter} = functions
 
     const primaryInfo = character?.class?.primary ? character?.class?.primary : {}
     const secondaryInfo = character?.class?.secondary ? character?.class?.secondary : {}
@@ -96,45 +96,48 @@ export default function ClassInfo ({functions, children}) {
 
     }
     
-    const primaryChoices = character?.class?.primary?.proficiency_choices
+    const primaryChoices = character?.proficiencies?.classProficiencies?.primary
     useEffect(() => {
-        const primaryChoices = character?.class?.primary?.proficiency_choices
-        setPrimaryMax(primaryChoices?.choose)
+        const primaryChoices = character?.proficiencies?.classProficiencies?.primary
+        setPrimaryMax(character?.proficiencies?.classProficiencies?.primary?.availableOptions[0]?.choose)
     }, [primaryChoices])
 
+    useEffect(() => {
+        const isChosen = "name" in character.class.primary
+        console.log({character})
+        console.log()
+    }, [character])
     useEffect(() => {
 
         const primaryProChoice = () => {
         
-            const primaryChoices = character?.class?.primary?.proficiency_choices
-            const secondaryChoices = character?.class?.secondary?.proficiency_choices
+            const primaryChoices = character?.proficiencies?.classProficiencies?.primary
+            const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
 
-            const isEmpty = Object.keys(character?.class?.primary).length === 0
+            const isEmpty = !("name" in character.class.primary)
             const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
             
             if(!isEmpty && character.class.primary.name !== 'Bard'){
                 
                 console.log(primaryMax)
            
-                const isDisabled = chosenProPrimary.length >= primaryMax ? true : false   
+                // const isDisabled = chosenProPrimary.length >= primaryMax ? true : false   
                 
                 return setPrimaryProDiv(
                     <div>
-                        {primaryChoices[0].desc}
-                        {primaryChoices[0].from.options.map((option, i) => {
+                        {/* {primaryChoices[0].desc} */}
+                        {primaryChoices.classProficiencies.map((option, i) => {
                             //       
-                            let isChecked
-
+                            const isChecked = chosenProPrimary.includes(option.index)
+                            const isDisabled = chosenProPrimary.length >= primaryMax && !isChecked
+                            
                             const handleCheck = (e) => {
-
                                 
                                 console.log(e)
                                 const beenChecked = e.target.checked
                                 if(beenChecked){
-                                    isChecked = true
                                     setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
                                 }else if (!beenChecked){
-                                    isChecked = false
                                     setChosenProPrimary((currentPro) => currentPro.filter((x) => x !== e.target.name))
                                 }
                                 console.log(chosenProPrimary)
@@ -148,12 +151,12 @@ export default function ClassInfo ({functions, children}) {
                                 <p key={i}>
                                    <input
                                         type='checkbox'
-                                        name={option.item.index}
+                                        name={option.index}
                                         onChange={handleCheck}
                                         disabled={isChecked ? false : isDisabled}
                                         
                                         />
-                                    <label htmlFor={option.item.index}>{option.item.name}</label> 
+                                    <label htmlFor={option.index}>{option.name}</label> 
                                 </p>
                             )
                         })}
@@ -166,61 +169,63 @@ export default function ClassInfo ({functions, children}) {
         }
         primaryProChoice()
     }, [chosenProPrimary, character, primaryMax])
-    const proChoice = () => {
-        const primaryChoices = character?.class?.primary?.proficiency_choices
-        const secondaryChoices = character?.class?.secondary?.proficiency_choices
 
-        const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
-        const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
 
-        if(!isPrimaryEmpty && isSecondaryEmpty){
+    // const proChoice = () => {
+    //     const primaryChoices = character?.proficiencies?.classProficiencies?.primary
+    //     const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
+
+    //     const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
+    //     const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
+
+    //     if(!isPrimaryEmpty && isSecondaryEmpty){
                 
-            return primaryChoices.map((set) => {
-                setPrimaryMax(set.choose)
-                return (
-                   <div>
-                    <strong>Choose {`${set.choose}`} for {`${primaryInfo.name}`}</strong>
+    //         return primaryChoices.map((set) => {
+    //             setPrimaryMax(set.choose)
+    //             return (
+    //                <div>
+    //                 <strong>Choose {`${set.choose}`} for {`${primaryInfo.name}`}</strong>
                     
-                    {/* {setProChoiceDiv( */}
-                        {set.from.options.map((option) => {
+    //                 {/* {setProChoiceDiv( */}
+    //                     {set.from.options.map((option) => {
                         
-                        if(shouldDisable(set.choose, option)){
+    //                     if(shouldDisable(set.choose, option)){
                             
-                            return(
-                                <p>
-                                    <input
-                                        name={option.item.index}
-                                        type='checkbox'
-                                        onChange={(e) => handleCheck(e, option.item, set.choose)}
-                                        className='proChoice'
-                                        data-chosenClass='primary'
-                                        disabled
-                                    />
-                                    <label  htmlFor={option.item.index} >{option.item.name}</label>
-                                </p>
-                            )
-                        }else if(!shouldDisable(set.choose, option)){
-                            return(
-                                <p>
-                                    <input
-                                        name={option.item.index}
-                                        type='checkbox'
-                                        onChange={(e) => handleCheck(e, option.item, set.choose)}
-                                        className='proChoice'
-                                        data-chosenClass='primary'
-                                    />
-                                    <label  htmlFor={option.item.index} >{option.item.name}</label>
-                                </p>
-                            )
-                        }
-                    })}
-                </div> 
-                )
+    //                         return(
+    //                             <p>
+    //                                 <input
+    //                                     name={option.item.index}
+    //                                     type='checkbox'
+    //                                     onChange={(e) => handleCheck(e, option.item, set.choose)}
+    //                                     className='proChoice'
+    //                                     data-chosenClass='primary'
+    //                                     disabled
+    //                                 />
+    //                                 <label  htmlFor={option.item.index} >{option.item.name}</label>
+    //                             </p>
+    //                         )
+    //                     }else if(!shouldDisable(set.choose, option)){
+    //                         return(
+    //                             <p>
+    //                                 <input
+    //                                     name={option.item.index}
+    //                                     type='checkbox'
+    //                                     onChange={(e) => handleCheck(e, option.item, set.choose)}
+    //                                     className='proChoice'
+    //                                     data-chosenClass='primary'
+    //                                 />
+    //                                 <label  htmlFor={option.item.index} >{option.item.name}</label>
+    //                             </p>
+    //                         )
+    //                     }
+    //                 })}
+    //             </div> 
+    //             )
                 
-            })
+    //         })
         
-        }
-    }
+    //     }
+    // }
 
 
     // useEffect(() => {
@@ -229,8 +234,8 @@ export default function ClassInfo ({functions, children}) {
     //     console.log(chosenProPrimary.length)
 
     //     const decideDisabled = () => {
-    //         const primaryChoices = character?.class?.primary?.proficiency_choices
-    //         const secondaryChoices = character?.class?.secondary?.proficiency_choices
+    //         const primaryChoices = character?.proficiencies?.classProficiencies?.primary
+    //         const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
     
     //         const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
     //         const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
@@ -257,10 +262,10 @@ export default function ClassInfo ({functions, children}) {
 
             const divsToDisplay = []
 
-            const primary = character?.class?.primary
+            const primary = character?.proficiencies?.primary?.classProficiencies
             const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
     
-            const secondary = character?.class?.secondary
+            const secondary = character?.proficiencies?.secondary?.classProficiencies
             const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
             
             const decideStyle = !isPrimaryEmpty || !isSecondaryEmpty ? '' : 'none'
@@ -275,12 +280,12 @@ export default function ClassInfo ({functions, children}) {
 
                 const getName = (element, i) => {
                     if(element[i].props.id === 'primaryPro'){
-                        return `${primary.name}`
+                        return `${character?.class?.primary?.name ?? ''}`
                     }else {
-                        return `${secondary.name}`
+                        return `${character?.class?.secondary?.name ?? ''}`
                     }
                 }
-                console.log(secondary.name)
+                // console.log(secondary.name)
 
                 if(!isPrimaryEmpty && isSecondaryEmpty){                
                     proDivs.push(primary?.proficiencies.map((proficiencies, i) =>(
@@ -296,34 +301,36 @@ export default function ClassInfo ({functions, children}) {
                         </p>
                     )))
                 }else if(!isPrimaryEmpty && !isSecondaryEmpty){
-                    proDivs.push(primary?.proficiencies.map((proficiencies, i) =>(
+                    proDivs.push(primary?.map((proficiencies, i) =>(
                         <p key={i} id='primaryPro' className='classProficiencies'>
                             {proficiencies.name} 
                         </p>
                     )))
 
-                    proDivs.push(secondary?.proficiencies.map((proficiencies, i) =>( 
+                    proDivs.push(secondary?.map((proficiencies, i) =>( 
                         <p key={i} id='secondaryPro' className='classProficiencies'>
                             {proficiencies.name}
                         </p>
                     )))
+                }else if(isPrimaryEmpty && isSecondaryEmpty){
+                    return
                 }
-console.log('proDivs[0].props', proDivs[0])
+console.log('proDivs[0].props', proDivs)
                 return (
                     <div>
                         <div id='proficiencies'>
                             <strong className='title'>Proficiencies</strong>
                         </div>
 
-                        {
+                        {/* {
                             proDivs.map((element, i) => (
-                                <div id={`proficiencies${i}`} key={i}>
-                                    {console.log(element[i].props.id)}
+                                <div key={i}>
+                                    {console.log('the log', element[i].props.id)}
                                     <strong>{getName(element, i)}</strong>
                                         {element}
                                 </div>
                             ))
-                        }
+                        } */}
                     </div>
                 )
                 console.log({isSecondaryEmpty})
@@ -357,7 +364,7 @@ console.log('proDivs[0].props', proDivs[0])
                     </div>
                     <div>
                         {proChoiceDiv}
-                        {proChoice()}
+                        {/* {proChoice()} */}
                         {/* {getProChoices()} */}
                         {/* {choiceDivs.map((choice) => (
                             {choice}
@@ -384,7 +391,7 @@ console.log('proDivs[0].props', proDivs[0])
         <div key={'classStats'}>
             {classStats}
             {primaryProDiv}
-            {proChoice}
+            {/* {proChoice} */}
         </div>
     )
 }

@@ -25,8 +25,14 @@ export default function CharCreator () {
             racialAbilityBonus:{}
         },
         class:{
-            primary:{},
-            secondary:{}
+            primary:{
+                multiClassing:{},
+                subClasses:{}
+            },
+            secondary:{
+                multiClassing:{},
+                subClasses:{}
+            }
         },
         stats: {
             str:10,
@@ -50,7 +56,17 @@ export default function CharCreator () {
             conPro:false,
             intPro:false,
             wisPro:false,
-            chaPro:false
+            chaPro:false,
+            classProficiencies:{
+                primary:{
+                    classProficiencies:[],
+                    availableOptions:[]
+                },
+                secondary:{
+                    classProficiencies:[],
+                    availableOptions:[]
+                }
+            }
         },
         combat: {
             size:'',
@@ -61,7 +77,8 @@ export default function CharCreator () {
             initBonus:'',
             speed:'',
             atkPerRound:'',
-            resistances:['']
+            resistances:[''],
+            savingThrows:{}
         },
         skills:{
             acrobatics:{value:0, stat:'dex'},
@@ -83,6 +100,10 @@ export default function CharCreator () {
             stealth:{value:0, stat:'dex'},
             survival:{value:0, stat:'wis'}
             },
+            equipment:{
+                startingEquipment:{},
+                equipmentOptions:{}
+            }
         // misc:{
             // primaryClass:{},
             // secondaryClass:{},
@@ -175,7 +196,7 @@ console.log(character)
                 </div>
 
                 <div>
-                    <ClassInfo functions={{character: character}} />
+                    <ClassInfo functions={{character: character, setCharacter: setCharacter}} />
                 </div>
 
                 <div>
