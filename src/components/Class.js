@@ -52,14 +52,13 @@ export default function Class ({functions}) {
                     combat:{
                         ...prevCharacter.combat,
                         savingThrows: {
-                            savingThrows: data.saving_throws
+                            primaryClass: data.saving_throws
                         }
                         
                     },
                     class:{
                         ...prevCharacter.class,
                         primary:{
-                            name:data.name,
                             className:data.name,
                             url: data.url,
                             combat:{
@@ -85,9 +84,38 @@ export default function Class ({functions}) {
             .then(data => {
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
+                    proficiencies:{
+                        ...prevCharacter.proficiencies,
+                        classProficiencies:{
+                            ...prevCharacter.proficiencies.classProficiencies,
+                            secondary:{
+                                name:data.name,
+                                classProficiencies: data.proficiencies,
+                                availibleOptions: data.proficiency_choices
+                            }
+                        }
+                    },
+                    equipment:{
+                        ...character.equipment,
+                        startingEquipment:data.starting_equipment,
+                        equipmentOptions: data.starting_equipment_options
+                    },
+                    combat:{
+                        ...prevCharacter.combat,
+                        savingThrows:{
+                            secondaryClass:data.saving_throws
+                        }
+                    },
                     class:{
                         ...prevCharacter.class,
-                        secondary: data
+                        secondary:{
+                            className:data.name,
+                            url:data.url,
+                            combat:{
+                                hitDie: data.hit_die
+                            },
+                            multiClassing:data.multi_classing
+                        }
                     }
                 }))
                 console.log({data})
@@ -102,16 +130,17 @@ export default function Class ({functions}) {
     const verifyInput = (e) => {
         const input = e.target.value
         const inputName = e.target.name
+
         console.log(character.class)
+        
         const compare = classList.some(element => element.name === input) || classList.some(element => element.name.toLowerCase() === input)
+        
         if(inputName === 'primaryClass' && compare){
             setPrimaryClassData(input.toLowerCase())
+        
         }else if(inputName === 'secondaryClass' && compare){
             setSecondaryClassData(input.toLowerCase())
         }
-        // else{
-        //     input = ''
-        // }
     }
 
     return(

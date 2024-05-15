@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, React, useEffect} from 'react'
 import { Children } from 'react';
 
 export default function ClassInfo ({functions}) {
@@ -52,7 +52,7 @@ export default function ClassInfo ({functions}) {
     //change to useEffect with this dep array [character.class]
 
     const [chosenProPrimary, setChosenProPrimary] = useState([])
-    const [primaryProDiv, setPrimaryProDiv] = useState()
+    const [primaryProChoiceDiv, setPrimaryProChoiceDiv] = useState()
 
     const shouldDisable = (max, option) => {
 
@@ -105,8 +105,8 @@ export default function ClassInfo ({functions}) {
     useEffect(() => {
         const isChosen = "name" in character.class.primary
         console.log({character})
-        console.log()
-    }, [character])
+        console.log(primaryProChoiceDiv)
+    }, [primaryProChoiceDiv])
     useEffect(() => {
 
         const primaryProChoice = () => {
@@ -114,18 +114,18 @@ export default function ClassInfo ({functions}) {
             const primaryChoices = character?.proficiencies?.classProficiencies?.primary
             const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
 
-            const isEmpty = !("name" in character.class.primary)
+            const isEmpty = ("name" in character.class.primary)
             const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
-            
-            if(!isEmpty && character.class.primary.name !== 'Bard'){
+            console.log(primaryChoices.availableOptions)
+            if(!isEmpty && character.class.primary.className !== 'Bard'){
                 
                 console.log(primaryMax)
            
                 // const isDisabled = chosenProPrimary.length >= primaryMax ? true : false   
                 
-                return setPrimaryProDiv(
-                    <div>
-                        {/* {primaryChoices[0].desc} */}
+                return setPrimaryProChoiceDiv(
+                    <div className='proficiencyChoice'>
+                        {primaryChoices?.availableOptions[0]?.desc}
                         {primaryChoices.classProficiencies.map((option, i) => {
                             //       
                             const isChecked = chosenProPrimary.includes(option.index)
@@ -168,230 +168,75 @@ export default function ClassInfo ({functions}) {
         
         }
         primaryProChoice()
+        console.log(primaryProChoiceDiv)
     }, [chosenProPrimary, character, primaryMax])
 
-
-    // const proChoice = () => {
-    //     const primaryChoices = character?.proficiencies?.classProficiencies?.primary
-    //     const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
-
-    //     const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
-    //     const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
-
-    //     if(!isPrimaryEmpty && isSecondaryEmpty){
-                
-    //         return primaryChoices.map((set) => {
-    //             setPrimaryMax(set.choose)
-    //             return (
-    //                <div>
-    //                 <strong>Choose {`${set.choose}`} for {`${primaryInfo.name}`}</strong>
-                    
-    //                 {/* {setProChoiceDiv( */}
-    //                     {set.from.options.map((option) => {
-                        
-    //                     if(shouldDisable(set.choose, option)){
-                            
-    //                         return(
-    //                             <p>
-    //                                 <input
-    //                                     name={option.item.index}
-    //                                     type='checkbox'
-    //                                     onChange={(e) => handleCheck(e, option.item, set.choose)}
-    //                                     className='proChoice'
-    //                                     data-chosenClass='primary'
-    //                                     disabled
-    //                                 />
-    //                                 <label  htmlFor={option.item.index} >{option.item.name}</label>
-    //                             </p>
-    //                         )
-    //                     }else if(!shouldDisable(set.choose, option)){
-    //                         return(
-    //                             <p>
-    //                                 <input
-    //                                     name={option.item.index}
-    //                                     type='checkbox'
-    //                                     onChange={(e) => handleCheck(e, option.item, set.choose)}
-    //                                     className='proChoice'
-    //                                     data-chosenClass='primary'
-    //                                 />
-    //                                 <label  htmlFor={option.item.index} >{option.item.name}</label>
-    //                             </p>
-    //                         )
-    //                     }
-    //                 })}
-    //             </div> 
-    //             )
-                
-    //         })
-        
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    //     console.log('proChoiceDiv', proChoiceDiv)
-    //     console.log('primaryMax', primaryMax)
-    //     console.log(chosenProPrimary.length)
-
-    //     const decideDisabled = () => {
-    //         const primaryChoices = character?.proficiencies?.classProficiencies?.primary
-    //         const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
-    
-    //         const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
-    //         const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
-
-    //         if(chosenProPrimary.length >= primaryMax){
-    //             proChoice()
-    //         }
-    //     }
-    //     decideDisabled()
-    // }, [chosenProPrimary, character, primaryMax])
-
-
-
-    // useEffect(() => {
-    //     proChoice()
-    // }, [classStats])
-
-
-
+    //Primary Proficiencies
+    const [primaryProDiv, setPrimaryProDiv] = useState()
+    const [secondaryProDiv, setSecondaryProDiv] = useState()
 
     useEffect(() => {
+        const primaryPro = () => {
 
-        const getClassStats = () => {
+            const primary = character?.proficiencies?.classProficiencies?.primary?.classProficiencies
+            const isEmpty = ("name" in character.class.primary)
+            console.log(isEmpty)
 
-            const divsToDisplay = []
+            if(!isEmpty){
 
-            const primary = character?.proficiencies?.primary?.classProficiencies
-            const isPrimaryEmpty = Object.keys(character?.class?.primary).length === 0
-    
-            const secondary = character?.proficiencies?.secondary?.classProficiencies
-            const isSecondaryEmpty = Object.keys(character?.class?.secondary).length === 0
-            
-            const decideStyle = !isPrimaryEmpty || !isSecondaryEmpty ? '' : 'none'
-            
-            console.log({decideStyle})
-        //Proficiencies
-            const getProficiencies = () => {
-                
-                const proDivs = []
-                
-                console.log({divsToDisplay})
-
-                const getName = (element, i) => {
-                    if(element[i].props.id === 'primaryPro'){
-                        return `${character?.class?.primary?.name ?? ''}`
-                    }else {
-                        return `${character?.class?.secondary?.name ?? ''}`
-                    }
-                }
-                // console.log(secondary.name)
-
-                if(!isPrimaryEmpty && isSecondaryEmpty){                
-                    proDivs.push(primary?.proficiencies.map((proficiencies, i) =>(
-                        <p key={i} id='primaryPro' className='classProficiencies'>
-                            {proficiencies.name} 
-                        </p>
-                    )))
-                }else if(!isSecondaryEmpty && isPrimaryEmpty){
-                    proDivs.push(secondary?.proficiencies.map((proficiencies, i) =>( 
-                        <p key={i} id='secondaryPro' className='classProficiencies'>
-                            {proficiencies.name}
-                            {console.log(proficiencies.name)}
-                        </p>
-                    )))
-                }else if(!isPrimaryEmpty && !isSecondaryEmpty){
-                    proDivs.push(primary?.map((proficiencies, i) =>(
-                        <p key={i} id='primaryPro' className='classProficiencies'>
-                            {proficiencies.name} 
-                        </p>
-                    )))
-
-                    proDivs.push(secondary?.map((proficiencies, i) =>( 
-                        <p key={i} id='secondaryPro' className='classProficiencies'>
-                            {proficiencies.name}
-                        </p>
-                    )))
-                }else if(isPrimaryEmpty && isSecondaryEmpty){
-                    return
-                }
-console.log('proDivs[0].props', proDivs)
-                return (
-                    <div>
-                        <div id='proficiencies'>
-                            <strong className='title'>Proficiencies</strong>
-                        </div>
-
-                        {/* {
-                            proDivs.map((element, i) => (
-                                <div key={i}>
-                                    {console.log('the log', element[i].props.id)}
-                                    <strong>{getName(element, i)}</strong>
-                                        {element}
-                                </div>
-                            ))
-                        } */}
+                setPrimaryProDiv(
+                    <div className='proficiencies'>
+                        <strong>{character?.class?.primary?.className}</strong>
+                        {primary.map((element, i) => (
+                            <p key={i} className='classProficiencies' >
+                                {element.name}
+                            </p>
+                        ))}
                     </div>
                 )
-                console.log({isSecondaryEmpty})
-
             }
-
-            const getSavingThrows = () => {
-    
-            }
-    
-            const getSpellcasting = () => {
-    
-            }
-    
-            const startingEquip = () => {
-    
-            }
-    
-            const getStartingEquipOptions = () => {
-    
-            }
-    
-            const getSubClasses = () => {
-                
-            }
-            // getProChoices()
-            return(
-                <div style={{display: decideStyle}} id='proficiencies'>
-                    <div>
-                        {getProficiencies()}
-                    </div>
-                    <div>
-                        {proChoiceDiv}
-                        {/* {proChoice()} */}
-                        {/* {getProChoices()} */}
-                        {/* {choiceDivs.map((choice) => (
-                            {choice}
-                        ))} */}
-                    </div>
-                    
-                </div>
-            )
         }
 
-        setClassStats(getClassStats)
-        console.log({classStats})
-    }, [character.class])
+        const secondaryPro = () => {
 
+            const secondary = character?.proficiencies?.classProficiencies?.primary?.classProficiencies
+            const isEmpty = ("name" in character.class.secondary)
+            
+            const decideStyle = !isEmpty ? '' : 'none'
 
-    const proChoices = () => {
+            if(!isEmpty){
+                setSecondaryProDiv(
+                    <div className='proficiencies'>
+                        <strong>{character?.class?.secondary?.className}</strong>
+                        {secondary.map((element, i) => (
+                            <p key={i} className='classProficiencies'>
+                                {element.name}
+                            </p>
+                        ))}
+                    </div>
+                )
+            }
+        }
 
+        primaryPro()
 
-    }
-    
+        secondaryPro()
+        console.log(primaryProDiv)
+    }, [character])
 
 //final return statement
     return (
-        <div key={'classStats'}>
-            {classStats}
-            {primaryProDiv}
-            {/* {proChoice} */}
+        <div key={'classStats'} id='classInfo'>
+            {/* {classStats} */}
+            <div>
+                {primaryProDiv}
+                {primaryProChoiceDiv}
+            </div>
+            <div>
+                {secondaryProDiv}
+                {primaryProChoiceDiv}
+            </div>
+            
         </div>
     )
 }

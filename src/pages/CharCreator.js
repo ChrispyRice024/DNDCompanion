@@ -78,7 +78,10 @@ export default function CharCreator () {
             speed:'',
             atkPerRound:'',
             resistances:[''],
-            savingThrows:{}
+            savingThrows:{
+                primaryClass:{},
+                secondaryClass:{}
+            }
         },
         skills:{
             acrobatics:{value:0, stat:'dex'},
@@ -104,14 +107,6 @@ export default function CharCreator () {
                 startingEquipment:{},
                 equipmentOptions:{}
             }
-        // misc:{
-            // primaryClass:{},
-            // secondaryClass:{},
-            // primaryRace:{},
-            // secondaryRace:{},
-            // characterName:{},
-            
-        // }
         })
     const getCharacter = (data) => {
         setCharacter(data)

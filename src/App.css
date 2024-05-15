@@ -23,10 +23,20 @@
   width:100%;
 }
 
-#proficiencies0 > div{
+#classInfo{
+  display:grid;
+}
+
+.proficiencies{
   background-color:blue;
-  display:flex;
-  width:50%;
+  /* display:grid; */
+  width:20%;
+}
+
+.proficiencyChoice{
+  background-color:green;
+  /* display:grid; */
+  width:20%;
 }
 
 #primaryPro{
