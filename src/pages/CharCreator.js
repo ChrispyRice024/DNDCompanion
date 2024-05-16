@@ -7,7 +7,8 @@ import SavingThrows from '../components/SavingThrows'
 import Race from '../components/Race'
 import RaceInfo from '../components/RaceInfo'
 import Class from '../components/Class'
-import ClassInfo from '../components/ClassInfo1'
+import ProInfo from '../components/ProInfo'
+import Spellcasting from '../components/Spellcasting'
 
 export default function CharCreator () {
 
@@ -27,11 +28,21 @@ export default function CharCreator () {
         class:{
             primary:{
                 multiClassing:{},
-                subClasses:{}
+                subClasses:{},
+                combat:{
+                    spellcasting:{
+                        spellList:{}
+                    }
+                }
             },
             secondary:{
                 multiClassing:{},
-                subClasses:{}
+                subClasses:{},
+                combat:{
+                    spellcasting:{
+                        spellList:{}
+                    }
+                }
             }
         },
         stats: {
@@ -191,7 +202,11 @@ console.log(character)
                 </div>
 
                 <div>
-                    <ClassInfo functions={{character: character, setCharacter: setCharacter}} />
+                    <ProInfo functions={{character: character, setCharacter: setCharacter}} />
+                </div>
+
+                <div>
+                    <Spellcasting functions={{character: character, setCharacter: setCharacter}} />
                 </div>
 
                 <div>

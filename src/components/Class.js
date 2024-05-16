@@ -45,7 +45,7 @@ export default function Class ({functions}) {
                         
                     },
                     equipment:{
-                        ...character.equipment,
+                        ...prevCharacter.equipment,
                         startingEquipment:data.starting_equipment,
                         equipmentOptions: data.starting_equipment_options
                     },
@@ -62,7 +62,13 @@ export default function Class ({functions}) {
                             className:data.name,
                             url: data.url,
                             combat:{
-                                hitDie: data.hit_die
+                                hitDie: data.hit_die,
+                                spellcasting: {
+                                    ...prevCharacter.class.primary.combat.spellcasting,
+                                    info: data.spellcasting.info,
+                                    level:data.spellcasting.level,
+                                    spellCastingAbility: data.spellcasting.spellcasting_ability
+                                }
                             },
                             multiClassing: data.multi_classing
                         }
@@ -91,12 +97,12 @@ export default function Class ({functions}) {
                             secondary:{
                                 name:data.name,
                                 classProficiencies: data.proficiencies,
-                                availibleOptions: data.proficiency_choices
+                                availableOptions: data.proficiency_choices
                             }
                         }
                     },
                     equipment:{
-                        ...character.equipment,
+                        ...prevCharacter.equipment,
                         startingEquipment:data.starting_equipment,
                         equipmentOptions: data.starting_equipment_options
                     },
@@ -112,7 +118,8 @@ export default function Class ({functions}) {
                             className:data.name,
                             url:data.url,
                             combat:{
-                                hitDie: data.hit_die
+                                hitDie: data.hit_die,
+                                spellcasting: data.spellcasting
                             },
                             multiClassing:data.multi_classing
                         }
