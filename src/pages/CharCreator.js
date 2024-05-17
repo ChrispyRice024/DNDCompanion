@@ -122,22 +122,6 @@ export default function CharCreator () {
     const getCharacter = (data) => {
         setCharacter(data)
     }
-    // const abilityBonus = () => {
-        // const primaryRace = character?.misc?.primaryRace?.ability_bonuses
-        //for the bonus appllied to the ability. replace primaryRace with secondaryRace to get the secondaryRace 
-        // const secondaryRace = character?.misc?.primaryRace?.ability_bonuses[i].bonus
-
-        // for(let i= 0; 1 < primaryRace.length; i++){
-        //     for(let i=0; i< secondaryRace.length; i++){
-        //         if(primaryRace[i].index === secondaryRace[i].index){
-        //             math.max
-        //         }
-        //     }
-        // }
-        // console.log(Math.max(...primaryRace, ...secondaryRace))
-// console.log(primaryRace)
-
-// }
 
 
 const highestAbilityBonus = (character) => {
@@ -155,7 +139,6 @@ const highestAbilityBonus = (character) => {
                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
                     highestBonus = bonus.bonus
                 }
-                console.log('bonus', highestBonus)
             })
         }
 
@@ -167,8 +150,7 @@ const highestAbilityBonus = (character) => {
             })
         }
     highestBonuses[ability] = highestBonus
-    console.log('highestBonuses', highestBonuses)
-    console.log(primaryBonus?.[0]?.bonus)
+
     })
     setCharacter(prevCharacter => ({
         ...prevCharacter,
@@ -182,10 +164,9 @@ const highestAbilityBonus = (character) => {
 
 useEffect(() => {
    highestAbilityBonus(character)
-   console.log('character', character)
+
 }, [character?.race?.primary, character?.race?.secondary])
 
-console.log(character)
     return(
         <div>
             <form>

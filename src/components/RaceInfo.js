@@ -14,8 +14,6 @@ export default function RaceInfo({functions}) {
     const primaryStyle = primaryRaceEmpty ? 'none' : ''
     const secondaryStyle = secondaryRaceEmpty ? 'none' : ''
 
-
-    console.log(character.race)
     return(
         <div id='raceInfo'>
             <div id='primaryRaceInfo' style={{display: primaryStyle}}>

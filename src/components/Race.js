@@ -16,14 +16,10 @@ export default function Race({functions}) {
 
         .then((data) => {
             setRaceList(data.results)
-            console.log(data)
-            // console.log(raceList)
         })
         .catch((err) => {
             console.error('Error fetching data: ', err)
         })
-        //this loggs an empty object, which is correct
-        console.log(character.race.primaryRace)
     }, [])
 
     useEffect(() => {
@@ -38,7 +34,6 @@ export default function Race({functions}) {
                         primary: data
                     }
                 }))
-                console.log(data)
             }).catch(err => {
                 console.error('Error ', err)
             })
@@ -61,7 +56,6 @@ export default function Race({functions}) {
         }).catch(err => {
             console.error('Error ', err)
         })
-        console.log(secondaryRaceData)
     }
     }, [secondaryRaceData])
 
@@ -73,7 +67,7 @@ useEffect(() => {
         const input = e.target.value
         const inputName = e.target.name
         const compare = raceList.some(element => element.name === input) || raceList.some(element => element.name.toLowerCase() === input)
-console.log({compare, inputName})
+
         if(inputName === 'primaryRace' && compare){
             setPrimaryRaceData(input.toLowerCase())
             
@@ -85,9 +79,6 @@ console.log({compare, inputName})
             input = ''
         }
 
-        // decidceBonus(e)
-
-        console.log({primaryRaceData, secondaryRaceData})
     }
     
 

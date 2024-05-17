@@ -16,7 +16,7 @@ export default function Class ({functions}) {
         .then((data) => {
             setClassList(data.results)
             console.log(data)
-            // console.log(raceList)
+
         })
         .catch((err) => {
             console.error('Error fetching data: ', err)
@@ -137,8 +137,6 @@ export default function Class ({functions}) {
     const verifyInput = (e) => {
         const input = e.target.value
         const inputName = e.target.name
-
-        console.log(character.class)
         
         const compare = classList.some(element => element.name === input) || classList.some(element => element.name.toLowerCase() === input)
         

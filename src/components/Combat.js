@@ -4,45 +4,6 @@ import {useState, useEffect} from 'react'
 export default function Combat ({functions}) {
 
 const {setCharacter, proBonus, character, sendCharacter} = functions
-    // const [combat, setCombat] = useState({
-    //     hp:'',
-    //     ac:'',
-    //     proBonus:'',
-    //     initBonus:'',
-    //     speed:'',
-    //     atkPerRound:'',
-    //     resistances:['']
-    // })
-
-    // useEffect(() => {
-    //     sendCombat(combat)
-    // })
-
-    // const handleAdd = (e) => {
-    //     e.preventDefault()
-
-    //     setCharacter((prevCharacter) => ({
-    //         ...prevCharacter,
-    //         resistances: [...prevCharacter.combat.resistances, '']
-    //     }))
-    // }
-
-    // const handleResistChange = (i, value) => {
-
-    //     setCharacter((prevCharacter) => {
-    //         const updatedResistances = [...prevCharacter.combat.resistances]
-    //         updatedResistances[i] = value
-    //         return {...prevCharacter.combat, resistances: updatedResistances}
-    //     })
-
-    //     return false
-    // }
-
-    // const handleChange = (e) => {
-    //     e.preventDefault()
-
-    //     setCharacter({...character.combat, [e.target.name]: e.target.value})
-    // }
 
     const handleResistChange = (i, value) => {
 

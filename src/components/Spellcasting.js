@@ -3,7 +3,9 @@ import {useState, React, useEffect} from 'react'
 export default function Spellcating ({functions}) {
 
     const {character, setCharacter} = functions
-console.log('hello')
+
+    const [primarySpells, setPrimarySpells] = useState({})
+    const [secondarySpells, setSecondarySpells] = useState({})
     //Fetching Spells
     useEffect(() => {
         const primaryClass = character?.class?.primary?.url
@@ -30,6 +32,16 @@ console.log('hello')
                         
                     }
                 }))
+                setPrimarySpells(
+                    {
+                        cantrips:{
+                            spells:data.results.filter(obj => obj.level === 0)
+                        },
+                        level_1:{
+                            spells:data.results.filter(obj => obj.level === 1)
+                        }
+                    }
+                )
                 console.log(data)
             })
         }
@@ -56,19 +68,137 @@ console.log('hello')
                         
                     }
                 }))
+                setSecondarySpells(
+                    {
+                        cantrips:{
+                            spells:data.results.filter(obj => obj.level === 0)
+                        },
+                        level_1:{
+                            spells:data.results.filter(obj => obj.level === 1)
+                        }
+                    }
+                )
                 console.log(data)
             })
         }
         
     }, [character.class.primary.className, character.class.secondary.className])
 
+    //Spell divs
+useEffect(() => {
+    console.log({primarySpells})
+}, [character])
+
+    const [primarySpellsInfoDiv, setPrimarySpellsInfoDiv] = useState()
+    const [primaryLearnableSpellsDiv, setPrimaryLearnableSpellsDiv] = useState()
+
+    const [chosenCantripPrimary, setChosenCantripPrimary] = useState([])
+    const [chosenSpellPrimary, setChosenSpellPrimary] = useState([])
     useEffect(() => {
         const primarySpellcasting = character?.class?.primary?.combat?.spellcasting
         const secondarySpellcasting = character?.class?.secondary?.combat?.spellcasting
-    }, [character])
+        const firstLevel = primarySpells.level_1
+        const cantrips = primarySpells.cantrips
+        const primaryMaxCantrips = 3
+        const primaryMaxSpells = 2
+        
+        if(primarySpellcasting.info){
+            setPrimarySpellsInfoDiv(
+                <div>
+                    {primarySpellcasting.info.map((info, i) => (
+                        <div id='primarySpellInfo'>
+                            <strong>{info.name}</strong>
+                            <p>
+                                {info.desc}
+                            </p>
+                            
+                        </div>
+                    ))}
+                </div>
+            )
+
+            setPrimaryLearnableSpellsDiv(
+                <div>
+                    <div>    
+                        <div>
+                            <strong>Cantrips</strong>
+                            {primarySpells?.cantrips?.spells.map((spell, i) => {
+                                const isChecked = chosenCantripPrimary.includes(spell.index)
+                                const isDisabled = chosenCantripPrimary.length >= primaryMaxCantrips && !isChecked
+
+                                const handleCheck = (e) => {
+                                    const beenChecked = e.target.checked
+
+                                    if(beenChecked){
+                                        
+                                        setChosenCantripPrimary((prevSpells) => [...prevSpells, spell.index])
+                                    }else if(!beenChecked){
+
+                                        setChosenCantripPrimary((prevSpells) => prevSpells.filter((x) => x !== spell.index))
+                                    }
+                                }
+
+                                return(
+                                    <p>
+                                        <input 
+                                            type='checkbox'
+                                            name={spell.name}
+                                            onChange={handleCheck}
+                                            disabled={isChecked ? false : isDisabled}
+                                        />
+                                        <label htmlFor={spell.name}><strong>{spell.name}</strong></label>
+                                    </p>
+                                )
+                            })}
+                        </div>
+                        <div>
+                            <strong>Level 1 Spells</strong>
+                            {primarySpells?.level_1?.spells.map((spell, i) => {
+                                const isChecked = chosenSpellPrimary.includes(spell.index)
+                                const isDisabled =chosenSpellPrimary.length >= primaryMaxSpells && !isChecked
+                                
+                                const handleCheck = (e) => {
+                                    const beenChecked = e.target.checked
+
+                                    if(beenChecked){
+
+                                        setChosenSpellPrimary((prevSpell) => [...prevSpell, spell.index])
+                                    }else if(!beenChecked){
+                                        setChosenSpellPrimary((prevSpell) => prevSpell.filter((x) => x !== spell.index))
+                                    }
+                                }
+
+                                return(
+                                    <p>
+                                        <input 
+                                            type='checkbox'
+                                            name={spell.name}
+                                            onChange={handleCheck}
+                                            disabled={isChecked ? false : isDisabled}
+                                        />
+                                        <label htmlFor={spell.name}><strong>{spell.name}</strong></label>
+                                    </p>
+                                )
+                            }
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        console.log(primarySpellcasting)
+        console.log({chosenCantripPrimary})
+        console.log({chosenSpellPrimary})
+    }, [character, chosenCantripPrimary, chosenSpellPrimary])
     return(
         <div>
-
+            <div>
+                {primarySpellsInfoDiv}
+            </div>
+            <div>
+                {primaryLearnableSpellsDiv}
+            </div>
+            
         </div>
     )
 }

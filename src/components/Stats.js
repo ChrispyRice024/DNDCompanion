@@ -25,18 +25,15 @@ export default function Stats({functions}) {
             },
         }))
 
-        console.log(character)
     };
     
     
     const decideBonus = (e) => {
         const proChoicePrimary = character?.race?.primary?.ability_bonuses
-        console.log('proChoicePrimary', proChoicePrimary)
         
         for(let i=0; i < proChoicePrimary.length; i++){
             
             const primaryChoice = proChoicePrimary[i].ability_score.index
-            console.log('primaryChoice', primaryChoice)
 
             if(e.target.name === primaryChoice){
                 return 'hidden'
@@ -44,7 +41,6 @@ export default function Stats({functions}) {
             
         }
     }
-    console.log('ability Bonus', character?.race?.primary?.ability_bonuses)
 
     const handleProChange = (e) => {
         setCharacter(prevCharacter => ({
@@ -54,7 +50,6 @@ export default function Stats({functions}) {
                 [e.target.name]: e.target.checked
             }
         })) 
-        console.log(character)
     }
 
 
