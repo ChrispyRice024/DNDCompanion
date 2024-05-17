@@ -5,12 +5,6 @@ export default function ClassInfo ({ functions }) {
 
     const {character} = functions
 
-    const primaryInfo = character?.class?.primary ? character?.class?.primary : {}
-    const secondaryInfo = character?.class?.secondary ? character?.class?.secondary : {}
-
-    const [classStats, setClassStats] = useState(null)
-
-
     //Proficiencies
     const [proficiencies, setProficiencies] = useState()
     const [proDivs, setProDivs] = useState([])

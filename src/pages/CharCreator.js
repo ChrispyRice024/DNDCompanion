@@ -9,6 +9,7 @@ import RaceInfo from '../components/RaceInfo'
 import Class from '../components/Class'
 import ProInfo from '../components/ProInfo'
 import Spellcasting from '../components/Spellcasting'
+import Equip from '../components/Equip'
 
 export default function CharCreator () {
 
@@ -188,6 +189,10 @@ useEffect(() => {
 
                 <div>
                     <Spellcasting functions={{character: character, setCharacter: setCharacter}} />
+                </div>
+
+                <div>
+                    <Equip functions={{character: character, setCharacter: setCharacter}} />
                 </div>
 
                 <div>
