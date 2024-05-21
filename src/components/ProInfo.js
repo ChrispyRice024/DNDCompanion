@@ -65,6 +65,18 @@ export default function ProInfo ({functions}) {
     const [secondaryMax, setSecondaryMax] = useState(0)
 
     useEffect(() => {
+        setChosenProPrimary([])
+        setChosenInstrumentPrimary([])
+    }, [character.class.primary.className])
+
+    useEffect(() => {
+        setChosenProSecondary([])
+        setChosenInstrumentSecondary([])
+    },[character.class.secondary.className])
+
+    
+
+    useEffect(() => {
         setPrimaryMax(character?.proficiencies?.classProficiencies?.primary?.availableOptions[0]?.choose)
     }, [primaryChoices])
 
@@ -74,7 +86,7 @@ export default function ProInfo ({functions}) {
 
     //real time logs
     useEffect(() => {
-        console.log({character})
+        // console.log({character})
     }, [primaryProChoiceDiv, chosenInstrumentPrimary])
 
     //Proficiency Options
@@ -115,6 +127,7 @@ export default function ProInfo ({functions}) {
                                 <p key={i}>
                                    <input
                                         type='checkbox'
+                                        checked={isChecked}
                                         name={option.item.index}
                                         onChange={handleCheck}
                                         disabled={isChecked ? false : isDisabled}
@@ -156,6 +169,7 @@ export default function ProInfo ({functions}) {
                                     <p key={i}>
                                        <input
                                             type='checkbox'
+                                            checked={isChecked}
                                             name={option.item.index}
                                             onChange={handleCheck}
                                             disabled={isChecked ? false : isDisabled}
@@ -195,6 +209,7 @@ export default function ProInfo ({functions}) {
                                     <p key={i}>
                                         <input
                                             type='checkbox'
+                                            checked={isChecked}
                                             name={option.item.index}
                                             onChange={handleCheck}
                                             disabled={isChecked ? false : isDisabled}
@@ -217,6 +232,7 @@ export default function ProInfo ({functions}) {
             const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
             const isEmpty = ("name" in character.class.secondary)
 
+            
             if(!isEmpty && character.class.secondary.className !== 'Bard'){
                 return setSecondaryProChoiceDiv(
 
@@ -241,11 +257,11 @@ export default function ProInfo ({functions}) {
                                     setChosenProSecondary((prevPro) => prevPro.filter((x) => x !== e.target.name))
                                 }
                             }
-
                             return(
                                 <p key={i}>
                                     <input 
                                         type='checkbox'
+                                        checked={isChecked}
                                         name={option.item.index}
                                         onChange={handleCheck}
                                         disabled={isChecked ? false :isDisabled}
@@ -256,15 +272,16 @@ export default function ProInfo ({functions}) {
                         })}
                     </div>
                 )
-            }else if(!isEmpty && character.class.primary.className === 'Bard'){
+            }else if(!isEmpty && character.class.secondary.className === 'Bard'){
+                // console.log('hello')
                 const bardPro = () => {
                     return setSecondaryProChoiceDiv(
                         <div className='proficiencyChoice'>
-                            {primaryChoices?.availableOptions[0]?.desc}
-                            {primaryChoices?.availableOptions[0]?.from?.options.map((option, i) => {
-                                     
+                            {secondaryChoices?.availableOptions[0]?.desc}
+                            {secondaryChoices?.availableOptions[0]?.from?.options.map((option, i) => {
+                                    //  console.log()
                                 const isChecked = chosenProSecondary.includes(option.item.index)
-                                const isDisabled = chosenProSecondary.length >= primaryMax && !isChecked
+                                const isDisabled = chosenProSecondary.length >= secondaryMax && !isChecked
                                 
                                 const handleCheck = (e) => {
                                     
@@ -283,6 +300,7 @@ export default function ProInfo ({functions}) {
                                 return(
                                     <p key={i}>
                                        <input
+                                            checked={isChecked}
                                             type='checkbox'
                                             name={option.item.index}
                                             onChange={handleCheck}
@@ -297,10 +315,11 @@ export default function ProInfo ({functions}) {
                 }
 
                 const bardInstrument = () => {
+                    // console.log('hello')
                     return setSecondaryInstrumentChoiceDiv(
                         <div className='proficiencyChoice'>
-                            {primaryChoices?.availableOptions[1]?.desc}
-                            {primaryChoices?.availableOptions[1]?.from?.options.map((option, i) => {
+                            {secondaryChoices?.availableOptions[1]?.desc}
+                            {secondaryChoices?.availableOptions[1]?.from?.options.map((option, i) => {
     
                                 const isChecked = chosenInstrumentSecondary.includes(option.item.index)
                                 const isDisabled = chosenInstrumentSecondary.length >= instrumentMax && !isChecked
@@ -318,7 +337,7 @@ export default function ProInfo ({functions}) {
                                         setChosenInstrumentSecondary((prevPro) => prevPro.filter((x) => x !== e.target.name))
                                     }
                                 }
-    
+                                // console.log(chosenInstrumentSecondary)
                                 return(
                                     <p key={i}>
                                         <input
@@ -342,7 +361,7 @@ export default function ProInfo ({functions}) {
         primaryProChoice()
         secondaryProChoice()
 
-    }, [chosenProPrimary, chosenProSecondary, character, primaryMax, chosenInstrumentPrimary])
+    }, [chosenProPrimary, chosenProSecondary, character, primaryMax,chosenInstrumentPrimary, chosenInstrumentSecondary])
 
     //Proficiencies
     const [primaryProDiv, setPrimaryProDiv] = useState()

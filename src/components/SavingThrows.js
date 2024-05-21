@@ -9,7 +9,6 @@ export default function SavingThrows ({functions}) {
         e.preventDefault()
 
         const STMod = `${e.target.dataset.skill}Mod`
-        // console.log('STMod', STMod)
 
         setSavingThrow(mods.STMod.value)
     }
@@ -27,8 +26,6 @@ export default function SavingThrows ({functions}) {
     })
     return(
         <div>
-            {/* {console.log('saving throws mods', mods)}
-            {console.log('savingThrow', savingThrow)} */}
             <label htmlFor='stStr'>Strength</label>
             <input name='stStr'type='number' data-stat='str' readOnly onLoad={decideST} defaultValue={savingThrow.str}/>
         </div>

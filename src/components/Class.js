@@ -15,7 +15,7 @@ export default function Class ({functions}) {
 
         .then((data) => {
             setClassList(data.results)
-            console.log(data)
+            // console.log(data)
 
         })
         .catch((err) => {
@@ -65,9 +65,9 @@ export default function Class ({functions}) {
                                 hitDie: data.hit_die,
                                 spellcasting: {
                                     ...prevCharacter.class.primary.combat.spellcasting,
-                                    info: data.spellcasting.info,
-                                    level:data.spellcasting.level,
-                                    spellCastingAbility: data.spellcasting.spellcasting_ability
+                                    info: data?.spellcasting?.info,
+                                    level:data?.spellcasting?.level,
+                                    spellCastingAbility: data?.spellcasting?.spellcasting_ability
                                 }
                             },
                             multiClassing: data.multi_classing
@@ -75,7 +75,7 @@ export default function Class ({functions}) {
                         
                     }
                 }))
-                console.log('data', data)
+                // console.log('data', data)
             }).catch(err => {
                 console.error('Error ', err)
             })
@@ -125,8 +125,8 @@ export default function Class ({functions}) {
                         }
                     }
                 }))
-                console.log({data})
-                console.log({character})
+                // console.log({data})
+                // console.log({character})
             }).catch(err => {
                 console.error('Error ', err)
             })

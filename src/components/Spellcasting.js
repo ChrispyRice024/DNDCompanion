@@ -14,7 +14,7 @@ export default function Spellcating ({functions}) {
             fetch(`https://www.dnd5eapi.co${primaryClass}/spells`)
             .then(res => res.json())
             .then(data => {
-                console.log({data})
+                // console.log({data})
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
                     class:{
@@ -42,7 +42,7 @@ export default function Spellcating ({functions}) {
                         }
                     }
                 )
-                console.log(data)
+                // console.log(data)
             })
         }
 
@@ -50,7 +50,7 @@ export default function Spellcating ({functions}) {
             fetch(`https://www.dnd5eapi.co${secondaryClass}/spells`)
             .then(res => res.json())
             .then(data => {
-                console.log({data})
+                // console.log({data})
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
                     class:{
@@ -78,7 +78,7 @@ export default function Spellcating ({functions}) {
                         }
                     }
                 )
-                console.log(data)
+                // console.log(data)
             })
         }
         
@@ -86,7 +86,7 @@ export default function Spellcating ({functions}) {
 
     //Spell divs
 useEffect(() => {
-    console.log({primarySpells})
+    // console.log({primarySpells})
 }, [character])
 
     const [primarySpellsInfoDiv, setPrimarySpellsInfoDiv] = useState()
@@ -186,9 +186,9 @@ useEffect(() => {
                 </div>
             )
         }
-        console.log(primarySpellcasting)
-        console.log({chosenCantripPrimary})
-        console.log({chosenSpellPrimary})
+        // console.log(primarySpellcasting)
+        // console.log({chosenCantripPrimary})
+        // console.log({chosenSpellPrimary})
     }, [character, chosenCantripPrimary, chosenSpellPrimary])
     return(
         <div>
