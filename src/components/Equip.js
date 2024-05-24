@@ -1,4 +1,4 @@
-import {useState, React, useEffect} from 'react'
+import {useRef, useState, React, useEffect} from 'react'
 
 export default function Equip ({functions}) {
 
@@ -9,6 +9,26 @@ export default function Equip ({functions}) {
 
     const [secondaryEquip, setSecondaryEquip] = useState([])
     const [secondaryEquipOptions, setSecondaryEquipOptions] = useState([])
+    const [triggerRender, setTriggerRender] = useState(1)
+    
+
+    // useEffect(() => {
+        
+    //     const triggerFetch = (i, url, container) => {
+    //         try{
+    //             const res = fetch(`${url}`)
+    //             const data = res.json()
+    
+    //             container = data
+    
+    //         }catch(err){
+    //             console.error(err)
+    //         }    
+    //     }
+        
+    //     triggerFetch()
+    // }, [triggerRender])
+
 
     useEffect(() => {
         const primaryUrl = character?.class?.primary?.url
@@ -48,6 +68,9 @@ export default function Equip ({functions}) {
     const [chosenEquipPrimary, setChosenEquipPrimary] = useState([])
     const [chosenequipSecondary, setChosenEquipSecondary] = useState([])
 
+    const [fetchedData, setFetchedData] = useState({})
+
+
     useEffect(() => {
 
         
@@ -71,9 +94,9 @@ export default function Equip ({functions}) {
                 )
             }
         }
-if(character.class.primary.className){
-    // fetchChoice(primaryEquipOptions[0].from.options[1].choice.from.equipment_category.url)
-}
+        if(character.class.primary.className){
+            // fetchChoice(primaryEquipOptions[0].from.options[1].choice.from.equipment_category.url)
+        }
         console.log('primaryEquipOptions', primaryEquipOptions)
         if(primaryEquip.length > 0 && primaryEquipOptions.length > 0){
 
@@ -90,6 +113,7 @@ if(character.class.primary.className){
                 </div>
             )
             // console.log()
+            
             setPrimaryOptionsDiv(
                 // console.log(primaryEquipOptions)
 
@@ -97,13 +121,18 @@ if(character.class.primary.className){
                     <div>
                         
                         {character.class.primary.className} Equipment Options
+
                         {primaryEquipOptions.map((option, i) => {
+
+                            console.log('primaryEquipOptions', primaryEquipOptions)
+                            console.log(option)
 
                             if (option.from.option_set_type === 'options_array'){
                                 // each item is a seperate choice (.map)
                                 return(
                                     <div>
-                                        pick one 
+                                        pick one
+                                        {console.log(option.from.options)}
                                         {
                                             option.from.options.map((choice, j) => {
                                                 console.log('choice.option_type', choice.option_type, choice?.of?.name)
@@ -116,23 +145,15 @@ if(character.class.primary.className){
                                                 ]
                                                 if(choice.option_type === 'counted_reference'){
                                                     console.log(letter[i])
-                                                console.log('choice.of.name', choice.of)
-                                                return(
-                                                    <p>
-                                                        {letter[i]} | {choice.count} {choice.of.name}
-                                                    </p>
-                                                )
+                                                    console.log('choice.of.name', choice.of)
+                                                    return(
+                                                        <p>
+                                                            {letter[j]} | {choice.count} {choice.of.name}
+                                                        </p>
+                                                    )
                                                 }else if(choice.option_type === 'multiple'){
                                                     console.log(choice.items[0].of.name)
-                                                    // choice.items.map((item, i) => {
-                                                    //     return(
-                                                    //         <p>
-                                                    //             hello
-                                                    //             {item.of.name} and
-                                                    //         {console.log(item)}
-                                                    //         </p>
-                                                    //     )
-                                                    // })
+                                       
                                                     return(
                                                         <p>
                                                             {choice.items.map((item, k) => {
@@ -148,26 +169,60 @@ if(character.class.primary.className){
                                                         </p>
                                                     )
                                                 }else if(choice.option_type === 'choice'){
+
+
+
+
+
                                                     console.log('choice', choice, choice.choice.from.equipment_category.url)
                                                     const url = choice.choice.from.equipment_category.url
 
                                                     let fetchedChoices
-
-                                                    const fetchData = async () => {
-                                                        await  fetch(`https://www.dnd5eapi.co${url}`)
-                                                            .then((res) => res.json())
-                                                            .then((data) => {
-                                                                console.log(data)
-                                                                return fetchedChoices = data
-                                                            })
+                                                    const getFetchKey = (className, j) => {
+                                                        return fetchedData[`${className}_${j}`]
                                                     }
-                                                     
-                                                    fetchData()
-                                                    return (
-                                                        <span>
-                                                            {fetchedChoices}
-                                                        </span>
+                                                    const fetchKey = getFetchKey(character.class.primary.className, j)
+                                                    let ready = false
+                                                    // this function needs to change the value of fetchedChoices so i can return a div with the data mapped over
+                                
+                                                    const getData = async (url) => {
+                                                        try{
+                                                            
+                                                                const res = await fetch(`https://www.dnd5eapi.co${choice.choice.from.equipment_category.url}`)
+                                                                const data = await res.json()
+                                                                setFetchedData((prevData) => ({
+                                                                    ...prevData,
+                                                                    [`${character.class.primary.className}_${j}`]: data
+                                                                }))
+                                                            
+                                                        }catch(err){
+                                                            console.error(err)
+                                                        }
+                                                    }
+                                                    getData()
+
+                                                    console.log('fetchedData', fetchedData)
+                                                    console.log('after new fetch fun', fetchedChoices)
+                                                    console.log(fetchedChoices)
+                                                    return(
+                                                        <div>
+                                                            <p>
+                                                                or any {choice.choice.desc}
+                                                            </p>
+                                                            {
+                                                                // console.log(fetchedData[`${character.class.primary.className}_${j}`].equipment)
+                                                                fetchedData[`${character?.class?.primary?.className}_${j}`]?.equipment.map((item, k) => {
+
+                                                                    return(
+                                                                        <p>
+                                                                            {item.name}
+                                                                        </p>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
                                                     )
+                                                    
                                                 }
                                                 
                                             })
@@ -184,6 +239,7 @@ if(character.class.primary.className){
                     </div>
                 
             )
+
             // setPrimaryOptionsDiv(
                 // <div>
                 //     <strong>{character.class.primary.className} Equipment Options</strong>
