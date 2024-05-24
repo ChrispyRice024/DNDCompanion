@@ -46,6 +46,27 @@ export default function CharCreator () {
                 }
             }
         },
+        inventory:{
+            equipment:{
+                armor:{
+
+                },
+                weapons:{
+                    ammunition:{
+                        
+                    }
+                }
+            },
+            items:{
+                tools:{
+
+                }
+            },
+            spellComponents:{
+
+            }
+        },
+        
         stats: {
             str:10,
             dex:10,
