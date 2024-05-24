@@ -9,27 +9,10 @@ export default function Equip ({functions}) {
 
     const [secondaryEquip, setSecondaryEquip] = useState([])
     const [secondaryEquipOptions, setSecondaryEquipOptions] = useState([])
+    // Makes the main useEffect re-render to display the fetched data
     const [stall, setStall] = useState(0)
-    
 
-    // useEffect(() => {
-        
-    //     const triggerFetch = (i, url, container) => {
-    //         try{
-    //             const res = fetch(`${url}`)
-    //             const data = res.json()
-    
-    //             container = data
-    
-    //         }catch(err){
-    //             console.error(err)
-    //         }    
-    //     }
-        
-    //     triggerFetch()
-    // }, [triggerRender])
-
-
+    //fetches the equipmet and equipment options
     useEffect(() => {
         const primaryUrl = character?.class?.primary?.url
         const secondaryUrl = character?.class?.secondary?.url
@@ -54,9 +37,6 @@ export default function Equip ({functions}) {
             })
         }
         
-        // console.log('primaryEquip', primaryEquip)
-        // console.log('primaryEquipOptions', primaryEquipOptions)
-        
     }, [character])
 
     const [primaryEquipDiv, setPrimaryEquipDiv] = useState()
@@ -74,9 +54,10 @@ export default function Equip ({functions}) {
         console.log('chosenEquipPrimary', chosenEquipPrimary);
     }, [chosenEquipPrimary]);
 
+
+    //sets the divs with euipment and equipment options
     useEffect(() => {
 
-        console.log('primaryEquipOptions', primaryEquipOptions)
         if(primaryEquip.length > 0 && primaryEquipOptions.length > 0){
 
             setPrimaryEquipDiv(
@@ -92,16 +73,17 @@ export default function Equip ({functions}) {
                 </div>
             )
 
-            
+            //sets the options div
             setPrimaryOptionsDiv(
                     <div>
                         
                         {character.class.primary.className} Equipment Options
-
+                        {/* iterates through the main options */}
                         {primaryEquipOptions.map((option, i) => {
 
                             console.log('primaryEquipOptions', primaryEquipOptions)
 
+                            // sets chosenEquipPrimary to the chosen equipment 
                                 const handleChange = async (e, url) => {                                                            
                                     try{
                                         const res = await fetch(`https://www.dnd5eapi.co${url}`)
@@ -118,7 +100,7 @@ export default function Equip ({functions}) {
                                         console.error(err)
                                     }
                                 }
-
+                                // options_array is an array of 2 or more options
                             if (option.from.option_set_type === 'options_array'){
 
                                 return(
@@ -126,8 +108,9 @@ export default function Equip ({functions}) {
                                         pick one
                                         {console.log(option.from.options)}
                                         {
+                                            
                                             option.from.options.map((choice, j) => {
-                                                console.log('choice.option_type', choice.option_type, choice?.of?.name)
+                                            
                                                 const letter = [
                                                     'A',
                                                     'B',
@@ -135,18 +118,17 @@ export default function Equip ({functions}) {
                                                     'D',
                                                     'E'
                                                 ]
+                                                // counted_reference has a quantity(count) and item
                                                 if(choice.option_type === 'counted_reference'){
 
-                                                    
-                                                    
                                                     return(
                                                         <p>
-                                                            {console.log(choice.of.url)}
                                                             <input type='radio' name={`equipOption${i}`} id={choice?.of?.index} onChange={(e) => handleChange(e, choice?.of?.url)} />
                                                             {letter[j]} | {choice?.count} {choice?.count > 1 ? `${choice?.of?.name}s` : choice?.of?.name}
                                                             
                                                         </p>
                                                     )
+                                                    // multiple has 2 or more counted_references that come together in one choice
                                                 }else if(choice.option_type === 'multiple'){
                                                     console.log(choice.items[0]?.of?.name)
                                        
@@ -165,11 +147,13 @@ export default function Equip ({functions}) {
                                                             })}
                                                         </p>
                                                     )
+                                                    //choice is a list retrieved from a fetch call
                                                 }else if(choice.option_type === 'choice'){
   
                                                     console.log('choice', choice, choice.choice.from.equipment_category.url)
                                                     const url = choice.choice.from.equipment_category.url
-                                
+                                                    
+                                                    //the fetch call setting fetchedData with a unique key
                                                     const getData = async (url) => {
                                                         try{
                                                             
@@ -193,9 +177,7 @@ export default function Equip ({functions}) {
                                                             <p>
                                                                 or any {choice.choice.desc}
                                                             </p>
-                                                            {console.log('option', primaryEquipOptions)}
                                                             {
-                                                                // console.log(fetchedData[`${character.class.primary.className}_${j}`].equipment)
                                                                 fetchedData[`${character?.class?.primary?.className}_${j}_C`]?.equipment.map((item, k) => {
                                                                     console.log('choice?.of?.url', item.url)
                                                                     return(
@@ -212,12 +194,13 @@ export default function Equip ({functions}) {
                                                 }
                                                 
                                             })
-                                        }
-                                 {console.log(option.from.option_set_type)}       
+                                        }      
                                     </div>
                                 )
+                                //equipment_category is a list of items from a fetch call
                             }else if(option.from.option_set_type === 'equipment_category'){
                                 
+                                //the fetch call sets fetchedData with a unique key
                                 const getData = async () => {
                                     const url = option.from.equipment_category.url
                                     try{
@@ -234,7 +217,7 @@ export default function Equip ({functions}) {
                                     }
                                 }
                                 getData()
-                                console.log('hello', fetchedData[`${character.class.primary.className}_${i}_EC`])
+                                
                                 return(
                                     <div>
                                         pick one {fetchedData[`${character.class.primary.className}_${i}_EC`]?.name}
@@ -258,6 +241,7 @@ export default function Equip ({functions}) {
                     </div>   
             )
         }
+        //makes the component re-render to display the fetch data after its received
         setStall(1)
     }, [primaryEquip, primaryEquipOptions, stall])
 
