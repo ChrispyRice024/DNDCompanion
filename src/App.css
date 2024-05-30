@@ -5,15 +5,19 @@
 #raceInfo{
   display:flex;
   text-align:center;
+  justify-content:center;
 }
 
 #primaryRaceInfo{
   background-color:green;
   border-style:solid;
+  width:50%;
 }
 
 #secondaryRaceInfo{
   background-color:blue;
+  border-style:solid;
+  width:50%;
 }
 
 #proficiencies{
@@ -45,4 +49,92 @@
 
 .title{
   display:grid;
+}
+
+#RaceInfo_infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+#secondary_RaceInfo_infoCard{
+  position:absolute;
+  left:50%;
+  /* bottom:-80%; */
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+#Spellcasting_infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:400px;
+  padding:5px;
+}
+
+.Equipment_infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:400px;
+  padding:5px;
+}
+
+.secondaryInfoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+.raceProList{
+  /* position:relative; */
+  display:inline-block;
+  max-width:100px;
+}
+
+.primaryTraits{
+  justify-content:center;
+  position:relative;
+  display:inline-block;
+  /* width:150px; */
+}
+
+.secondaryTraits{
+  /* justify-content:center; */
+  position:relative;
+  display:inline-block;
+}
+
+.innerMapProRaceDiv{
+  position:relative;
+  width:150px;
+  text-align:center;
+}
+
+.racialTraits{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }

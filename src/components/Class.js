@@ -7,7 +7,9 @@ export default function Class ({functions}) {
     const [primaryClassData, setPrimaryClassData] = useState('')
     const [secondaryClassData, setSecondaryClassData] = useState('')
 
+    const [urlList, setUrlList] = useState([])
     const [classList, setClassList] = useState([])
+    const [multiClassData, setMultiClassData] = useState([])
 
     useEffect(() => {
         fetch('https://www.dnd5eapi.co/api/classes')
@@ -15,20 +17,25 @@ export default function Class ({functions}) {
 
         .then((data) => {
             setClassList(data.results)
-            // console.log(data)
-
+            console.log(data)
+            classList.map((className, i) => {
+                setUrlList(className.url)
+            })
+            console.log(urlList)
         })
         .catch((err) => {
             console.error('Error fetching data: ', err)
         })
-    
-    }, [])
+    }, [character])
+
+
 
     useEffect(() => {
         if(primaryClassData !== ''){
         fetch(`https://www.dnd5eapi.co/api/classes/${primaryClassData}`)
             .then(res => res.json())
             .then(data => {
+                console.log('Class.js', {data})
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
                     proficiencies:{
@@ -60,6 +67,7 @@ export default function Class ({functions}) {
                         ...prevCharacter.class,
                         primary:{
                             className:data.name,
+                            classIndex: data.index,
                             url: data.url,
                             combat:{
                                 hitDie: data.hit_die,
@@ -84,6 +92,51 @@ export default function Class ({functions}) {
     }, [primaryClassData])
 
     useEffect(() => {
+        const fetchData = async () => {
+            if(classList.length > 0){
+                try{
+                    const res = await Promise.all(classList.map(url=> fetch(`https://www.dnd5eapi.co${url.url}`)))
+                    const data = await Promise.all(res.map(res => res.json()))
+                    console.log('hello', data)
+                    
+
+                    const updates = data.map((entry) => ({
+                        name:entry.name,
+                        multi_classing:entry.multi_classing
+                    }))
+
+                    setMultiClassData(updates)
+                    // setMultiClassData((prevData) => {
+                    //     const updates = data.reduce((acc, entry) => {
+                    //         acc[entry.name] = entry.multi_classing
+                    //         return acc
+                    //     }, {})
+
+                    //     return{
+                    //         ...prevData,
+                    //         ...updates
+                    //     }
+                    // })
+                }catch(err){
+                    console.error(err)
+                }
+            }
+        }
+
+        fetchData()
+    }, [primaryClassData])
+
+    useEffect(() => {
+        console.log(classList)
+
+        console.log('multiClassData', multiClassData)
+
+        console.log(multiClassData)
+    },[classList])
+    useEffect(() => {
+
+        const canMultiClass = character.class.primary.multiClassing
+        console.log(canMultiClass)
         if(secondaryClassData !== ''){
         fetch(`https://www.dnd5eapi.co/api/classes/${secondaryClassData}`)
             .then(res => res.json())
@@ -148,6 +201,10 @@ export default function Class ({functions}) {
         }
     }
 
+    const decidePrerequisites = () => {
+
+    }
+
     return(
         <div>
             <div>
@@ -165,11 +222,22 @@ export default function Class ({functions}) {
             <label htmlFor='secondaryClass'>Secondary Class</label>
                 <input name='secondaryClass' list='secondaryClassList' autoComplete='on' onChange={verifyInput} id='secondaryClass' className='class' placeholder='Class' />
                 <datalist id='secondaryClassList'>
-                    {classList.map((race, i) => (
-                        <option
-                        key={i}
-                        value={race.name}/>
-                    ))}
+                    {
+                        multiClassData.map((classData, i) => {
+                            let text = classData.name
+                            console.log(classData?.multi_classing?.prerequisites?.length)
+                            if(classData?.multi_classing?.prerequisites?.length){
+                                text += ' -Requires'
+                                text += classData?.multi_classing?.prerequisites.map(req => {
+                                    return`${req.minimum_score} ${req.ability_score.name}`
+                                }).join(', ')
+                                console.log(text)
+                            }
+                            return(
+                                <option value={classData.name}>{text}</option>
+                            )
+                        })
+                    }
                 </datalist>
             </div>
         </div>

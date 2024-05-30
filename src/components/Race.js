@@ -27,6 +27,7 @@ export default function Race({functions}) {
         fetch(`https://www.dnd5eapi.co/api/races/${primaryRaceData}`)
             .then(res => res.json())
             .then(data => {
+                console.log('Race.js', {data})
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
                     race:{
@@ -59,9 +60,6 @@ export default function Race({functions}) {
     }
     }, [secondaryRaceData])
 
-useEffect(() => {
-    setTimeout(5000, )
-}, [secondaryRaceData])
 
     const verifyInput = (e) => {
         const input = e.target.value
@@ -75,9 +73,9 @@ useEffect(() => {
             setSecondaryRaceData(input.toLowerCase())
         
         }
-        else{
-            input = ''
-        }
+        // else{
+        //     input = ''
+        // }
 
     }
     

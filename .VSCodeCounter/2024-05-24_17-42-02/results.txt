@@ -1,0 +1,63 @@
+Date : 2024-05-24 17:42:02
+Directory : c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion
+Total : 28 files,  20093 codes, 101 comments, 402 blanks, all 20596 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |     18,319 |          0 |          3 |     18,322 |
+| JavaScript |         20 |      1,666 |         76 |        354 |      2,096 |
+| CSS        |          2 |         49 |          2 |         11 |         62 |
+| Markdown   |          1 |         38 |          0 |         33 |         71 |
+| HTML       |          1 |         20 |         23 |          1 |         44 |
+| XML        |          1 |          1 |          0 |          0 |          1 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                       | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                          |         28 |     20,093 |        101 |        402 |     20,596 |
+| . (Files)                                                                                  |          3 |     18,332 |          0 |         35 |     18,367 |
+| public                                                                                     |          2 |         45 |         23 |          2 |         70 |
+| src                                                                                        |         23 |      1,716 |         78 |        365 |      2,159 |
+| src (Files)                                                                                |          8 |         98 |          9 |         22 |        129 |
+| src\components                                                                             |         14 |      1,410 |         66 |        313 |      1,789 |
+| src\pages                                                                                  |          1 |        208 |          3 |         30 |        241 |
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                   | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\README.md                      | Markdown   |         38 |          0 |         33 |         71 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\package-lock.json              | JSON       |     18,254 |          0 |          1 |     18,255 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\package.json                   | JSON       |         40 |          0 |          1 |         41 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\public\index.html              | HTML       |         20 |         23 |          1 |         44 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\public\manifest.json           | JSON       |         25 |          0 |          1 |         26 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\App.css                    | CSS        |         37 |          2 |          9 |         48 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\App.js                     | JavaScript |         16 |          0 |          3 |         19 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\App.test.js                | JavaScript |          7 |          0 |          2 |          9 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Api.js          | JavaScript |         13 |          0 |          3 |         16 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Character.js    | JavaScript |          7 |          0 |          3 |         10 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Class.js        | JavaScript |        152 |          4 |         21 |        177 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\ClassInfo.js    | JavaScript |         87 |          5 |         14 |        106 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Combat.js       | JavaScript |         76 |          0 |         11 |         87 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Equip.js        | JavaScript |        181 |         13 |         44 |        238 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\ProInfo.js      | JavaScript |        289 |         32 |        117 |        438 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Race.js         | JavaScript |        100 |          2 |         16 |        118 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\RaceInfo.js     | JavaScript |        103 |          0 |          7 |        110 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\SavingThrows.js | JavaScript |         27 |          0 |          6 |         33 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Skills.js       | JavaScript |         89 |          0 |         21 |        110 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Spellcasting.js | JavaScript |        171 |         10 |         23 |        204 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Stats.js        | JavaScript |        107 |          0 |         24 |        131 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\components\Subclasses.js   | JavaScript |          8 |          0 |          3 |         11 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\index.css                  | CSS        |         12 |          0 |          2 |         14 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\index.js                   | JavaScript |         12 |          3 |          3 |         18 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\logo.svg                   | XML        |          1 |          0 |          0 |          1 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\pages\CharCreator.js       | JavaScript |        208 |          3 |         30 |        241 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\reportWebVitals.js         | JavaScript |         12 |          0 |          2 |         14 |
+| c:\Users\chris\OneDrive\Documents\Repositories\DNDCompanion\src\setupTests.js              | JavaScript |          1 |          4 |          1 |          6 |
+| Total                                                                                      |            |     20,093 |        101 |        402 |     20,596 |
++--------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
