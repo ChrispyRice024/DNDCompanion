@@ -67,15 +67,19 @@ export default function ProInfo ({functions}) {
     useEffect(() => {
         setChosenProPrimary([])
         setChosenInstrumentPrimary([])
-    }, [character.class.primary.className])
+        console.log({character})
+    }, [character?.class?.primary?.className])
 
     useEffect(() => {
         setChosenProSecondary([])
         setChosenInstrumentSecondary([])
-    },[character.class.secondary.className])
+    },[character?.class?.secondary?.className])
 
-    
+    useEffect(() => {
 
+        // console.log(skills)
+    })
+ 
     useEffect(() => {
         setPrimaryMax(character?.proficiencies?.classProficiencies?.primary?.availableOptions[0]?.choose)
     }, [primaryChoices])
@@ -86,8 +90,8 @@ export default function ProInfo ({functions}) {
 
     //real time logs
     useEffect(() => {
-        // console.log({character})
-    }, [primaryProChoiceDiv, chosenInstrumentPrimary])
+        console.log({character})
+    }, [character])
 
     //Proficiency Options
     useEffect(() => {
@@ -95,9 +99,9 @@ export default function ProInfo ({functions}) {
         const primaryProChoice = () => {
         
             const primaryChoices = character?.proficiencies?.classProficiencies?.primary
-            const isEmpty = ("name" in character.class.primary)
+            const isEmpty = !("className" in character?.class?.primary)
 
-            if(!isEmpty && character.class.primary.className !== 'Bard'){
+            if(!isEmpty && character?.class?.primary?.className !== 'Bard'){
                 
                 return setPrimaryProChoiceDiv(
                     <div className='proficiencyChoice'>
@@ -113,7 +117,45 @@ export default function ProInfo ({functions}) {
 
                                 if(beenChecked){
 
+                                    const chosenSkill = e.target.name.replace('skill-', '')
+                                    const skills = Object.keys(character.skills)
+
                                     setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
+                                    
+                                    console.log(e.target.name)
+                                    console.log(chosenProPrimary)
+                                    console.log(chosenSkill)
+
+                                    setCharacter((prevCharacter) => {
+                                        const updatedSkills = {...prevCharacter.skills}
+
+                                        if(updatedSkills[chosenSkill]){
+                                            updatedSkills[chosenSkill] = {
+                                                ...updatedSkills[chosenSkill],
+                                                isProficient:true
+                                            }
+                                        }
+                                        return {
+                                            ...prevCharacter,
+                                            skills: updatedSkills
+                                        }
+                                    })
+                                    console.log(character)
+                                    // skills.forEach((skill) => {
+                                    //     console.log(character.skills)
+                                    //     if(chosenSkill === skill){
+                                    //         setCharacter((...prevCharacter) => ({
+                                    //             ...prevCharacter,
+                                    //             skills:{
+                                    //                 ...prevCharacter.skills,
+                                    //                 [skill]: {
+                                    //                     ...prevCharacter.skills[skill],
+                                    //                     isProficient: true
+                                    //                 }
+                                    //             }
+                                    //         }))
+                                    //     }
+                                    // })
                                
                                 }else if (!beenChecked){
 
@@ -371,7 +413,7 @@ export default function ProInfo ({functions}) {
         const primaryPro = () => {
 
             const primary = character?.proficiencies?.classProficiencies?.primary?.classProficiencies
-            const isEmpty = ("name" in character.class.primary)
+            const isEmpty = ("className" in character.class.primary)
 
             if(!isEmpty){
 
@@ -394,7 +436,7 @@ export default function ProInfo ({functions}) {
         const secondaryPro = () => {
 
             const secondary = character?.proficiencies?.classProficiencies?.secondary?.classProficiencies
-            const isEmpty = ("name" in character.class.secondary)
+            const isEmpty = ("className" in character.class.secondary)
 
             if(!isEmpty){
                 setSecondaryProDiv(
@@ -414,9 +456,15 @@ export default function ProInfo ({functions}) {
                 )
             }
         }
+        if('className' in character.class.primary){
+            primaryPro()
+        }
+        if('className' in character.class.secondary){
+            secondaryPro()
+        }
 
-        primaryPro()
-        secondaryPro()
+        
+        
     }, [character])
 
 //final return statement

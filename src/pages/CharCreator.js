@@ -13,14 +13,8 @@ import Equip from '../components/Equip'
 
 export default function CharCreator () {
 
-    const [proBonus, setProBonus] = useState('')
-
-    // const decideBonus = () => {
-    //     const primaryBonus = character?.misc?.primaryRace?.
-    // }
-
-
     const [character, setCharacter] = useState({
+        level:1,
         race:{
             primary:{},
             secondary:{},
@@ -84,20 +78,25 @@ export default function CharCreator () {
             chaMod:0
         },
         proficiencies:{
-            strPro:false,
-            dexPro:false,
-            conPro:false,
-            intPro:false,
-            wisPro:false,
-            chaPro:false,
-            classProficiencies:{
+            bonus:2,
+            racialProficiencies:{
                 primary:{
-                    classProficiencies:[],
-                    availableOptions:[]
+                    racialProficiencies:{},
+                    availableOptions:{}
                 },
                 secondary:{
-                    classProficiencies:[],
-                    availableOptions:[]
+                    racialProficiencies:{},
+                    availableOptions:{}
+                }
+            },
+            classProficiencies:{
+                primary:{
+                    classProficiencies:{},
+                    availableOptions:{}
+                },
+                secondary:{
+                    classProficiencies:{},
+                    availableOptions: {}
                 }
             }
         },
@@ -116,26 +115,98 @@ export default function CharCreator () {
                 secondaryClass:{}
             }
         },
-        skills:{
-            acrobatics:{value:0, stat:'dex'},
-            animalHandling:{value:0, stat:'wis'},
-            arcana:{value:0, stat:'int'},
-            athletics:{value:0, stat:'str'},
-            deception:{value:0, stat:'cha'},
-            history:{value:0, stat:'int'},
-            insight:{value:0, stat:'wis'},
-            intimidation:{value:0, stat:'cha'},
-            investigation:{value:0, stat:'int'},
-            medicine:{value:0, stat:'wis'},
-            nature:{value:0, stat:'int'},
-            perception:{value:0, stat:'wis'},
-            performance:{value:0, stat:'cha'},
-            persuassion:{value:0, stat:'cha'},
-            religion:{value:0, stat:'int'},
-            sleightOfHand:{value:0, stat:'dex'},
-            stealth:{value:0, stat:'dex'},
-            survival:{value:0, stat:'wis'}
+        skills: {
+            'acrobatics': {
+              value: 0,
+              stat: 'dex',
+              isProficient: false
             },
+            'animal-handling': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'arcana': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'athletics': {
+              value: 0,
+              stat: 'str',
+              isProficient: false
+            },
+            'deception': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'history': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'insight': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'intimidation': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'investigation': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'medicine': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'nature': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'perception': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'performance': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'persuassion': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'religion': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'sleight-of-hand': {
+              value: 0,
+              stat: 'dex',
+              isProficient: false
+            },
+            'stealth': {
+              value: 0,
+              stat: 'dex',
+              isProficient: false
+            },
+            'survival': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            }
+          },
             equipment:{
                 startingEquipment:{},
                 equipmentOptions:{}
@@ -155,11 +226,13 @@ const highestAbilityBonus = (character) => {
 
     abilities.forEach(ability => {
         let highestBonus = 0
+        let raceName
 
         if(primaryBonus){
             primaryBonus.forEach(bonus => {
                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
                     highestBonus = bonus.bonus
+                    raceName = character?.race?.primary?.name
                 }
             })
         }
@@ -168,10 +241,14 @@ const highestAbilityBonus = (character) => {
             secondaryBonus.forEach(bonus => {
                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
                     highestBonus = bonus.bonus
+                    raceName = character?.race?.secondary?.name
                 }
             })
         }
-    highestBonuses[ability] = highestBonus
+    highestBonuses[ability] = {
+        bonus: highestBonus,
+        race: raceName
+    }
 
     })
     setCharacter(prevCharacter => ({
@@ -186,14 +263,13 @@ const highestAbilityBonus = (character) => {
 
 useEffect(() => {
    highestAbilityBonus(character)
-
 }, [character?.race?.primary, character?.race?.secondary])
 
     return(
         <div>
             <form>
                 <div>
-                    <Race functions={{setCharacter: setCharacter, character:character, proBonus}} />
+                    <Race functions={{setCharacter: setCharacter, character:character}} />
                 </div>
                 
                 <div>
@@ -217,15 +293,15 @@ useEffect(() => {
                 </div>
 
                 <div>
-                    <Stats functions={{setCharacter: setCharacter, sendCharacter: getCharacter, proBonus: proBonus, character:character}} />
+                    <Stats functions={{setCharacter: setCharacter, sendCharacter: getCharacter, character:character}} />
                 </div>
 
                 <div>
-                    <Combat functions={{setCharacter: setCharacter, character:character, proBonus: proBonus, sendCharacter: getCharacter}} />
+                    <Combat functions={{setCharacter: setCharacter, character:character, sendCharacter: getCharacter}} />
                 </div>
 
                 <div>
-                    <Skills functions={{character:character}}/>
+                    <Skills functions={{character:character, setCharacter: setCharacter}}/>
                 </div>
                 <div>
                     {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}

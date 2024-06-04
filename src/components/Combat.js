@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 
 export default function Combat ({functions}) {
 
-const {setCharacter, proBonus, character, sendCharacter} = functions
+const {setCharacter, character, sendCharacter} = functions
 
     const handleResistChange = (i, value) => {
 
@@ -70,7 +70,7 @@ const {setCharacter, proBonus, character, sendCharacter} = functions
                 <label htmlFor='resist'>Resistances</label>
                 {/* <input name='resist' type='text' onChange={handleChange} placeholder='Resistances'/> */}
                 <span id='newResistList'>
-                    {character.combat.resistances.map((resist, i) => (
+                    {character?.combat?.resistances?.map((resist, i) => (
                         <input
                             key={i}
                             type='text'

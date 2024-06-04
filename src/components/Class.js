@@ -17,11 +17,10 @@ export default function Class ({functions}) {
 
         .then((data) => {
             setClassList(data.results)
-            console.log(data)
+
             classList.map((className, i) => {
                 setUrlList(className.url)
             })
-            console.log(urlList)
         })
         .catch((err) => {
             console.error('Error fetching data: ', err)
@@ -35,7 +34,7 @@ export default function Class ({functions}) {
         fetch(`https://www.dnd5eapi.co/api/classes/${primaryClassData}`)
             .then(res => res.json())
             .then(data => {
-                console.log('Class.js', {data})
+
                 setCharacter(prevCharacter => ({
                     ...prevCharacter,
                     proficiencies:{
@@ -83,7 +82,7 @@ export default function Class ({functions}) {
                         
                     }
                 }))
-                // console.log('data', data)
+
             }).catch(err => {
                 console.error('Error ', err)
             })
@@ -97,8 +96,6 @@ export default function Class ({functions}) {
                 try{
                     const res = await Promise.all(classList.map(url=> fetch(`https://www.dnd5eapi.co${url.url}`)))
                     const data = await Promise.all(res.map(res => res.json()))
-                    console.log('hello', data)
-                    
 
                     const updates = data.map((entry) => ({
                         name:entry.name,
@@ -126,13 +123,13 @@ export default function Class ({functions}) {
         fetchData()
     }, [primaryClassData])
 
-    useEffect(() => {
-        console.log(classList)
+    // useEffect(() => {
+    //     console.log(classList)
 
-        console.log('multiClassData', multiClassData)
+    //     console.log('multiClassData', multiClassData)
 
-        console.log(multiClassData)
-    },[classList])
+    //     console.log(multiClassData)
+    // },[classList])
     useEffect(() => {
 
         const canMultiClass = character.class.primary.multiClassing
@@ -178,8 +175,7 @@ export default function Class ({functions}) {
                         }
                     }
                 }))
-                // console.log({data})
-                // console.log({character})
+
             }).catch(err => {
                 console.error('Error ', err)
             })
@@ -225,13 +221,13 @@ export default function Class ({functions}) {
                     {
                         multiClassData.map((classData, i) => {
                             let text = classData.name
-                            console.log(classData?.multi_classing?.prerequisites?.length)
+
                             if(classData?.multi_classing?.prerequisites?.length){
                                 text += ' -Requires'
                                 text += classData?.multi_classing?.prerequisites.map(req => {
                                     return`${req.minimum_score} ${req.ability_score.name}`
                                 }).join(', ')
-                                console.log(text)
+              
                             }
                             return(
                                 <option value={classData.name}>{text}</option>

@@ -32,7 +32,7 @@ export default function ClassInfo ({ functions }) {
                 const fillDiv = () => {
                     
                     if(!isPrimaryEmpty && isSecondaryEmpty){
-                        // console.log('numbah 1')
+
                         return setProDivs((prevDiv) => {
                             primary?.proficiencies.map((pro, i) => (
                                 <p key={i}>
@@ -41,7 +41,7 @@ export default function ClassInfo ({ functions }) {
                             ))
                         })
                     }else if(isPrimaryEmpty && !isSecondaryEmpty){
-                        // console.log('numbah 2')
+
                         return setProDivs((prevDiv) => {
                             primary?.proficiencies.map((pro, i) => (
                                 <p key={i}>
@@ -50,7 +50,7 @@ export default function ClassInfo ({ functions }) {
                             ))
                         })
                     }else if (!isPrimaryEmpty && !isSecondaryEmpty){
-                        // console.log('numbah 3')
+
                         return setProDivs(
                             <div>
                                 <div>
@@ -95,7 +95,6 @@ export default function ClassInfo ({ functions }) {
                 fillDiv()
             }
             getPro()
-        //    console.log({proDivs})
     }, [character.class])
 
     return(

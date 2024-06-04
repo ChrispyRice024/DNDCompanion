@@ -1,5 +1,7 @@
 {
     "gitlens.codeLens.enabled": false,
     "dotnet.codeLens.enableReferencesCodeLens": false,
-    "dotnet.codeLens.enableTestsCodeLens": false
+    "dotnet.codeLens.enableTestsCodeLens": false,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4
 }

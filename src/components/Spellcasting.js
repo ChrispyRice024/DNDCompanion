@@ -9,6 +9,8 @@ export default function Spellcating ({functions}) {
 
     const [primarySpells, setPrimarySpells] = useState({})
     const [secondarySpells, setSecondarySpells] = useState({})
+
+
     
     //Fetching Spells
     useEffect(() => {
@@ -88,15 +90,79 @@ export default function Spellcating ({functions}) {
             })
         }
         
-    }, [character.class.primary.className, character.class.secondary.className])
+    }, [character?.class?.primary?.className, character?.class?.secondary?.className])
 
-    //Spell divs
-useEffect(() => {
-    // console.log({primarySpells})
-    if(secondarySpells){
-        console.log('secondarySpells', secondarySpells)
-    }
-}, [character])
+    useEffect(() => {
+      const fetchPrimaryData = async () => {
+        try{
+            const res = await fetch(`https://www.dnd5eapi.co/api/classes/${character.class.primary.classIndex}/levels/1`)
+            const data = await res.json()
+            setCharacter((prevCharacter) => ({
+                ...prevCharacter,
+                class:{
+                    ...prevCharacter.class,
+                    primary:{
+                        ...prevCharacter.class.primary,
+                        combat:{
+                            ...prevCharacter.class.primary.combat,
+                            spellcasting:{
+                                ...prevCharacter.class.primary.combat.spellcasting,
+                                [character.class.primary.classIndex]: data.spellcasting
+                            }
+                        }
+    
+                }
+                
+                }
+            }))
+            console.log('primary')
+            console.log(data.spellcasting)
+        }catch(err){
+            console.error(err)
+        }
+      }
+      if(character.class.primary.className){
+        fetchPrimaryData()
+      }
+        
+      
+    }, [primarySpells])
+
+    useEffect(() => {
+        const fetchSecondaryData = () => {
+        
+            try{
+                const res = fetch(`https://www.dnd5eapi.co/api/classes/${character.class.secondary.classIndex}/levels/1`)
+                const data = res.json()
+    
+                setCharacter((prevCharacter) => ({
+                    ...prevCharacter,
+                    class:{
+                        ...prevCharacter.class,
+                        secondary:{
+                            ...prevCharacter.class.secondary,
+                            combat:{
+                                ...prevCharacter.class.secondary.combat,
+                                spellcasting:{
+                                    ...prevCharacter.class.secondary.combat.spellcasting,
+                                    [character.class.secondary.classIndex]: data.spellcasting
+                                }
+                            }
+        
+                    }
+                    
+                    }
+                }))
+                console.log('secondary')
+            }catch(err){
+                console.error(err)
+            }
+          }
+          if(character.class.secondary.className){
+            fetchSecondaryData()
+          }
+        
+    },[secondarySpells])
 
     const [primarySpellsInfoDiv, setPrimarySpellsInfoDiv] = useState()
     const [primaryLearnableSpellsDiv, setPrimaryLearnableSpellsDiv] = useState()
@@ -125,23 +191,23 @@ useEffect(() => {
         setEvent(e)
         setKey(key)
         setHoveredKey(key)
-        console.log(e.target)
-        console.log(isHovering)
-        console.log(hoveredKey)
+
         console.log('hello')
     }
 
     const handleMouseOut = (e) => {
-console.log(isHovering)
+
             setIsHovering(false)
             setEvent(null)
             setSpawnCount((prevCount) => prevCount+1)
-        console.log('goodbye')
+
     }
 
-    useEffect(() => {
-        console.log(isHovering)
-    })
+    // useEffect(() => {
+    //     console.log(event?.target)
+    //     console.log(isHovering)
+    //     console.log(hoveredKey)
+    // })
     useEffect(() => {
 
         if(spawnCount > 5){
@@ -158,10 +224,6 @@ console.log(isHovering)
         const primaryMaxSpells = 2
         const secondaryMaxCantrips = 3
         const secondaryMaxSpells = 2
-        
-        console.log('secondarySpellcasting', secondarySpellcasting)
-
-        
 
         if(primarySpellcasting?.info){
             setPrimarySpellsInfoDiv(
@@ -198,7 +260,7 @@ console.log(isHovering)
                                         setChosenCantripPrimary((prevSpells) => prevSpells.filter((x) => x !== spell.index))
                                     }
                                 }
-                                console.log(spell)
+
                                 return(
                                     <span>
                                         <p key={i}>
@@ -210,7 +272,7 @@ console.log(isHovering)
                                             />
                                             <label key={`primaryCantrip_${i}`} htmlFor={spell.name} onMouseOver={(e) => handleMouseOver(e, `primaryCantrip_${i}`)} onMouseOut={handleMouseOut} data-url={spell.url}><strong>{spell.name}</strong></label>
                                         </p>
-                                        {console.log({isHovering, event, hoveredKey}, spell.url)}
+
                                         {isHovering && event && hoveredKey === `primaryCantrip_${i}` ? 
                                             
                                             <InfoCard functions={{
@@ -278,7 +340,7 @@ console.log(isHovering)
             )
         }
             if(secondarySpellcasting?.info){
-                console.log('secondarySpellcasting', secondarySpellcasting)
+
                 setSecondarySpellsInfoDiv(
                     <div>
                         {secondarySpellcasting.info.map((info, i) => (
