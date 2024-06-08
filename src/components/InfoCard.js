@@ -22,28 +22,50 @@ export default function InfoCard({ functions }) {
     (property) => property.name
   );
   useEffect(() => {
+
+    const racialEquipUrl = fetchData.reference ? fetchData.reference.url : '' 
     const fetchInfo = async () => {
-      console.log(isHovering);
+
       try {
         const res = await fetch(`https://www.dnd5eapi.co${url}`);
         const data = await res.json();
 
         setFetchData(data);
+
       } catch (err) {
         console.error(err);
       }
     };
-    console.log(hoveredKey);
+    const proFetch = async () => {
+      try{
+        const res = await fetch(`https://www.dnd5eapi.co${racialEquipUrl}`)
+        const data = await res.json()
+
+        console.log(data)
+      }catch(err){
+        console.error(err)
+      }
+    }
+    const bothFetch = async () => {
+      await fetchInfo()
+      await proFetch() 
+    }
+    if(parentName === 'RaceInfo_infoCard'){
+      bothFetch()
+    }else{
+      fetchInfo()
+    }
+
     fetchInfo();
-    console.log("InfoCard");
   }, [url]);
 
-//   useEffect(() => {
-//     console.log("fetchData", fetchData);
-//     console.log("equipmentCategory", fetchData.contents);
-//     console.log(className);
-//     console.log(parentName);
-//   }, [fetchData]);
+  useEffect(() => {
+    console.log("fetchData", fetchData);
+    console.log(url)
+    console.log("equipmentCategory", fetchData.contents);
+    console.log(className);
+    console.log(parentName);
+  }, [fetchData]);
 console.log('character.mods', character.mods)
   return (
     <div id={parentName} className="infoCard">
@@ -101,9 +123,10 @@ console.log('character.mods', character.mods)
 
             </p>
         </span>
-      ) : (
-        ""
-      )}
+      ):(
+        ''
+      )
+      }
       {stall === 0 ? setStall(stall+1) : ""}
     </div>
   );

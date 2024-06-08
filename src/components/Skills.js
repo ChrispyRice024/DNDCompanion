@@ -55,6 +55,9 @@ export default function Skills ({functions}) {
              <p>
                 <label htmlFor='acrobatics'>Acrobatics</label>
                 <input name='acrobatics' value={character.skills.acrobatics.isProficient ? character.skills.acrobatics.value + character.proficiencies.bonus : character.skills.acrobatics} type='number' readOnly data-stat='dex'/>
+                <span>
+                    {}
+                </span>
             </p>
 
             <p>

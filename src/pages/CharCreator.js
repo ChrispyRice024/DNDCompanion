@@ -10,6 +10,7 @@ import Class from '../components/Class'
 import ProInfo from '../components/ProInfo'
 import Spellcasting from '../components/Spellcasting'
 import Equip from '../components/Equip'
+import Api from '../components/Api'
 
 export default function CharCreator () {
 
@@ -91,12 +92,12 @@ export default function CharCreator () {
             },
             classProficiencies:{
                 primary:{
-                    classProficiencies:{},
-                    availableOptions:{}
+                    classProficiencies:[],
+                    availableOptions:[]
                 },
                 secondary:{
-                    classProficiencies:{},
-                    availableOptions: {}
+                    classProficiencies:[],
+                    availableOptions:[]
                 }
             }
         },
@@ -212,54 +213,172 @@ export default function CharCreator () {
                 equipmentOptions:{}
             }
         })
+
+        const [fetchData, setFetchData] = useState({
+            race_list:[],
+            class_list:[],
+            race:{
+                primary:{
+                    index:'',
+                    name:'',
+                    age:'',
+                    alignment:'',
+                    language:{
+                        language_desc:'',
+                        languages:[]
+                    },
+                    size:{
+                        size:'',
+                        size_description:''
+                    },
+                    speed:'',
+                    starting_proficiencies:[],
+                    subraces:[],
+                    traits:[],
+                    url:''
+                },
+                secondary:{
+                    index:'',
+                    name:'',
+                    age:'',
+                    alignment:'',
+                    language:{
+                        language_desc:'',
+                        languages:[]
+                    },
+                    size:{
+                        size:'',
+                        size_description:''
+                    },
+                    speed:'',
+                    starting_proficiencies:[],
+                    subraces:[],
+                    traits:[],
+                    url:''
+                }
+            },
+            class:{
+                primary:{
+                    name:'',
+                    index:'',
+                    url:'',
+                    spellcasting:{
+                        description:[],
+                        ability:{},
+                        spell_list:{}
+                    },
+                    equipment:{
+                        starting_equipment:{
+                            primary:[],
+                            secondary:[]
+                        },
+                        starting_equipment_options:{
+                            primary:[],
+                            secondary:[]
+                        }
+                    },
+                    proficiencies:{
+                        skills:{
+                            given:[],
+                            options:[],
+                            chosen:[]
+                        },
+                        weapons_armor:{
+                            given:[],
+                            options:[],
+                            chosen:[]
+                        }
+                    }
+                },
+                secondary:{
+                    name:'',
+                    index:'',
+                    url:'',
+                    spellcasting:{
+                        description:[],
+                        ability:{},
+                        spell_list:{}
+                    },
+                    equipment:{
+                        starting_equipment:{
+                            primary:[],
+                            secondary:[]
+                        },
+                        starting_equipment_options:{
+                            primary:[],
+                            secondary:[]
+                        }
+                    },
+                    proficiencies:{
+                        skills:{
+                            given:[],
+                            options:[],
+                            chosen:[]
+                        },
+                        weapons_armor:{
+                            given:[],
+                            options:[],
+                            chosen:[]
+                        }
+                    }
+                }
+            }
+        })
     const getCharacter = (data) => {
         setCharacter(data)
     }
-
-
-const highestAbilityBonus = (character) => {
-    const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
-    const highestBonuses = {}
-    
-    const primaryBonus = character?.race?.primary?.ability_bonuses
-    const secondaryBonus = character?.race?.secondary?.ability_bonuses
-
-    abilities.forEach(ability => {
-        let highestBonus = 0
-        let raceName
-
-        if(primaryBonus){
-            primaryBonus.forEach(bonus => {
-                if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
-                    highestBonus = bonus.bonus
-                    raceName = character?.race?.primary?.name
-                }
-            })
-        }
-
-        if(secondaryBonus) {
-            secondaryBonus.forEach(bonus => {
-                if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
-                    highestBonus = bonus.bonus
-                    raceName = character?.race?.secondary?.name
-                }
-            })
-        }
-    highestBonuses[ability] = {
-        bonus: highestBonus,
-        race: raceName
-    }
-
+    const [classUrl, setClassUrl] = useState({
+        primary:'',
+        secondary:''
     })
-    setCharacter(prevCharacter => ({
-        ...prevCharacter,
-        race:{
-            ...prevCharacter.race,
-            racialAbilityBonus: highestBonuses
-        }
-    }))
 
-}
+    const [primaryClassUrl, setPrimaryClassUrl] = useState('')
+
+    const [primaryClassProficiencies, setPrimaryClassProficiencies] = useState([])
+    const [secondaryClassProficiencies, setSecondaryClassProficiencies] = useState([]) 
+    const highestAbilityBonus = (character) => {
+        const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+        const highestBonuses = {}
+        
+        const primaryBonus = character?.race?.primary?.ability_bonuses
+        const secondaryBonus = character?.race?.secondary?.ability_bonuses
+
+        abilities.forEach(ability => {
+            let highestBonus = 0
+            let raceName
+
+            if(primaryBonus){
+                primaryBonus.forEach(bonus => {
+                    if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+                        highestBonus = bonus.bonus
+                        raceName = character?.race?.primary?.name
+                    }
+                })
+            }
+
+            if(secondaryBonus) {
+                secondaryBonus.forEach(bonus => {
+                    if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+                        highestBonus = bonus.bonus
+                        raceName = character?.race?.secondary?.name
+                    }
+                })
+            }
+        highestBonuses[ability] = {
+            bonus: highestBonus,
+            race: raceName
+        }
+
+        })
+        setCharacter(prevCharacter => ({
+            ...prevCharacter,
+            race:{
+                ...prevCharacter.race,
+                racialAbilityBonus: highestBonuses
+            }
+        }))
+
+    }
 
 useEffect(() => {
    highestAbilityBonus(character)
@@ -267,45 +386,86 @@ useEffect(() => {
 
     return(
         <div>
+            <p>
+            <Api functions={{fetchData:fetchData,
+                            setFetchData:setFetchData,
+                            primaryClassUrl:primaryClassUrl}}/>
+            </p>
             <form>
                 <div>
-                    <Race functions={{setCharacter: setCharacter, character:character}} />
+                    <Race functions={{setCharacter: setCharacter,
+                                    character:character,
+                                    fetchData:fetchData}} />
                 </div>
                 
                 <div>
-                    <RaceInfo functions={{setCharacter: setCharacter, character:character}} />
+                    <RaceInfo functions={{setCharacter: setCharacter,
+                                        character:character,
+                                        fetchData:fetchData,
+                                        setFetchData:setFetchData}} />
                 </div>
 
                 <div>
-                    <Class functions={{character:character, setCharacter: setCharacter}} />
+                    <Class functions={{character:character,
+                                        setCharacter: setCharacter,
+                                        fetchData:fetchData,
+                                        setFetchData:setFetchData,
+                                        primaryClassProficiencies: primaryClassProficiencies,
+                                        setPrimaryClassProficiencies: setPrimaryClassProficiencies,
+                                        secondaryClassProficiencies:secondaryClassProficiencies,
+                                        setSecondaryClassProficiencies:setSecondaryClassProficiencies,
+                                        setPrimaryClassUrl:setPrimaryClassUrl}} />
                 </div>
 
                 <div>
-                    <ProInfo functions={{character: character, setCharacter: setCharacter}} />
+                    <ProInfo functions={{character: character,
+                                        setCharacter: setCharacter,
+                                        fetchData:fetchData,
+                                        setFetchData:setFetchData}} />
                 </div>
 
                 <div>
-                    <Spellcasting functions={{character: character, setCharacter: setCharacter}} />
+                    <Spellcasting functions={{character: character,
+                                            setCharacter: setCharacter,
+                                            fetchData:fetchData,
+                                            setFetchData:setFetchData}} />
                 </div>
 
                 <div>
-                    <Equip functions={{character: character, setCharacter: setCharacter}} />
+                    <Equip functions={{character: character,
+                                    setCharacter: setCharacter,
+                                    fetchData:fetchData,
+                                    setFetchData:setFetchData}} />
                 </div>
 
                 <div>
-                    <Stats functions={{setCharacter: setCharacter, sendCharacter: getCharacter, character:character}} />
+                    <Stats functions={{setCharacter: setCharacter,
+                                    sendCharacter: getCharacter,
+                                    character:character,
+                                    fetchData:fetchData,
+                                    setFetchData:setFetchData}} />
                 </div>
 
                 <div>
-                    <Combat functions={{setCharacter: setCharacter, character:character, sendCharacter: getCharacter}} />
+                    <Combat functions={{setCharacter: setCharacter,
+                                        character:character,
+                                        sendCharacter: getCharacter,
+                                        fetchData:fetchData,
+                                        setFetchData:setFetchData}} />
                 </div>
 
                 <div>
-                    <Skills functions={{character:character, setCharacter: setCharacter}}/>
+                    <Skills functions={{character:character,
+                                        setCharacter: setCharacter,
+                                        fetchData:fetchData,
+                                        setFetchData:setFetchData}}/>
                 </div>
                 <div>
                     {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
                 </div>
+                <p>
+                    <input type='submit' onClick/>
+                </p>
             </form>
         </div>
     )

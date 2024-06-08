@@ -73,10 +73,6 @@ export default function Race({functions}) {
             setSecondaryRaceData(input.toLowerCase())
         
         }
-        // else{
-        //     input = ''
-        // }
-
     }
     
 

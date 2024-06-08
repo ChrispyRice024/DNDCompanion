@@ -1,15 +1,46 @@
-export default fetchClassData = async () => {
-    try{
-        const res = await fetch(`https://www.dnd5eapi.co/api/classes`)
+import react from 'react'
+import {useState, useEffect} from 'react'
 
-        if(!res.ok){
-            throw new Error('Network Response Not Okay')
+export default function Api ({functions}){
+    const {fetchData, setFetchData, primaryClassUrl, classUrl} = functions
+    const [stall, setStall] = useState(0)
+
+    
+
+    useEffect(() => {
+        const classList = async () => {
+            try{
+                const res = await fetch(`https://dnd5eapi.co/api/classes`)
+                const data = await res.json()
+
+                setFetchData(() => ({
+                    class_list:data
+                }))
+            }catch(err){
+                console.error(err)
+            }
         }
-        const data = await res.json()
-        return data
-    }catch(err) {
-        console.error('Error Fetching Data: ', err)
-        throw err
-    }
+
+        classList()
+        if(stall === 0){
+            setStall(1)
+        }
+        console.log(stall)
+    }, [])
+
+    useEffect(() => {
+        console.log(classUrl)
+        const fetchClassData = async () => {
+            try{
+                const res = await fetch(`https://dnd5eapi.co${classUrl}`)
+                const data = await res.json()
+
+                console.log({data})
+            }catch(err){
+                console.error(err)
+            }
+        }
+        fetchClassData()
+    }, [primaryClassUrl])
 }
 

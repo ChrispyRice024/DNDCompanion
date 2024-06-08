@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 
 export default function Class ({functions}) {
 
-    const {character, setCharacter} = functions
+    const {character, setCharacter, fetchData, setPrimaryClassUrl} = functions
     
     const [primaryClassData, setPrimaryClassData] = useState('')
     const [secondaryClassData, setSecondaryClassData] = useState('')
@@ -11,6 +11,11 @@ export default function Class ({functions}) {
     const [classList, setClassList] = useState([])
     const [multiClassData, setMultiClassData] = useState([])
 
+    const [optionDiv, setOptionDiv] = useState()
+
+    const [stall, setStall] = useState(0)
+
+    // sets the list of available classes
     useEffect(() => {
         fetch('https://www.dnd5eapi.co/api/classes')
         .then((res) => res.json())
@@ -28,7 +33,7 @@ export default function Class ({functions}) {
     }, [character])
 
 
-
+    // Fetch the primaryClass data after its selected
     useEffect(() => {
         if(primaryClassData !== ''){
         fetch(`https://www.dnd5eapi.co/api/classes/${primaryClassData}`)
@@ -91,6 +96,7 @@ export default function Class ({functions}) {
     }, [primaryClassData])
 
     useEffect(() => {
+        // fetch the multiclass prerequisites
         const fetchData = async () => {
             if(classList.length > 0){
                 try{
@@ -103,17 +109,6 @@ export default function Class ({functions}) {
                     }))
 
                     setMultiClassData(updates)
-                    // setMultiClassData((prevData) => {
-                    //     const updates = data.reduce((acc, entry) => {
-                    //         acc[entry.name] = entry.multi_classing
-                    //         return acc
-                    //     }, {})
-
-                    //     return{
-                    //         ...prevData,
-                    //         ...updates
-                    //     }
-                    // })
                 }catch(err){
                     console.error(err)
                 }
@@ -123,13 +118,7 @@ export default function Class ({functions}) {
         fetchData()
     }, [primaryClassData])
 
-    // useEffect(() => {
-    //     console.log(classList)
-
-    //     console.log('multiClassData', multiClassData)
-
-    //     console.log(multiClassData)
-    // },[classList])
+    // MultiClass logic for secondary class
     useEffect(() => {
 
         const canMultiClass = character.class.primary.multiClassing
@@ -182,60 +171,80 @@ export default function Class ({functions}) {
         }
 
     }, [secondaryClassData])
-
+    console.log(fetchData)
     const verifyInput = (e) => {
         const input = e.target.value
         const inputName = e.target.name
         
+        const selectedOption = fetchData.class_list.results.find(
+            (item) => item.name === e.target.value
+        )
+
+
         const compare = classList.some(element => element.name === input) || classList.some(element => element.name.toLowerCase() === input)
         
         if(inputName === 'primaryClass' && compare){
-            setPrimaryClassData(input.toLowerCase())
-        
+            // setPrimaryClassData(input.toLowerCase())
+            // setClassUrl((...prevUrl) =>({
+            //     ...prevUrl,
+            //     primary:selectedOption.url
+            // }))
+            setPrimaryClassUrl(selectedOption.url)
         }else if(inputName === 'secondaryClass' && compare){
             setSecondaryClassData(input.toLowerCase())
         }
+        //else for either being a wrong value
+        console.log(e.target)
     }
 
-    const decidePrerequisites = () => {
+    useEffect(() => {
+        console.log({fetchData})
+        setOptionDiv(
+            <div>
+                <div>
+                    <label htmlFor='primaryClass'>Primary Class</label>
+                    <input name='primaryClass' list='primaryClassList' onChange={verifyInput} autoComplete='on' id='primaryClass' className='class' placeholder='Class' />
+                    <datalist id='primaryClassList'>
+                        {fetchData?.class_list?.results?.map((item, i) => (
+                            <option
+                            key={i}
+                            data-url={item.url}
+                            value={item.name}/>
+                        ))}
+                    </datalist>
+                </div>
+                <div>
+                <label htmlFor='secondaryClass'>Secondary Class</label>
+                    <input name='secondaryClass' list='secondaryClassList' autoComplete='on' onChange={verifyInput} id='secondaryClass' className='class' placeholder='Class' />
+                    <datalist id='secondaryClassList'>
+                        {
+                            multiClassData.map((classData, i) => {
+                                let text = classData.name
 
-    }
-
+                                if(classData?.multi_classing?.prerequisites?.length){
+                                    text += ' -Requires'
+                                    text += classData?.multi_classing?.prerequisites.map(req => {
+                                        return`${req.minimum_score} ${req.ability_score.name}`
+                                    }).join(', ')
+                
+                                }
+                                return(
+                                    <option value={classData.name}>{text}</option>
+                                )
+                            })
+                        }
+                    </datalist>
+                </div>
+            </div>
+        )
+        if(stall === 0){
+            setStall(1)
+        }
+    }, [fetchData.class_list])
+console.log(classList)
     return(
         <div>
-            <div>
-                <label htmlFor='primaryClass'>Primary Class</label>
-                <input name='primaryClass' list='primaryClassList' onChange={verifyInput} autoComplete='on' id='primaryClass' className='class' placeholder='Class' />
-                <datalist id='primaryClassList'>
-                    {classList.map((race, i) => (
-                        <option
-                        key={i}
-                        value={race.name}/>
-                    ))}
-                </datalist>
-            </div>
-            <div>
-            <label htmlFor='secondaryClass'>Secondary Class</label>
-                <input name='secondaryClass' list='secondaryClassList' autoComplete='on' onChange={verifyInput} id='secondaryClass' className='class' placeholder='Class' />
-                <datalist id='secondaryClassList'>
-                    {
-                        multiClassData.map((classData, i) => {
-                            let text = classData.name
-
-                            if(classData?.multi_classing?.prerequisites?.length){
-                                text += ' -Requires'
-                                text += classData?.multi_classing?.prerequisites.map(req => {
-                                    return`${req.minimum_score} ${req.ability_score.name}`
-                                }).join(', ')
-              
-                            }
-                            return(
-                                <option value={classData.name}>{text}</option>
-                            )
-                        })
-                    }
-                </datalist>
-            </div>
+           {optionDiv}
         </div>
     )
 }

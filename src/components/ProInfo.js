@@ -5,44 +5,7 @@ export default function ProInfo ({functions}) {
 
     const {character, setCharacter} = functions
 
-    // hit die--- #hit_die#
-    // name --- 'name'
-
-    // proficiencies --- [proficiencies] => 'index' = 'name' = 'url' 
-    
-    
-    
-    // proficiency choices--- [proficiency_choices] => #choose# = 'desc' = {from} = 'type'
-        // {from} --- 'option_set_type' = [options]
-            //[options] --- {item} => 'index' = 'name' = 'url' = 'option_type'
-    
-    
-    
-            // saving_throws --- [saving_throws] => 'index' = 'name' = 'url'
-    
-   
-   
-    // spellcasting --- spellcasing => [info] = #level# = {spellcasting_ability}
-        // [info]--- [desc] = 'name'
-            //{spellcasting_ability} --- 'index' = 'name' = 'url'
-    
-            // spells--- spells
-    
-    //startting_equipment--- [{starting_equipment}] => {equipment} = #quantity#
-        // {equipment} --- 'index' = 'name' = 'url'
-    
-    // [{starting_equipment_options}] --- 'desc' = {from} = 'type'
-        //{from} --- option_set_type = [options]
-            //[options]--- #count# = {of} = 'option_type'
-                                            // could be "counted_reference" ||"choice"
-                //{of}--- 'index' = 'name' = 'url'
-
-    //[subclasses]--- [{subclasses}] => 'index' = 'name' = 'url'
-    //'url'
-
-    //change to useEffect with this dep array [character.class]
-
-
+    const parentName = 'proInfo_infoCard'
 
     const [chosenProPrimary, setChosenProPrimary] = useState([])
     const [chosenProSecondary, setChosenProSecondary] = useState([])
@@ -61,9 +24,10 @@ export default function ProInfo ({functions}) {
     const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
 
     const instrumentMax = 3
-    const [primaryMax, setPrimaryMax] = useState()
+    const [primaryMax, setPrimaryMax] = useState(0)
     const [secondaryMax, setSecondaryMax] = useState(0)
 
+    // resets the chosen pro arrays when the class is changed
     useEffect(() => {
         setChosenProPrimary([])
         setChosenInstrumentPrimary([])
@@ -74,11 +38,6 @@ export default function ProInfo ({functions}) {
         setChosenProSecondary([])
         setChosenInstrumentSecondary([])
     },[character?.class?.secondary?.className])
-
-    useEffect(() => {
-
-        // console.log(skills)
-    })
  
     useEffect(() => {
         setPrimaryMax(character?.proficiencies?.classProficiencies?.primary?.availableOptions[0]?.choose)
@@ -119,10 +78,30 @@ export default function ProInfo ({functions}) {
 
                                     const chosenSkill = e.target.name.replace('skill-', '')
                                     const skills = Object.keys(character.skills)
-
+                                    console.log(e.target)
                                     setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
                                     
-                                    console.log(e.target.name)
+                                    setCharacter((...prevCharacter) => ({
+                                        ...prevCharacter,
+                                        proficiencies:{
+                                            ...prevCharacter.proficiencies,
+                                            classProficiencies:{
+                                                ...prevCharacter.proficiencies.classProficiencies,
+                                                primary:{
+                                                    ...prevCharacter.proficiencies.classProficiencies.primary,
+                                                    classProficiencies:[
+                                                        ...prevCharacter.proficiencies.classProficiencies.primary.classProficiencies,
+                                                        {
+                                                            name: e.target.name,
+                                                            url:e.target.url,
+                                                            index: e.target.name.toLowerCase()
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }))
+                                    console.log(option)
                                     console.log(chosenProPrimary)
                                     console.log(chosenSkill)
 
@@ -140,30 +119,12 @@ export default function ProInfo ({functions}) {
                                             skills: updatedSkills
                                         }
                                     })
-                                    console.log(character)
-                                    // skills.forEach((skill) => {
-                                    //     console.log(character.skills)
-                                    //     if(chosenSkill === skill){
-                                    //         setCharacter((...prevCharacter) => ({
-                                    //             ...prevCharacter,
-                                    //             skills:{
-                                    //                 ...prevCharacter.skills,
-                                    //                 [skill]: {
-                                    //                     ...prevCharacter.skills[skill],
-                                    //                     isProficient: true
-                                    //                 }
-                                    //             }
-                                    //         }))
-                                    //     }
-                                    // })
                                
                                 }else if (!beenChecked){
 
                                     setChosenProPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
                                 }
                             }
-
-                            
 
                             return(
                                 <p key={i}>
@@ -173,11 +134,13 @@ export default function ProInfo ({functions}) {
                                         name={option.item.index}
                                         onChange={handleCheck}
                                         disabled={isChecked ? false : isDisabled}
+                                        data-url={option.item.url}
                                         />
-                                    <label htmlFor={option.item.index}>{option.item.name}</label> 
+                                    <label htmlFor={option.item.index}>{option.item.name}</label>
                                 </p>
                             )
                         })}
+                        {console.log({character})}
                     </div>
                 )
             }else if(!isEmpty && character.class.primary.className === 'Bard'){
@@ -204,8 +167,6 @@ export default function ProInfo ({functions}) {
                                         setChosenProPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
                                     }
                                 }
-    
-                                
     
                                 return(
                                     <p key={i}>
@@ -315,7 +276,7 @@ export default function ProInfo ({functions}) {
                     </div>
                 )
             }else if(!isEmpty && character.class.secondary.className === 'Bard'){
-                // console.log('hello')
+
                 const bardPro = () => {
                     return setSecondaryProChoiceDiv(
                         <div className='proficiencyChoice'>
@@ -357,7 +318,7 @@ export default function ProInfo ({functions}) {
                 }
 
                 const bardInstrument = () => {
-                    // console.log('hello')
+
                     return setSecondaryInstrumentChoiceDiv(
                         <div className='proficiencyChoice'>
                             {secondaryChoices?.availableOptions[1]?.desc}
@@ -379,7 +340,7 @@ export default function ProInfo ({functions}) {
                                         setChosenInstrumentSecondary((prevPro) => prevPro.filter((x) => x !== e.target.name))
                                     }
                                 }
-                                // console.log(chosenInstrumentSecondary)
+
                                 return(
                                     <p key={i}>
                                         <input
