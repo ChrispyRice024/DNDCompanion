@@ -450,7 +450,7 @@ export default function Spellcating ({functions}) {
     return(
         <div>
             <div>
-                {fetchData.primary_class.spellcasting.info.map((item, i) => {
+                {fetchData?.primary_class?.spellcasting?.info?.map((item, i) => {
                     return(
                         <div>
                             <p>

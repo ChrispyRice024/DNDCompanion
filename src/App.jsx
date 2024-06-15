@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import CharCreator from './pages/CharCreator.js'
+import CharCreator from './pages/CharCreator.jsx'
 
 function App() {
   return (
