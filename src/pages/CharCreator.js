@@ -212,130 +212,55 @@ export default function CharCreator () {
                 startingEquipment:{},
                 equipmentOptions:{}
             }
-        })
-
-        const [fetchData, setFetchData] = useState({
-            race_list:[],
-            class_list:[],
-            race:{
-                primary:{
-                    index:'',
-                    name:'',
-                    age:'',
-                    alignment:'',
-                    language:{
-                        language_desc:'',
-                        languages:[]
-                    },
-                    size:{
-                        size:'',
-                        size_description:''
-                    },
-                    speed:'',
-                    starting_proficiencies:[],
-                    subraces:[],
-                    traits:[],
-                    url:''
-                },
-                secondary:{
-                    index:'',
-                    name:'',
-                    age:'',
-                    alignment:'',
-                    language:{
-                        language_desc:'',
-                        languages:[]
-                    },
-                    size:{
-                        size:'',
-                        size_description:''
-                    },
-                    speed:'',
-                    starting_proficiencies:[],
-                    subraces:[],
-                    traits:[],
-                    url:''
-                }
-            },
-            class:{
-                primary:{
-                    name:'',
-                    index:'',
-                    url:'',
-                    spellcasting:{
-                        description:[],
-                        ability:{},
-                        spell_list:{}
-                    },
-                    equipment:{
-                        starting_equipment:{
-                            primary:[],
-                            secondary:[]
-                        },
-                        starting_equipment_options:{
-                            primary:[],
-                            secondary:[]
-                        }
-                    },
-                    proficiencies:{
-                        skills:{
-                            given:[],
-                            options:[],
-                            chosen:[]
-                        },
-                        weapons_armor:{
-                            given:[],
-                            options:[],
-                            chosen:[]
-                        }
-                    }
-                },
-                secondary:{
-                    name:'',
-                    index:'',
-                    url:'',
-                    spellcasting:{
-                        description:[],
-                        ability:{},
-                        spell_list:{}
-                    },
-                    equipment:{
-                        starting_equipment:{
-                            primary:[],
-                            secondary:[]
-                        },
-                        starting_equipment_options:{
-                            primary:[],
-                            secondary:[]
-                        }
-                    },
-                    proficiencies:{
-                        skills:{
-                            given:[],
-                            options:[],
-                            chosen:[]
-                        },
-                        weapons_armor:{
-                            given:[],
-                            options:[],
-                            chosen:[]
-                        }
-                    }
-                }
-            }
-        })
-    const getCharacter = (data) => {
-        setCharacter(data)
-    }
-    const [classUrl, setClassUrl] = useState({
-        primary:'',
-        secondary:''
     })
 
-    const [primaryClassUrl, setPrimaryClassUrl] = useState('')
+    const [fetchData, setFetchData] = useState({})
 
-    const [primaryClassProficiencies, setPrimaryClassProficiencies] = useState([])
-    const [secondaryClassProficiencies, setSecondaryClassProficiencies] = useState([]) 
+    const fetchCall = async (url, targetKey) => {
+        // const URL = targetKey === 'secondary_class' ? 
+        try{
+            console.log(url)
+            const res = await fetch(`https://dnd5eapi.co${url}`)
+            const data = await res.json()
+
+            const spellUrl = data.spells
+            console.log(spellUrl, data.spellcasting)
+            await spellFetch(data.spells, `${targetKey}_spellcasting`)
+
+            setFetchData((prevData) => ({
+                ...prevData,
+                [targetKey]: data
+            }))
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    const spellFetch = async (url, targetKey) => {
+        try{
+            console.log('spellFetch', url)
+            const res = await fetch(`https://www.dnd5eapi.co${url}`)
+            const data = await res.json()
+            
+            console.log('spellFetch', data)
+            data.results.forEach((item) => {
+                if(item.level === 1 || item.level == 0){
+                    setFetchData(prevData => ({
+                        ...prevData,
+                        [`${targetKey}_spells`]:{
+                            ...prevData[`${targetKey}_spells`],
+                            [item.index]:item
+                        }
+                    }))
+                }
+                console.log(fetchData)
+            })
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+
     const highestAbilityBonus = (character) => {
         const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
         const highestBonuses = {}
@@ -388,8 +313,7 @@ useEffect(() => {
         <div>
             <p>
             <Api functions={{fetchData:fetchData,
-                            setFetchData:setFetchData,
-                            primaryClassUrl:primaryClassUrl}}/>
+                            setFetchData:setFetchData}}/>
             </p>
             <form>
                 <div>
@@ -406,15 +330,11 @@ useEffect(() => {
                 </div>
 
                 <div>
-                    <Class functions={{character:character,
-                                        setCharacter: setCharacter,
+                    <Class functions={{
+                                        
                                         fetchData:fetchData,
                                         setFetchData:setFetchData,
-                                        primaryClassProficiencies: primaryClassProficiencies,
-                                        setPrimaryClassProficiencies: setPrimaryClassProficiencies,
-                                        secondaryClassProficiencies:secondaryClassProficiencies,
-                                        setSecondaryClassProficiencies:setSecondaryClassProficiencies,
-                                        setPrimaryClassUrl:setPrimaryClassUrl}} />
+                                        fetchCall:fetchCall}} />
                 </div>
 
                 <div>
@@ -424,12 +344,15 @@ useEffect(() => {
                                         setFetchData:setFetchData}} />
                 </div>
 
-                <div>
-                    <Spellcasting functions={{character: character,
-                                            setCharacter: setCharacter,
-                                            fetchData:fetchData,
-                                            setFetchData:setFetchData}} />
-                </div>
+                {fetchData.primary_class || fetchData.secondary_class ? 
+                    <div>
+                        <Spellcasting functions={{character: character,
+                                                setCharacter: setCharacter,
+                                                fetchData:fetchData,
+                                                setFetchData:setFetchData}} />
+                    </div>
+                :''}
+                
 
                 <div>
                     <Equip functions={{character: character,
@@ -440,7 +363,6 @@ useEffect(() => {
 
                 <div>
                     <Stats functions={{setCharacter: setCharacter,
-                                    sendCharacter: getCharacter,
                                     character:character,
                                     fetchData:fetchData,
                                     setFetchData:setFetchData}} />
@@ -449,7 +371,6 @@ useEffect(() => {
                 <div>
                     <Combat functions={{setCharacter: setCharacter,
                                         character:character,
-                                        sendCharacter: getCharacter,
                                         fetchData:fetchData,
                                         setFetchData:setFetchData}} />
                 </div>

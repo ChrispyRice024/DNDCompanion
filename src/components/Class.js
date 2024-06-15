@@ -2,199 +2,99 @@ import {useState, useEffect} from 'react'
 
 export default function Class ({functions}) {
 
-    const {character, setCharacter, fetchData, setPrimaryClassUrl} = functions
-    
-    const [primaryClassData, setPrimaryClassData] = useState('')
-    const [secondaryClassData, setSecondaryClassData] = useState('')
+    const {fetchData, setFetchData, fetchCall} = functions
 
-    const [urlList, setUrlList] = useState([])
-    const [classList, setClassList] = useState([])
     const [multiClassData, setMultiClassData] = useState([])
 
     const [optionDiv, setOptionDiv] = useState()
 
-    const [stall, setStall] = useState(0)
-
-    // sets the list of available classes
+    //fetches the list of classes
     useEffect(() => {
-        fetch('https://www.dnd5eapi.co/api/classes')
-        .then((res) => res.json())
+        const classList = async () => {
+            try{
+                const res = await fetch(`https://dnd5eapi.co/api/classes`)
+                const data = await res.json()
 
-        .then((data) => {
-            setClassList(data.results)
-
-            classList.map((className, i) => {
-                setUrlList(className.url)
-            })
-        })
-        .catch((err) => {
-            console.error('Error fetching data: ', err)
-        })
-    }, [character])
-
-
-    // Fetch the primaryClass data after its selected
-    useEffect(() => {
-        if(primaryClassData !== ''){
-        fetch(`https://www.dnd5eapi.co/api/classes/${primaryClassData}`)
-            .then(res => res.json())
-            .then(data => {
-
-                setCharacter(prevCharacter => ({
-                    ...prevCharacter,
-                    proficiencies:{
-                        ...prevCharacter.proficiencies,
-                        classProficiencies:{
-                            ...prevCharacter.proficiencies.classProficiencies,
-                            primary:{
-                                name:data.name,
-                                classProficiencies: data.proficiencies,
-                                availableOptions: data.proficiency_choices
-                            }    
-                            
-                        }
-                        
-                    },
-                    equipment:{
-                        ...prevCharacter.equipment,
-                        startingEquipment:data.starting_equipment,
-                        equipmentOptions: data.starting_equipment_options
-                    },
-                    combat:{
-                        ...prevCharacter.combat,
-                        savingThrows: {
-                            primaryClass: data.saving_throws
-                        }
-                        
-                    },
-                    class:{
-                        ...prevCharacter.class,
-                        primary:{
-                            className:data.name,
-                            classIndex: data.index,
-                            url: data.url,
-                            combat:{
-                                hitDie: data.hit_die,
-                                spellcasting: {
-                                    ...prevCharacter.class.primary.combat.spellcasting,
-                                    info: data?.spellcasting?.info,
-                                    level:data?.spellcasting?.level,
-                                    spellCastingAbility: data?.spellcasting?.spellcasting_ability
-                                }
-                            },
-                            multiClassing: data.multi_classing
-                        }
-                        
-                    }
+                setFetchData(prevData => ({
+                    ...prevData,
+                    class_list:data
                 }))
-
-            }).catch(err => {
-                console.error('Error ', err)
-            })
-        }
-
-    }, [primaryClassData])
-
-    useEffect(() => {
-        // fetch the multiclass prerequisites
-        const fetchData = async () => {
-            if(classList.length > 0){
-                try{
-                    const res = await Promise.all(classList.map(url=> fetch(`https://www.dnd5eapi.co${url.url}`)))
-                    const data = await Promise.all(res.map(res => res.json()))
-
-                    const updates = data.map((entry) => ({
-                        name:entry.name,
-                        multi_classing:entry.multi_classing
-                    }))
-
-                    setMultiClassData(updates)
-                }catch(err){
-                    console.error(err)
-                }
+                console.log(fetchData)
+            }catch(err){
+                console.error(err)
             }
         }
+        
+        classList()
+    }, [])
 
-        fetchData()
-    }, [primaryClassData])
+    //sets the multiclass logic for the secondary class
+    const [multiClassDiv, setMultiClassDiv] = useState()
 
-    // MultiClass logic for secondary class
-    useEffect(() => {
+    const multiClassFetch = async () => {
+            try{
+                const res = await Promise.all(fetchData.class_list.results.map(url=> fetch(`https://www.dnd5eapi.co${url.url}`)))
+                const data = await Promise.all(res.map(res => res.json()))
 
-        const canMultiClass = character.class.primary.multiClassing
-        console.log(canMultiClass)
-        if(secondaryClassData !== ''){
-        fetch(`https://www.dnd5eapi.co/api/classes/${secondaryClassData}`)
-            .then(res => res.json())
-            .then(data => {
-                setCharacter(prevCharacter => ({
-                    ...prevCharacter,
-                    proficiencies:{
-                        ...prevCharacter.proficiencies,
-                        classProficiencies:{
-                            ...prevCharacter.proficiencies.classProficiencies,
-                            secondary:{
-                                name:data.name,
-                                classProficiencies: data.proficiencies,
-                                availableOptions: data.proficiency_choices
-                            }
-                        }
-                    },
-                    equipment:{
-                        ...prevCharacter.equipment,
-                        startingEquipment:data.starting_equipment,
-                        equipmentOptions: data.starting_equipment_options
-                    },
-                    combat:{
-                        ...prevCharacter.combat,
-                        savingThrows:{
-                            secondaryClass:data.saving_throws
-                        }
-                    },
-                    class:{
-                        ...prevCharacter.class,
-                        secondary:{
-                            className:data.name,
-                            url:data.url,
-                            combat:{
-                                hitDie: data.hit_die,
-                                spellcasting: data.spellcasting
-                            },
-                            multiClassing:data.multi_classing
-                        }
-                    }
+                const updates = data.map((entry) => ({
+                    name:entry.name,
+                    multi_classing:entry.multi_classing,
+                    url:entry.url
                 }))
 
-            }).catch(err => {
-                console.error('Error ', err)
-            })
-        }
+                setMultiClassData(updates)
+                
+                setMultiClassDiv(
+                    <div>
+                        <label htmlFor='secondaryClass'>Secondary Class</label>
+                            <input name='secondaryClass' list='secondaryClassList' autoComplete='on' onChange={verifyInput} id='secondaryClass' className='class' placeholder='Class' />
+                            <datalist id='secondaryClassList'>
+                                {
+                                    updates?.map((classData, i) => {
+                                        let text = classData.name
 
-    }, [secondaryClassData])
-    console.log(fetchData)
+                                            text += ' -Requires'
+                                            text += classData?.multi_classing?.prerequisites?.map(req => {
+                                                return`${req.minimum_score} ${req.ability_score.name}`
+                                            }).join(', ')
+
+                                        return(
+                                            <option key={`s_${i}`}
+                                                data-url={classData.url}
+                                                value={classData.name}>
+                                                    {text}
+                                                </option>
+                                        )
+                                    })
+                                }
+                            </datalist>
+                        </div>
+                )
+                fetchCall()
+            }catch(err){
+                console.error(err)
+            }
+            console.log('multiClassData', multiClassData)
+    }
+
     const verifyInput = (e) => {
         const input = e.target.value
         const inputName = e.target.name
-        
-        const selectedOption = fetchData.class_list.results.find(
-            (item) => item.name === e.target.value
-        )
 
+        const compare = fetchData.class_list.results.some(element => element.name === input) || fetchData.class_list.results.some(element => element.name.toLowerCase() === input)
+        const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
 
-        const compare = classList.some(element => element.name === input) || classList.some(element => element.name.toLowerCase() === input)
-        
         if(inputName === 'primaryClass' && compare){
-            // setPrimaryClassData(input.toLowerCase())
-            // setClassUrl((...prevUrl) =>({
-            //     ...prevUrl,
-            //     primary:selectedOption.url
-            // }))
-            setPrimaryClassUrl(selectedOption.url)
+
+            fetchCall(url, 'primary_class')
+            multiClassFetch()
         }else if(inputName === 'secondaryClass' && compare){
-            setSecondaryClassData(input.toLowerCase())
+
+            fetchCall(url, 'secondary_class')
+        }else{
+            alert('please select an existing class')
         }
-        //else for either being a wrong value
-        console.log(e.target)
+
     }
 
     useEffect(() => {
@@ -213,38 +113,15 @@ export default function Class ({functions}) {
                         ))}
                     </datalist>
                 </div>
-                <div>
-                <label htmlFor='secondaryClass'>Secondary Class</label>
-                    <input name='secondaryClass' list='secondaryClassList' autoComplete='on' onChange={verifyInput} id='secondaryClass' className='class' placeholder='Class' />
-                    <datalist id='secondaryClassList'>
-                        {
-                            multiClassData.map((classData, i) => {
-                                let text = classData.name
-
-                                if(classData?.multi_classing?.prerequisites?.length){
-                                    text += ' -Requires'
-                                    text += classData?.multi_classing?.prerequisites.map(req => {
-                                        return`${req.minimum_score} ${req.ability_score.name}`
-                                    }).join(', ')
-                
-                                }
-                                return(
-                                    <option value={classData.name}>{text}</option>
-                                )
-                            })
-                        }
-                    </datalist>
-                </div>
             </div>
         )
-        if(stall === 0){
-            setStall(1)
-        }
+
     }, [fetchData.class_list])
-console.log(classList)
+
     return(
         <div>
            {optionDiv}
+           {multiClassDiv}
         </div>
     )
 }

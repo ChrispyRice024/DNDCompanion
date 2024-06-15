@@ -37,14 +37,17 @@
   width:20%;
 }
 
-.proficiencyChoice{
+.primary_pro{
   background-color:green;
   /* display:grid; */
   width:20%;
+  border-style:solid;
 }
 
-#primaryPro{
-  background-color:green;
+.secondary_pro{
+  background-color:blue;
+  width:20%;
+  border-style:solid;
 }
 
 .title{

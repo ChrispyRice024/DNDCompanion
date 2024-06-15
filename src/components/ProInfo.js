@@ -1,370 +1,207 @@
 import {useState, React, useEffect} from 'react'
-import { Children } from 'react';
+import { Children } from 'react'
+import InfoCard from './InfoCard'
 
 export default function ProInfo ({functions}) {
 
-    const {character, setCharacter} = functions
+    const {character, fetchData, setFetchData} = functions
 
     const parentName = 'proInfo_infoCard'
 
-    const [chosenProPrimary, setChosenProPrimary] = useState([])
-    const [chosenProSecondary, setChosenProSecondary] = useState([])
-    const [chosenInstrumentPrimary, setChosenInstrumentPrimary] = useState([])
-    const [chosenInstrumentSecondary, setChosenInstrumentSecondary] = useState([])
-
     const [primaryProChoiceDiv, setPrimaryProChoiceDiv] = useState()
     const [secondaryProChoiceDiv, setSecondaryProChoiceDiv] = useState()
-    const [primaryInstrumentChoiceDiv, setPrimaryInstrumentChoiceDiv] = useState()
-    const [secondaryInstrumentChoiceDiv, setSecondaryInstrumentChoiceDiv] = useState()
-    
 
-    
-    //Set the max for proficiency choices
-    const primaryChoices = character?.proficiencies?.classProficiencies?.primary
-    const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
+    const [isHovering, setIsHovering] = useState(false)
+	const [event, setEvent] = useState(null)
+	const [spawnCount, setSpawnCount] = useState(0)
+	const [key, setKey] = useState(null)
+	const [hoveredKey, setHoveredKey] = useState(null)
 
-    const instrumentMax = 3
-    const [primaryMax, setPrimaryMax] = useState(0)
-    const [secondaryMax, setSecondaryMax] = useState(0)
+    const handleMouseOver = (e, key) => {
+		setIsHovering(true)
+		setEvent(e)
+		setKey(key)
+		setHoveredKey(key)
+	}
 
-    // resets the chosen pro arrays when the class is changed
-    useEffect(() => {
-        setChosenProPrimary([])
-        setChosenInstrumentPrimary([])
-        console.log({character})
-    }, [character?.class?.primary?.className])
+    const handleMouseOut = e => {
+		setIsHovering(false)
+		setEvent(null)
+		setSpawnCount(prevCount => prevCount + 1)
+	}
 
-    useEffect(() => {
-        setChosenProSecondary([])
-        setChosenInstrumentSecondary([])
-    },[character?.class?.secondary?.className])
- 
-    useEffect(() => {
-        setPrimaryMax(character?.proficiencies?.classProficiencies?.primary?.availableOptions[0]?.choose)
-    }, [primaryChoices])
-
-    useEffect(() => {
-        setSecondaryMax(character?.proficiencies?.classProficiencies?.secondary?.availableOptions[0]?.choose)
-    }, [secondaryChoices])
-
-    //real time logs
-    useEffect(() => {
-        console.log({character})
-    }, [character])
 
     //Proficiency Options
     useEffect(() => {
 
         const primaryProChoice = () => {
         
-            const primaryChoices = character?.proficiencies?.classProficiencies?.primary
-            const isEmpty = !("className" in character?.class?.primary)
+            const primaryChoices = fetchData?.primary_class?.proficiency_choices
 
-            if(!isEmpty && character?.class?.primary?.className !== 'Bard'){
-                
-                return setPrimaryProChoiceDiv(
-                    <div className='proficiencyChoice'>
-                        {primaryChoices?.availableOptions[0]?.desc}
-                        {primaryChoices?.availableOptions[0]?.from?.options.map((option, i) => {
-                             
-                            const isChecked = chosenProPrimary.includes(option.item.index)
-                            const isDisabled = chosenProPrimary.length >= primaryMax && !isChecked
-                            
-                            const handleCheck = (e) => {
-                                
-                                const beenChecked = e.target.checked
-
-                                if(beenChecked){
-
-                                    const chosenSkill = e.target.name.replace('skill-', '')
-                                    const skills = Object.keys(character.skills)
-                                    console.log(e.target)
-                                    setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
-                                    
-                                    setCharacter((...prevCharacter) => ({
-                                        ...prevCharacter,
-                                        proficiencies:{
-                                            ...prevCharacter.proficiencies,
-                                            classProficiencies:{
-                                                ...prevCharacter.proficiencies.classProficiencies,
-                                                primary:{
-                                                    ...prevCharacter.proficiencies.classProficiencies.primary,
-                                                    classProficiencies:[
-                                                        ...prevCharacter.proficiencies.classProficiencies.primary.classProficiencies,
-                                                        {
-                                                            name: e.target.name,
-                                                            url:e.target.url,
-                                                            index: e.target.name.toLowerCase()
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        }
-                                    }))
-                                    console.log(option)
-                                    console.log(chosenProPrimary)
-                                    console.log(chosenSkill)
-
-                                    setCharacter((prevCharacter) => {
-                                        const updatedSkills = {...prevCharacter.skills}
-
-                                        if(updatedSkills[chosenSkill]){
-                                            updatedSkills[chosenSkill] = {
-                                                ...updatedSkills[chosenSkill],
-                                                isProficient:true
-                                            }
-                                        }
-                                        return {
-                                            ...prevCharacter,
-                                            skills: updatedSkills
-                                        }
-                                    })
-                               
-                                }else if (!beenChecked){
-
-                                    setChosenProPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-                                }
-                            }
-
+                setPrimaryProChoiceDiv(
+                    <div className='proficiency_choice'>
+                        {primaryChoices?.map((choice, i) => {
                             return(
-                                <p key={i}>
-                                   <input
-                                        type='checkbox'
-                                        checked={isChecked}
-                                        name={option.item.index}
-                                        onChange={handleCheck}
-                                        disabled={isChecked ? false : isDisabled}
-                                        data-url={option.item.url}
-                                        />
-                                    <label htmlFor={option.item.index}>{option.item.name}</label>
-                                </p>
+                                <div className='primary_pro' key={i}>
+                                    {choice.desc}
+                                    {choice.from.options.map((option, j) => {
+
+                                        const chosenPro = fetchData?.primary_class[`${choice.type}_${i}`]
+
+                                        const max = choice?.choose
+                                        const isChecked = chosenPro?.some(obj => obj.name === option.item.name)
+                                        const isDisabled = chosenPro?.length >= max && !isChecked
+
+                                        const handleCheck = (e) => {
+                                            const beenChecked = e.target.checked
+
+                                            if(beenChecked){
+
+                                                console.log(choice)
+                                                setFetchData(prevData => ({
+                                                    ...prevData,
+                                                    primary_class: {
+                                                        ...prevData.primary_class,
+                                                        [`${choice.type}_${i}`]:[
+                                                                ...(prevData.primary_class[`${choice.type}_${i}`])|| [],
+                                                            {
+                                                                name: e.target.value,
+                                                                url:e.target.getAttribute('data-url'),
+                                                                index:e.target.name
+                                                            }    
+                                                        ]
+                                                    }
+                                                }))
+                                                
+                                            }else if (!beenChecked){
+                                                setFetchData((prevData) => ({
+                                                    ...prevData,
+                                                    primary_class:{
+                                                        ...prevData.primary_class,
+                                                        chosen_pro:[
+                                                            ...prevData.filter((x) => x !== e.target.name)
+                                                        ]
+                                                    }
+                                                }))
+                                            }
+                                            console.log(fetchData.selected_pro_primary)
+                                        }
+
+                                        return(
+                                            <div key={`${i}${j}`}>
+                                                <p>
+                                                    <input
+                                                        type='checkbox'
+                                                        value={option.item.name}
+                                                        checked={isChecked}
+                                                        name={option.item.index}
+                                                        onChange={handleCheck}
+                                                        disabled={isChecked ? false : isDisabled}
+                                                        data-url={option.item.url}
+                                                        />
+                                                    <label onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} htmlFor={option.item.index}>{option.item.name}</label>
+                                                </p>
+                                                <InfoCard 
+                                                    functions={{
+                                                        character: character,
+                                                        event: event,
+                                                        isHovering: isHovering,
+                                                        spawnCount: spawnCount,
+                                                        setSpawnCount: setSpawnCount,
+                                                        className: hoveredKey,
+                                                        hoveredKey: hoveredKey,
+                                                        url: option.item.url,
+                                                        parentName: parentName,
+                                                    }}/>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
                             )
                         })}
-                        {console.log({character})}
                     </div>
-                )
-            }else if(!isEmpty && character.class.primary.className === 'Bard'){
+                )}
+            const secondaryProChoice = () => {
+                const secondaryChoices = fetchData?.secondary_class?.proficiency_choices
 
-                const bardPro = () => {
-                    return setPrimaryProChoiceDiv(
-                        <div className='proficiencyChoice'>
-                            {primaryChoices?.availableOptions[0]?.desc}
-                            {primaryChoices?.availableOptions[0]?.from?.options.map((option, i) => {
-                                //       
-                                const isChecked = chosenProPrimary.includes(option.item.index)
-                                const isDisabled = chosenProPrimary.length >= primaryMax && !isChecked
-                                
-                                const handleCheck = (e) => {
-                                    
-                                    const beenChecked = e.target.checked
-    
-                                    if(beenChecked){
-    
-                                        setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
-                                   
-                                    }else if (!beenChecked){
-    
-                                        setChosenProPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-                                    }
-                                }
-    
-                                return(
-                                    <p key={i}>
-                                       <input
-                                            type='checkbox'
-                                            checked={isChecked}
-                                            name={option.item.index}
-                                            onChange={handleCheck}
-                                            disabled={isChecked ? false : isDisabled}
-                                            />
-                                        <label htmlFor={option.item.index}>{option.item.name}</label> 
-                                    </p>
-                                )
-                            })}
-                        </div>
-                    )
-                }
-
-                const bardInstrument = () => {
-                    return setPrimaryInstrumentChoiceDiv(
-                        <div className='proficiencyChoice'>
-                            {primaryChoices?.availableOptions[1]?.desc}
-                            {primaryChoices?.availableOptions[1]?.from?.options.map((option, i) => {
-    
-                                const isChecked = chosenInstrumentPrimary.includes(option.item.index)
-                                const isDisabled = chosenInstrumentPrimary.length >= instrumentMax && !isChecked
-    
-                                const handleCheck = (e) => {
-    
-                                    const beenChecked = e.target.checked
-
-                                    if(beenChecked){
-    
-                                        setChosenInstrumentPrimary((prevPro) => [...prevPro, e.target.name])
-    
-                                    }else if(!beenChecked){
-    
-                                        setChosenInstrumentPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-                                    }
-                                }
-    
-                                return(
-                                    <p key={i}>
-                                        <input
-                                            type='checkbox'
-                                            checked={isChecked}
-                                            name={option.item.index}
-                                            onChange={handleCheck}
-                                            disabled={isChecked ? false : isDisabled}
-                                        />
-                                        <label htmlFor={option.item.index}>{option.item.name}</label>
-                                    </p>
-                                )
-                            })}
-                        </div>
-                    )
-                }
-
-                bardPro()
-                bardInstrument()
-            }
-        }
-
-        const secondaryProChoice = () => {
-
-            const secondaryChoices = character?.proficiencies?.classProficiencies?.secondary
-            const isEmpty = ("name" in character.class.secondary)
-
-            
-            if(!isEmpty && character.class.secondary.className !== 'Bard'){
-                return setSecondaryProChoiceDiv(
-
-                    <div className='proficiencyChoice'>
-                        {secondaryChoices?.availableOptions[0]?.desc}
-
-                        {secondaryChoices?.availableOptions[0]?.from?.options.map((option, i) => {
-                            
-                            const isChecked = chosenProSecondary.includes(option.item.index)
-                            const isDisabled = chosenProSecondary.length >= secondaryMax && !isChecked
-
-                            const handleCheck = (e) => {
-
-                                const beenChecked = e.target.checked
-
-                                if(beenChecked){
-
-                                    setChosenProSecondary((prevPro) => [...prevPro, e.target.name])
-                                
-                                }else if(!beenChecked){
-
-                                    setChosenProSecondary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-                                }
-                            }
+                setSecondaryProChoiceDiv(
+                    <div className='proficiency_choice'>
+                        {secondaryChoices?.map((choice, i) => {
                             return(
-                                <p key={i}>
-                                    <input 
-                                        type='checkbox'
-                                        checked={isChecked}
-                                        name={option.item.index}
-                                        onChange={handleCheck}
-                                        disabled={isChecked ? false :isDisabled}
-                                        />
-                                        <label htmlFor={option.item.index}>{option.item.name}</label>
-                                </p>
+                                <div className='secondary_pro' key={i}>
+                                    {choice.desc}
+                                    {choice.from.options.map((option, j) => {
+
+                                        const chosenPro = fetchData?.secondary_class[`${choice.type}_${i}`]
+                                        // console.log(chosenPro)
+                                        // console.log(fetchData)
+                                        const max = choice?.choose
+                                        // console.log(chosenPro)
+                                        const isChecked = chosenPro?.some(obj => obj.name === option.item.name)
+                                        const isDisabled = chosenPro?.length >= max && !isChecked
+
+                                        const handleCheck = (e) => {
+                                            const beenChecked = e.target.checked
+
+                                            if(beenChecked){
+
+                                                console.log(choice)
+                                                setFetchData(prevData => ({
+                                                    ...prevData,
+                                                    secondary_class: {
+                                                        ...prevData.secondary_class,
+                                                        [`${choice.type}_${i}`]:[
+                                                                ...(prevData.secondary_class[`${choice.type}_${i}`])|| [],
+                                                            {
+                                                                name: e.target.value,
+                                                                url:e.target.getAttribute('data-url'),
+                                                                index:e.target.name
+                                                            }    
+                                                        ]
+                                                    }
+                                                }))
+                                                
+                                            }else if (!beenChecked){
+                                                setFetchData((prevData) => ({
+                                                    ...prevData,
+                                                    secondary_class:{
+                                                        ...prevData.secondary_class,
+                                                        chosen_pro:[
+                                                            ...prevData.filter((x) => x !== e.target.name)
+                                                        ]
+                                                    }
+                                                }))
+                                            }
+                                            console.log(fetchData.selected_pro_secondary)
+                                        }
+
+                                        return(
+                                            <p key={`${i}${j}`}>
+                                                <input
+                                                    type='checkbox'
+                                                    value={option.item.name}
+                                                    checked={isChecked}
+                                                    name={option.item.index}
+                                                    onChange={handleCheck}
+                                                    disabled={isChecked ? false : isDisabled}
+                                                    data-url={option.item.url}
+                                                    />
+                                                <label htmlFor={option.item.index}>{option.item.name}</label>
+                                            </p>
+                                        )
+                                    })}
+                                </div>
                             )
                         })}
                     </div>
                 )
-            }else if(!isEmpty && character.class.secondary.className === 'Bard'){
-
-                const bardPro = () => {
-                    return setSecondaryProChoiceDiv(
-                        <div className='proficiencyChoice'>
-                            {secondaryChoices?.availableOptions[0]?.desc}
-                            {secondaryChoices?.availableOptions[0]?.from?.options.map((option, i) => {
-                                    //  console.log()
-                                const isChecked = chosenProSecondary.includes(option.item.index)
-                                const isDisabled = chosenProSecondary.length >= secondaryMax && !isChecked
-                                
-                                const handleCheck = (e) => {
-                                    
-                                    const beenChecked = e.target.checked
-    
-                                    if(beenChecked){
-    
-                                        setChosenProSecondary((prevPro) => [...prevPro, e.target.name])
-                                   
-                                    }else if (!beenChecked){
-    
-                                        setChosenProSecondary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-                                    }
-                                }
-    
-                                return(
-                                    <p key={i}>
-                                       <input
-                                            checked={isChecked}
-                                            type='checkbox'
-                                            name={option.item.index}
-                                            onChange={handleCheck}
-                                            disabled={isChecked ? false : isDisabled}
-                                            />
-                                        <label htmlFor={option.item.index}>{option.item.name}</label> 
-                                    </p>
-                                )
-                            })}
-                        </div>
-                    )
-                }
-
-                const bardInstrument = () => {
-
-                    return setSecondaryInstrumentChoiceDiv(
-                        <div className='proficiencyChoice'>
-                            {secondaryChoices?.availableOptions[1]?.desc}
-                            {secondaryChoices?.availableOptions[1]?.from?.options.map((option, i) => {
-    
-                                const isChecked = chosenInstrumentSecondary.includes(option.item.index)
-                                const isDisabled = chosenInstrumentSecondary.length >= instrumentMax && !isChecked
-    
-                                const handleCheck = (e) => {
-    
-                                    const beenChecked = e.target.checked
-
-                                    if(beenChecked){
-    
-                                        setChosenInstrumentSecondary((prevPro) => [...prevPro, e.target.name])
-    
-                                    }else if(!beenChecked){
-    
-                                        setChosenInstrumentSecondary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-                                    }
-                                }
-
-                                return(
-                                    <p key={i}>
-                                        <input
-                                            type='checkbox'
-                                            name={option.item.index}
-                                            onChange={handleCheck}
-                                            disabled={isChecked ? false : isDisabled}
-                                        />
-                                        <label htmlFor={option.item.index}>{option.item.name}</label>
-                                    </p>
-                                )
-                            })}
-                        </div>
-                    )
-                }
-                
-                bardPro()
-                bardInstrument()
             }
-        }
+
+      
         primaryProChoice()
         secondaryProChoice()
 
-    }, [chosenProPrimary, chosenProSecondary, character, primaryMax,chosenInstrumentPrimary, chosenInstrumentSecondary])
+    }, [fetchData])
 
     //Proficiencies
     const [primaryProDiv, setPrimaryProDiv] = useState()
@@ -434,12 +271,10 @@ export default function ProInfo ({functions}) {
             <div>
                 {primaryProDiv}
                 {primaryProChoiceDiv}
-                {primaryInstrumentChoiceDiv}
             </div>
             <div>
                 {secondaryProDiv}
                 {secondaryProChoiceDiv}
-                {secondaryInstrumentChoiceDiv}
             </div>
             
         </div>

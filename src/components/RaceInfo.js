@@ -27,9 +27,6 @@ export default function RaceInfo({ functions }) {
 		Object.keys(character.race.secondary).length === 0
 	)
 
-	const primaryStyle = primaryRaceEmpty ? 'none' : ''
-	const secondaryStyle = secondaryRaceEmpty ? 'none' : ''
-
 	const [isHovering, setIsHovering] = useState(false)
 	const [event, setEvent] = useState(null)
 	const [spawnCount, setSpawnCount] = useState(0)

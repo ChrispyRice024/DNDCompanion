@@ -4,8 +4,6 @@ export default function InfoCard({ functions }) {
   const {
     character,
     url,
-    event,
-    isHovering,
     parentName,
     spawnCount,
     setSpawnCount,
