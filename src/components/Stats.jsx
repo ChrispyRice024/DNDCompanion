@@ -110,141 +110,289 @@ export default function Stats({functions}) {
     return(
         <div>
             
-                <h2>Stats</h2>
+            <h2>Stats</h2>
+            <p className='str'>
+                <label className='str' htmlFor='str-input'>STR</label>
+                <input
+                    name='str'
+                    id='str-input'
+                    type='number'
+                    className='stat'
+                    defaultValue='10'
+                    onChange={handleChange}
+                    />
+                
+                <input
+                    name='strBonus'
+                    id='str-bonus-input'
+                    type='number'
+                    className='stat'
+                    value={character?.race?.racialAbilityBonus?.str?.bonus || 0}
+                    data-race={character?.race?.racialAbilityBonus?.str?.race || ''}
+                    readOnly
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    />
 
-            <p className="str">
-                <label className="str" htmlFor="str">STR</label>
-                <input name="str" id="str" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
-                <input name='str' id='str' type='number' className='stat' value={character?.race?.racialAbilityBonus?.str?.bonus} data-race={character?.race?.racialAbilityBonus?.str?.race} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
-                <input name='strTotal' id='strTotal' type='number' readonly value={character?.stats?.str + character?.race?.racialAbilityBonus?.str?.bonus} />
-                <input name='strMod' className='charBonus' type='number' value={character?.mods?.strMod} readOnly />
+                <input
+                    name='strTotal'
+                    id='str-total-input'
+                    type='number'
+                    readOnly
+                    value={((character?.stats?.str ?? 0) + (character?.race?.racialAbilityBonus?.str?.bonus ?? 0)).toString()}
+                    />
+
                 <span>
-                    {/* if this is in the req add tag */}
-                    {/* {console.log('prereq', character?.class?.secondary?.multiClassing?.prerequisites)} */}
-                    {/* {console.log('index', character?.class?.secondary?.multiClassing?.prerequisites[0]?.ability_score)} */}
-                    {character?.class?.secondary?.multiClassing?.prerequisites ? character?.class?.secondary?.multiClassing?.prerequisites.map((prereq, i) => {
-                        // console.log(prereq)
-                        if(prereq.ability_score.index === 'str'){
-                            return(
-                                <span>
-                                    *{character.class.secondary.className} Requires {prereq.minimum_score} STR for Multiclass
-                                </span>
-                            )
-                        }
-                    }) : ''}
+                    {character?.class.secondary?.multiClassing?.prerequisites
+                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                            if(prereq.ability_score.index === 'str'){
+                                return(
+                                    <span>
+                                        *{character.class.secondary.className} Requires {prereq.minimum_score} STR for Multiclass
+                                    </span>
+                                )
+                            }
+                            return null
+                        }) : ''}
                 </span>
                 {infoDiv}
             </p>
 
-            <p className="dex">
-                <label className="dex" htmlFor="dex">DEX</label>
-                <input name="dex" id="dex" type="number" defaultValue="10" className="stat"  onInput={handleChange} />
-                <input name='dex' readonly id='dex' type='number' className='stat' value={character?.race?.racialAbilityBonus?.dex?.bonus} data-race={character?.race?.racialAbilityBonus?.dex?.race} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
-                <input  readOnly id='dexMod' value={character?.mods?.dexMod} className="mod dex" />
+            <p className='dex'>
+                <label className='dex' htmlFor='dex-input'>DEX</label>
+                <input
+                    name='dex'
+                    id='dex-input'
+                    type='number'
+                    className='stat'
+                    defaultValue='10'
+                    onChange={handleChange}
+                    />
+                
+                <input
+                    name='dexBonus'
+                    id='dex-bonus-input'
+                    type='number'
+                    className='stat'
+                    value={character?.race?.racialAbilityBonus?.dex?.bonus || 0}
+                    data-race={character?.race?.racialAbilityBonus?.dex?.race || ''}
+                    readOnly
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    />
+
+                <input
+                    name='dexTotal'
+                    id='dex-total-input'
+                    type='number'
+                    readOnly
+                    value={((character?.stats?.dex ?? 0) + (character?.race?.racialAbilityBonus?.dex?.bonus ?? 0)).toString()}
+                    />
+
                 <span>
-                    {/* if this is in the req add tag */}
-                    {/* {console.log('prereq', character?.class?.secondary?.multiClassing?.prerequisites)} */}
-                    {/* {console.log('index', character?.class?.secondary?.multiClassing?.prerequisites[0]?.ability_score)} */}
-                    {character?.class?.secondary?.multiClassing?.prerequisites ? character?.class?.secondary?.multiClassing?.prerequisites.map((prereq, i) => {
-                        // console.log(prereq)
-                        if(prereq.ability_score.index === 'dex'){
-                            return(
-                                <span>
-                                    *{character.class.secondary.className} Requires {prereq.minimum_score} DEX for Multiclass
-                                </span>
-                            )
-                        }
-                    }) : ''}
+                    {character?.class.secondary?.multiClassing?.prerequisites
+                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                            if(prereq.ability_score.index === 'dex'){
+                                return(
+                                    <span>
+                                        *{character.class.secondary.className} Requires {prereq.minimum_score} dex for Multiclass
+                                    </span>
+                                )
+                            }
+                            return null
+                        }) : ''}
                 </span>
+                {infoDiv}
             </p>
 
-            <p className="con">
-                <label className="con" htmlFor="con">CON</label>
-                <input name="con" id="con" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
-                <input name='con' readonly id='con' type='number' className='stat' value={character?.race?.racialAbilityBonus?.con?.bonus} data-race={character?.race?.racialAbilityBonus?.con?.race} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
-                <input id="conMod"  readOnly value={character?.mods?.conMod} className="mod con"/>
+            <p className='con'>
+                <label className='con' htmlFor='con-input'>CON</label>
+                <input
+                    name='con'
+                    id='con-input'
+                    type='number'
+                    className='stat'
+                    defaultValue='10'
+                    onChange={handleChange}
+                    />
+                
+                <input
+                    name='conBonus'
+                    id='con-bonus-input'
+                    type='number'
+                    className='stat'
+                    value={character?.race?.racialAbilityBonus?.con?.bonus || 0}
+                    data-race={character?.race?.racialAbilityBonus?.con?.race || ''}
+                    readOnly
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    />
+
+                <input
+                    name='conTotal'
+                    id='con-total-input'
+                    type='number'
+                    readOnly
+                    value={((character?.stats?.con ?? 0) + (character?.race?.racialAbilityBonus?.con?.bonus ?? 0)).toString()}
+                    />
+
                 <span>
-                    {/* if this is in the req add tag */}
-                    {/* {console.log('prereq', character?.class?.secondary?.multiClassing?.prerequisites)} */}
-                    {/* {console.log('index', character?.class?.secondary?.multiClassing?.prerequisites[0]?.ability_score)} */}
-                    {character?.class?.secondary?.multiClassing?.prerequisites ? character?.class?.secondary?.multiClassing?.prerequisites.map((prereq, i) => {
-                        // console.log(prereq)
-                        if(prereq.ability_score.index === 'con'){
-                            return(
-                                <span>
-                                    *{character.class.secondary.className} Requires {prereq.minimum_score} Con for Multiclass
-                                </span>
-                            )
-                        }
-                    }) : ''}
+                    {character?.class.secondary?.multiClassing?.prerequisites
+                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                            if(prereq.ability_score.index === 'con'){
+                                return(
+                                    <span>
+                                        *{character.class.secondary.className} Requires {prereq.minimum_score} con for Multiclass
+                                    </span>
+                                )
+                            }
+                            return null
+                        }) : ''}
                 </span>
+                {infoDiv}
             </p>
 
-            <p className="int">
-                <label className="int" htmlFor="int">INT</label>
-                <input name="int" id="int" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
-                <input name='int' readonly id='int' type='number' className='stat' value={character?.race?.racialAbilityBonus?.int?.bonus} data-race={character?.race?.racialAbilityBonus?.int?.race} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
-                <input id="intMod" readOnly className="mod int" value={character?.mods?.intMod} />
+            <p className='int'>
+                <label className='int' htmlFor='int-input'>INT</label>
+                <input
+                    name='int'
+                    id='int-input'
+                    type='number'
+                    className='stat'
+                    defaultValue='10'
+                    onChange={handleChange}
+                    />
+                
+                <input
+                    name='intBonus'
+                    id='int-bonus-input'
+                    type='number'
+                    className='stat'
+                    value={character?.race?.racialAbilityBonus?.int?.bonus || 0}
+                    data-race={character?.race?.racialAbilityBonus?.int?.race || ''}
+                    readOnly
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    />
+
+                <input
+                    name='intTotal'
+                    id='int-total-input'
+                    type='number'
+                    readOnly
+                    value={((character?.stats?.int ?? 0) + (character?.race?.racialAbilityBonus?.int?.bonus ?? 0)).toString()}
+                    />
+
                 <span>
-                    {/* if this is in the req add tag */}
-                    {/* {console.log('prereq', character?.class?.secondary?.multiClassing?.prerequisites)} */}
-                    {/* {console.log('index', character?.class?.secondary?.multiClassing?.prerequisites[0]?.ability_score)} */}
-                    {character?.class?.secondary?.multiClassing?.prerequisites ? character?.class?.secondary?.multiClassing?.prerequisites.map((prereq, i) => {
-                        console.log(prereq)
-                        if(prereq.ability_score.index === 'int'){
-                            return(
-                                <span>
-                                    *{character.class.secondary.className} Requires {prereq.minimum_score} INT for Multiclass
-                                </span>
-                            )
-                        }
-                    }) : ''}
+                    {character?.class.secondary?.multiClassing?.prerequisites
+                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                            if(prereq.ability_score.index === 'int'){
+                                return(
+                                    <span>
+                                        *{character.class.secondary.className} Requires {prereq.minimum_score} int for Multiclass
+                                    </span>
+                                )
+                            }
+                            return null
+                        }) : ''}
                 </span>
+                {infoDiv}
             </p>
 
-            <p className="wis">
-                <label className="wis" htmlFor="wis">WIS</label>
-                <input type="number" id="wis" className="stat" name="wis" defaultValue="10" onChange={handleChange} />
-                <input name='wis' readonly id='wis' type='number' className='stat' value={character?.race?.racialAbilityBonus?.wis?.bonus} data-race={character?.race?.racialAbilityBonus?.wis?.race} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
-                <input  readOnly id="wisMod" value={character?.mods?.wisMod} className="mod wis"/>
+            <p className='wis'>
+                <label className='wis' htmlFor='wis-input'>WIS</label>
+                <input
+                    name='wis'
+                    id='wis-input'
+                    type='number'
+                    className='stat'
+                    defaultValue='10'
+                    onChange={handleChange}
+                    />
+                
+                <input
+                    name='wisBonus'
+                    id='wis-bonus-input'
+                    type='number'
+                    className='stat'
+                    value={character?.race?.racialAbilityBonus?.wis?.bonus || 0}
+                    data-race={character?.race?.racialAbilityBonus?.wis?.race || ''}
+                    readOnly
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    />
+
+                <input
+                    name='wisTotal'
+                    id='wis-total-input'
+                    type='number'
+                    readOnly
+                    value={((character?.stats?.wis ?? 0) + (character?.race?.racialAbilityBonus?.wis?.bonus ?? 0)).toString()}
+                    />
+
                 <span>
-                    {/* if this is in the req add tag */}
-                    {/* {console.log('prereq', character?.class?.secondary?.multiClassing?.prerequisites)} */}
-                    {/* {console.log('index', character?.class?.secondary?.multiClassing?.prerequisites[0]?.ability_score)} */}
-                    {character?.class?.secondary?.multiClassing?.prerequisites ? character?.class?.secondary?.multiClassing?.prerequisites.map((prereq, i) => {
-                        console.log(prereq)
-                        if(prereq.ability_score.index === 'wis'){
-                            return(
-                                <span>
-                                    *{character.class.secondary.className} Requires {prereq.minimum_score} WIS for Multiclass
-                                </span>
-                            )
-                        }
-                    }) : ''}
+                    {character?.class.secondary?.multiClassing?.prerequisites
+                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                            if(prereq.ability_score.index === 'wis'){
+                                return(
+                                    <span>
+                                        *{character.class.secondary.className} Requires {prereq.minimum_score} wis for Multiclass
+                                    </span>
+                                )
+                            }
+                            return null
+                        }) : ''}
                 </span>
+                {infoDiv}
             </p>
 
-            <p className="cha">
-                <label className="cha" htmlFor="cha">CHA</label>
-                <input name="cha" id="cha" type="number" className="stat" defaultValue="10" onChange={handleChange}/>
-                <input name='cha' readonly id='cha' type='number' className='stat' value={character?.race?.racialAbilityBonus?.cha?.bonus} data-race={character?.race?.racialAbilityBonus?.cha?.race} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
-                <input  id="chaMod" readOnly value={character?.mods?.chaMod} className="mod cha"/>
+            <p className='cha'>
+                <label className='cha' htmlFor='cha-input'>CHA</label>
+                <input
+                    name='cha'
+                    id='cha-input'
+                    type='number'
+                    className='stat'
+                    defaultValue='10'
+                    onChange={handleChange}
+                    />
+                
+                <input
+                    name='chaBonus'
+                    id='cha-bonus-input'
+                    type='number'
+                    className='stat'
+                    value={character?.race?.racialAbilityBonus?.cha?.bonus || 0}
+                    data-race={character?.race?.racialAbilityBonus?.cha?.race || ''}
+                    readOnly
+                    onMouseOver={handleMouseOver}
+                    onMouseOut={handleMouseOut}
+                    />
+
+                <input
+                    name='chaTotal'
+                    id='cha-total-input'
+                    type='number'
+                    readOnly
+                    value={((character?.stats?.cha ?? 0) + (character?.race?.racialAbilityBonus?.cha?.bonus ?? 0)).toString()}
+                    />
+
                 <span>
-                    {/* if this is in the req add tag */}
-                    {/* {console.log('prereq', character?.class?.secondary?.multiClassing?.prerequisites)} */}
-                    {/* {console.log('index', character?.class?.secondary?.multiClassing?.prerequisites[0]?.ability_score)} */}
-                    {character?.class?.secondary?.multiClassing?.prerequisites ? character?.class?.secondary?.multiClassing?.prerequisites.map((prereq, i) => {
-                        // console.log(prereq)
-                        if(prereq.ability_score.index === 'cha'){
-                            return(
-                                <span>
-                                    *{character.class.secondary.className} Requires {prereq.minimum_score} CHA for Multiclass
-                                </span>
-                            )
-                        }
-                    }) : ''}
+                    {character?.class.secondary?.multiClassing?.prerequisites
+                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                            if(prereq.ability_score.index === 'cha'){
+                                return(
+                                    <span>
+                                        *{character.class.secondary.className} Requires {prereq.minimum_score} cha for Multiclass
+                                    </span>
+                                )
+                            }
+                            return null
+                        }) : ''}
                 </span>
+                {infoDiv}
             </p>
+
         </div>
     )
 }

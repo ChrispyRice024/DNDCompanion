@@ -4,6 +4,9 @@ import InfoCard from './InfoCard'
 
 export default function ProInfo ({functions}) {
 
+
+    // `secondary_pro_${i}${j}`
+    // `primary_pro_${i}${j}`
     const {character, fetchData, setFetchData} = functions
 
     const parentName = 'proInfo_infoCard'
@@ -18,10 +21,12 @@ export default function ProInfo ({functions}) {
 	const [hoveredKey, setHoveredKey] = useState(null)
 
     const handleMouseOver = (e, key) => {
+        console.log(key)
 		setIsHovering(true)
 		setEvent(e)
 		setKey(key)
 		setHoveredKey(key)
+        console.log(isHovering)
 	}
 
     const handleMouseOut = e => {
@@ -36,7 +41,7 @@ export default function ProInfo ({functions}) {
 
         const primaryProChoice = () => {
         
-            const primaryChoices = fetchData?.primary_class?.proficiency_choices
+            const primaryChoices = fetchData?.primary_class?.proficiencies?.proficiency_choices
 
                 setPrimaryProChoiceDiv(
                     <div className='proficiency_choice'>
@@ -46,24 +51,26 @@ export default function ProInfo ({functions}) {
                                     {choice.desc}
                                     {choice.from.options.map((option, j) => {
 
-                                        const chosenPro = fetchData?.primary_class[`${choice.type}_${i}`]
-
+                                        const chosenPro = (fetchData?.primary_class[`chosen_pro_${i}`])
                                         const max = choice?.choose
+                               
                                         const isChecked = chosenPro?.some(obj => obj.name === option.item.name)
                                         const isDisabled = chosenPro?.length >= max && !isChecked
-
+                          
                                         const handleCheck = (e) => {
                                             const beenChecked = e.target.checked
 
                                             if(beenChecked){
+                                                console.log(option.item.name)
 
                                                 console.log(choice)
+                                                console.log(e.target.value)
                                                 setFetchData(prevData => ({
                                                     ...prevData,
                                                     primary_class: {
                                                         ...prevData.primary_class,
-                                                        [`${choice.type}_${i}`]:[
-                                                                ...(prevData.primary_class[`${choice.type}_${i}`])|| [],
+                                                        [`chosen_pro_${i}`]:[
+                                                                ...(prevData.primary_class[`chosen_pro_${i}`] || []),
                                                             {
                                                                 name: e.target.value,
                                                                 url:e.target.getAttribute('data-url'),
@@ -74,18 +81,21 @@ export default function ProInfo ({functions}) {
                                                 }))
                                                 
                                             }else if (!beenChecked){
+                                                console.log('unchecked')
                                                 setFetchData((prevData) => ({
                                                     ...prevData,
                                                     primary_class:{
                                                         ...prevData.primary_class,
-                                                        chosen_pro:[
-                                                            ...prevData.filter((x) => x !== e.target.name)
+                                                        [`chosen_pro_${i}`]:[
+                                                            ...prevData.primary_class[`chosen_pro_${i}`].filter((x) => x.name !== e.target.value)
                                                         ]
                                                     }
                                                 }))
+                                                console.log(fetchData.primary_class[`chosen_pro_${i}`])
                                             }
-                                            console.log(fetchData.selected_pro_primary)
+                                            
                                         }
+                                        console.log(option.item.url)
 
                                         return(
                                             <div key={`${i}${j}`}>
@@ -99,20 +109,24 @@ export default function ProInfo ({functions}) {
                                                         disabled={isChecked ? false : isDisabled}
                                                         data-url={option.item.url}
                                                         />
-                                                    <label onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} htmlFor={option.item.index}>{option.item.name}</label>
+                                                    <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={option.item.index}>{option.item.name}</label>
                                                 </p>
-                                                <InfoCard 
-                                                    functions={{
-                                                        character: character,
-                                                        event: event,
-                                                        isHovering: isHovering,
-                                                        spawnCount: spawnCount,
-                                                        setSpawnCount: setSpawnCount,
-                                                        className: hoveredKey,
-                                                        hoveredKey: hoveredKey,
-                                                        url: option.item.url,
-                                                        parentName: parentName,
+                                                {/* && hoveredKey === `primary_pro_${i}${j}` */}
+                                                {/* {isHovering  ? */}
+                                                    <InfoCard
+                                                        functions={{
+                                                            fetchData: fetchData,
+                                                            event: event,
+                                                            isHovering: isHovering,
+                                                            spawnCount: spawnCount,
+                                                            setSpawnCount: setSpawnCount,
+                                                            className: hoveredKey,
+                                                            hoveredKey: hoveredKey,
+                                                            url: option.item.url,
+                                                            parentName: parentName,
                                                     }}/>
+                                                {/* : ''} */}
+                                                
                                             </div>
                                         )
                                     })}
@@ -122,7 +136,7 @@ export default function ProInfo ({functions}) {
                     </div>
                 )}
             const secondaryProChoice = () => {
-                const secondaryChoices = fetchData?.secondary_class?.proficiency_choices
+                const secondaryChoices = fetchData?.secondary_class?.proficiencies?.proficiency_choices
 
                 setSecondaryProChoiceDiv(
                     <div className='proficiency_choice'>
@@ -132,8 +146,9 @@ export default function ProInfo ({functions}) {
                                     {choice.desc}
                                     {choice.from.options.map((option, j) => {
 
-                                        const chosenPro = fetchData?.secondary_class[`${choice.type}_${i}`]
+                                        const chosenPro = fetchData?.secondary_class[`chosen_pro_${i}`]
                                         // console.log(chosenPro)
+                                        console.log(choice.type)
                                         // console.log(fetchData)
                                         const max = choice?.choose
                                         // console.log(chosenPro)
@@ -150,8 +165,8 @@ export default function ProInfo ({functions}) {
                                                     ...prevData,
                                                     secondary_class: {
                                                         ...prevData.secondary_class,
-                                                        [`${choice.type}_${i}`]:[
-                                                                ...(prevData.secondary_class[`${choice.type}_${i}`])|| [],
+                                                        [`chosen_pro_${i}`]:[
+                                                                ...(prevData.secondary_class[`chosen_pro_${i}`] || []),
                                                             {
                                                                 name: e.target.value,
                                                                 url:e.target.getAttribute('data-url'),
@@ -166,28 +181,48 @@ export default function ProInfo ({functions}) {
                                                     ...prevData,
                                                     secondary_class:{
                                                         ...prevData.secondary_class,
-                                                        chosen_pro:[
-                                                            ...prevData.filter((x) => x !== e.target.name)
+                                                        [`chosen_pro_${i}`]:[
+                                                            ...prevData.secondary_class[`chosen_pro_${i}`].filter((x) => x.name !== e.target.value)
                                                         ]
                                                     }
                                                 }))
                                             }
-                                            console.log(fetchData.selected_pro_secondary)
+                                            console.log(fetchData)
                                         }
 
                                         return(
-                                            <p key={`${i}${j}`}>
-                                                <input
-                                                    type='checkbox'
-                                                    value={option.item.name}
-                                                    checked={isChecked}
-                                                    name={option.item.index}
-                                                    onChange={handleCheck}
-                                                    disabled={isChecked ? false : isDisabled}
-                                                    data-url={option.item.url}
-                                                    />
-                                                <label htmlFor={option.item.index}>{option.item.name}</label>
-                                            </p>
+                                            <div>
+                                                <p key={`${i}${j}`}>
+                                                    <input
+                                                        type='checkbox'
+                                                        value={option?.item?.name}
+                                                        checked={isChecked}
+                                                        name={option?.item?.index}
+                                                        onChange={handleCheck}
+                                                        disabled={isChecked ? false : isDisabled}
+                                                        data-url={option?.item?.url}
+                                                        />
+                                                    <label htmlFor={option?.item?.index} onMouseOver={(e) => {handleMouseOver(e, `secondary_pro_${i}${j}`)}}>{option?.item?.name}</label>
+                                                </p>
+                                                {console.log(key)}
+                                                {isHovering && hoveredKey === `secondary_pro_${i}${j}` ?
+                                                    <InfoCard 
+                                                        functions={{
+                                                            character: character,
+                                                            event: event,
+                                                            isHovering: isHovering,
+                                                            spawnCount: spawnCount,
+                                                            setSpawnCount: setSpawnCount,
+                                                            className: hoveredKey,
+                                                            hoveredKey: hoveredKey,
+                                                            url: option.item.url,
+                                                            parentName: parentName,
+                                                    }}/>
+                                                : ''}
+                                                
+                                            </div>
+                                            
+                                            
                                         )
                                     })}
                                 </div>
@@ -210,33 +245,51 @@ export default function ProInfo ({functions}) {
     useEffect(() => {
         const primaryPro = () => {
 
-            const primary = character?.proficiencies?.classProficiencies?.primary?.classProficiencies
-            const isEmpty = ("className" in character.class.primary)
+            const primary = fetchData?.primary_class?.proficiencies?.starting_proficiencies
+            console.log('primary', primary)
+            // const isEmpty = ("className" in character.class.primary)
 
-            if(!isEmpty){
+            // if(!isEmpty){
 
                 setPrimaryProDiv(
-                    <div className='proficiencies'>
+                    <div key='sec_pro' className='proficiencies'>
                         <strong>{character?.class?.primary?.className}</strong>
 
                         {primary.map((element, i) => (
 
-                            <p key={i} className='classProficiencies' >
 
-                                {element.name}
-                            </p>
+                            <div>
+                                <p onMouseOver={(e) => {handleMouseOver(e, `primary_pro${i}`)}} key={i} className='classProficiencies' >
+                                    {element.name}
+                                </p>
+                                {isHovering && hoveredKey === `primary_pro_${i}` ?
+                                    <InfoCard 
+                                        functions={{
+                                            character: character,
+                                            event: event,
+                                            isHovering: isHovering,
+                                            spawnCount: spawnCount,
+                                            setSpawnCount: setSpawnCount,
+                                            className: hoveredKey,
+                                            hoveredKey: hoveredKey,
+                                            url: option.item.url,
+                                            parentName: parentName,
+                                    }}/>
+                                : ''}
+                            </div>
+                            
                         ))}
                     </div>
                 )
-            }
+            // }
         }
 
         const secondaryPro = () => {
 
-            const secondary = character?.proficiencies?.classProficiencies?.secondary?.classProficiencies
-            const isEmpty = ("className" in character.class.secondary)
+            const secondary = fetchData?.secondary_class.proficiencies.starting_proficiencies
+            // const isEmpty = ("className" in character.class.secondary)
 
-            if(!isEmpty){
+            // if(!isEmpty){
                 setSecondaryProDiv(
 
                     <div className='proficiencies'>
@@ -244,26 +297,43 @@ export default function ProInfo ({functions}) {
                         <strong>{character?.class?.secondary?.className}</strong>
 
                         {secondary.map((element, i) => (
-
-                            <p key={i} className='classProficiencies'>
-
-                                {element.name}
-                            </p>
+                            <div>
+                                {console.log(element)}
+                                <p onMouseOver={(e) => {`secondary_pro_${i}`}} key={i} className='classProficiencies'>
+                                    {element.name}
+                                </p>
+                                
+                                {isHovering && hoveredKey === `secondary_pro_${i}` ?
+                                    <InfoCard 
+                                        functions={{
+                                            character: character,
+                                            event: event,
+                                            isHovering: isHovering,
+                                            spawnCount: spawnCount,
+                                            setSpawnCount: setSpawnCount,
+                                            className: hoveredKey,
+                                            hoveredKey: hoveredKey,
+                                            url: option.item.url,
+                                            parentName: parentName,
+                                    }}/>
+                                : ''}
+                            </div>
+                            
                         ))}
                     </div>
                 )
-            }
+            // }
         }
-        if('className' in character.class.primary){
+        if('primary_class' in fetchData){
             primaryPro()
         }
-        if('className' in character.class.secondary){
+        if('secondary_class' in fetchData){
             secondaryPro()
         }
 
         
         
-    }, [character])
+    }, [fetchData])
 
 //final return statement
     return (

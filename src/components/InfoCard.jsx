@@ -1,131 +1,40 @@
-import { useState, React, useEffect } from "react";
+import {useState, useEffect} from 'react'
+import { Children } from 'react';
 
-export default function InfoCard({ functions }) {
-  const {
-    character,
-    url,
-    parentName,
-    spawnCount,
-    setSpawnCount,
-    className,
-    hoveredKey,
-  } = functions;
 
-  const [fetchData, setFetchData] = useState({});
-  const [stall, setStall] = useState(0);
+export default function InfoCard({functions}) {
+    
+    const {
+        fetchData,
+        url,
+        parentName,
+        spawnCount,
+        setSpawnCount,
+        className,
+        hoveredKey,
+    } = functions
+    const api = `https://www.dnd5eapi.co`
+console.log(api + url)
+    const [info, setInfo] = useState({})
+    useEffect(() => {
+        const fetch = async () => {
+            try{
+                const res = await fetch(api + url)
+                const data = await res.json()
+                
+                // setInfo(data)
+                console.log(data)
+            }catch(err){
+                console.error(err)
+            }
+        }
 
-  const componentId = `InfoCard_` + `${parentName}`;
+        // fetch()
+    },[fetchData])
+    
+    return(
+        <div>
 
-  const equipProperties = fetchData?.properties?.map(
-    (property) => property.name
-  );
-  useEffect(() => {
-
-    const racialEquipUrl = fetchData.reference ? fetchData.reference.url : '' 
-    const fetchInfo = async () => {
-
-      try {
-        const res = await fetch(`https://www.dnd5eapi.co${url}`);
-        const data = await res.json();
-
-        setFetchData(data);
-
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    const proFetch = async () => {
-      try{
-        const res = await fetch(`https://www.dnd5eapi.co${racialEquipUrl}`)
-        const data = await res.json()
-
-        console.log(data)
-      }catch(err){
-        console.error(err)
-      }
-    }
-    const bothFetch = async () => {
-      await fetchInfo()
-      await proFetch() 
-    }
-    if(parentName === 'RaceInfo_infoCard'){
-      bothFetch()
-    }else{
-      fetchInfo()
-    }
-
-    fetchInfo();
-  }, [url]);
-
-  useEffect(() => {
-    console.log("fetchData", fetchData);
-    console.log(url)
-    console.log("equipmentCategory", fetchData.contents);
-    console.log(className);
-    console.log(parentName);
-  }, [fetchData]);
-console.log('character.mods', character.mods)
-  return (
-    <div id={parentName} className="infoCard">
-
-      <p>{fetchData.name}</p>
-
-      <p>{fetchData?.desc}</p>
-
-      {parentName === "Spellcasting_infoCard" ? (
-        <span>
-
-          <p>
-            {fetchData.concentration === true ? "(Requires Concentration)" : ""}
-            {fetchData.ritual ? `Ritual` : ""}
-          </p>
-          Components:{" "}
-          {fetchData?.components?.map((component, i) => {
-            return <span> {component} </span>;
-          })}
-          | Duration: {fetchData.duration} | Range: {fetchData.range}
-          {fetchData.material ? ` | Material: ${fetchData.material}` : ""}
-          <p>{fetchData?.school?.name}</p>
-        </span>
-
-      ) : parentName === "Equipment_infoCard" && fetchData.damage ? (
-        <span>
-
-          {fetchData?.damage?.damage_dice} {fetchData?.damage?.damage_type.name}
-          <p>{equipProperties?.join(" | ")}</p>
-        </span>
-
-      ) : fetchData?.equipment_category?.index === "adventuring-gear" ? (
-        <p>
-          {fetchData.contents.map((item, i) => (
-            <span>
-              {item.quantity} | {item.item.name}
-            </span>
-          ))}
-        </p>
-      ) : fetchData?.equipment_category?.index === 'armor' ? (
-        <span>
-            <p>
-                {fetchData.equipment_category.name}
-            </p>
-            <p>
-                AC: {fetchData.armor_class.base} | {fetchData?.armor_class?.dex_bonus ? (
-                    fetchData.armor_class.max_bonus ? (
-                        <span>Max Dex Bonus: {fetchData?.armor_class?.max_bonus}</span>
-                    ) : (
-                        <span>Dex Bonus: {character.mods.dexMod} (Dex Mod)</span>
-                    )
-                ) : (
-                    <span>No Dex Bonus</span>
-                )}
-
-            </p>
-        </span>
-      ):(
-        ''
-      )
-      }
-      {stall === 0 ? setStall(stall+1) : ""}
-    </div>
-  );
+        </div>
+    )
 }

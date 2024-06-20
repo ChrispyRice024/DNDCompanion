@@ -11,6 +11,7 @@ import ProInfo from '../components/ProInfo'
 import Spellcasting from '../components/Spellcasting'
 import Equip from '../components/Equip'
 import Api from '../components/Api'
+import InfoCard from '../components/InfoCard'
 
 export default function CharCreator () {
 
@@ -216,49 +217,88 @@ export default function CharCreator () {
 
     const [fetchData, setFetchData] = useState({})
 
-    const fetchCall = async (url, targetKey) => {
-        // const URL = targetKey === 'secondary_class' ? 
+    const [counter, setCounter] = useState(0)
+
+    //class fetch
+    const classFetchCall = async (url, targetKey) => { 
         try{
             console.log(url)
+            
+            // initial fetch
             const res = await fetch(`https://dnd5eapi.co${url}`)
             const data = await res.json()
+            console.log(data.spells)
+            // if(!res.ok){
+            //     console.error('fetch one failed')
+            // }
 
-            const spellUrl = data.spells
-            console.log(spellUrl, data.spellcasting)
-            await spellFetch(data.spells, `${targetKey}_spellcasting`)
+            console.log(counter)
+            console.log('data', data)
+            let spells = []
+            // spell Fetch
+            if(data.spells){
+                const spellRes = await fetch(`https://dnd5eapi.co${data.spells}`)
+                const spellData = await spellRes.json()
+                console.log('spellData', spellData)
 
-            setFetchData((prevData) => ({
-                ...prevData,
-                [targetKey]: data
-            }))
-        }catch(err){
-            console.error(err)
-        }
-    }
+                
 
-    const spellFetch = async (url, targetKey) => {
-        try{
-            console.log('spellFetch', url)
-            const res = await fetch(`https://www.dnd5eapi.co${url}`)
-            const data = await res.json()
-            
-            console.log('spellFetch', data)
-            data.results.forEach((item) => {
-                if(item.level === 1 || item.level == 0){
-                    setFetchData(prevData => ({
-                        ...prevData,
-                        [`${targetKey}_spells`]:{
-                            ...prevData[`${targetKey}_spells`],
-                            [item.index]:item
-                        }
-                    }))
+                for(const item of spellData.results){
+                    if(item.level === 1 || item.level=== 0){
+                        spells.push(item)
+                        // setFetchData(prevData => ({
+                        //     ...prevData,
+                        //     [targetKey]:{
+                        //         ...prevData[targetKey],
+                        //         spells:[
+                        //             ...(prevData[targetKey]?.spells ||[]),
+                        //             item
+                        //         ]
+                        //     }
+                        // }))
+                        
+                    }
                 }
-                console.log(fetchData)
-            })
+console.log(spells)
+            }
+            // if(!spellRes.ok){
+            //     console.error('fetch 2 failed')
+            // }
+            
+            setFetchData(prevData => ({
+                ...prevData,
+                [targetKey]:{
+                    index:data.index,
+                    name:data.name,
+                    levels:data.class_levels,
+                    hit_die:data.hit_die,
+                    multi_classing:data.multi_classing,
+                    equip:{
+                        starting_equip:data.starting_equipment,
+                        equip_options:data.starting_equipment_options
+                    },
+                    proficiencies:{
+                        starting_proficiencies:data.proficiencies,
+                        proficiency_choices:data.proficiency_choices
+                    },
+                    saving_throws:data.saving_throws,
+                    spellcasting:data.spellcasting,
+                    spells:[
+                        spells
+                    ],
+                    url:data.url
+                }
+            }))
+            console.log(fetchData)
+            console.log('spellData', spellData)
         }catch(err){
             console.error(err)
         }
     }
+
+    useEffect(() => {
+        console.log('fetchData useEffect', fetchData)
+    }, [fetchData])
 
 
     const highestAbilityBonus = (character) => {
@@ -334,7 +374,7 @@ useEffect(() => {
                                         
                                         fetchData:fetchData,
                                         setFetchData:setFetchData,
-                                        fetchCall:fetchCall}} />
+                                        classFetchCall:classFetchCall}} />
                 </div>
 
                 <div>
@@ -385,7 +425,7 @@ useEffect(() => {
                     {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
                 </div>
                 <p>
-                    <input type='submit' onClick/>
+                    {/* <input type='submit' onClick/> */}
                 </p>
             </form>
         </div>

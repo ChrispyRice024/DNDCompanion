@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 
 export default function Class ({functions}) {
 
-    const {fetchData, setFetchData, fetchCall} = functions
+    const {fetchData, setFetchData, classFetchCall} = functions
 
     const [multiClassData, setMultiClassData] = useState([])
 
@@ -30,8 +30,9 @@ export default function Class ({functions}) {
 
     //sets the multiclass logic for the secondary class
     const [multiClassDiv, setMultiClassDiv] = useState()
-
+    
     const multiClassFetch = async () => {
+        
             try{
                 const res = await Promise.all(fetchData.class_list.results.map(url=> fetch(`https://www.dnd5eapi.co${url.url}`)))
                 const data = await Promise.all(res.map(res => res.json()))
@@ -70,7 +71,7 @@ export default function Class ({functions}) {
                             </datalist>
                         </div>
                 )
-                fetchCall()
+                classFetchCall()
             }catch(err){
                 console.error(err)
             }
@@ -86,11 +87,11 @@ export default function Class ({functions}) {
 
         if(inputName === 'primaryClass' && compare){
 
-            fetchCall(url, 'primary_class')
+            classFetchCall(url, 'primary_class')
             multiClassFetch()
         }else if(inputName === 'secondaryClass' && compare){
 
-            fetchCall(url, 'secondary_class')
+            classFetchCall(url, 'secondary_class')
         }else{
             alert('please select an existing class')
         }

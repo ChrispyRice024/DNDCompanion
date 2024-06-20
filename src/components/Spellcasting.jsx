@@ -3,9 +3,9 @@ import InfoCard from './InfoCard'
 
 export default function Spellcating ({functions}) {
 
-    const {character, setCharacter, fetchData} = functions
+    const {character, setCharacter, fetchData, setFetchData} = functions
 
-    const parentName = 'Spellcasting_infoCard'
+    const parentName = 'spells'
 
     const [primarySpells, setPrimarySpells] = useState({})
     const [secondarySpells, setSecondarySpells] = useState({})
@@ -185,8 +185,6 @@ export default function Spellcating ({functions}) {
     const [hoveredKey, setHoveredKey] = useState(null)
     const [className, setClassName] = useState('')
 
-    const debounceTimeout = useRef(null)
-
     const handleMouseOver = (e, key) => {
 
         setIsHovering(true)
@@ -204,6 +202,7 @@ export default function Spellcating ({functions}) {
             setSpawnCount((prevCount) => prevCount+1)
 
     }
+    console.log(fetchData.primary_class?.spells)
 
     // useEffect(() => {
     //     console.log(event?.target)
@@ -452,7 +451,7 @@ export default function Spellcating ({functions}) {
             <div>
                 {fetchData?.primary_class?.spellcasting?.info?.map((item, i) => {
                     return(
-                        <div>
+                        <div key={i}>
                             <p>
                                 <strong>{item.name}</strong>
                             </p>
@@ -464,7 +463,66 @@ export default function Spellcating ({functions}) {
                 })}
             </div>
             <div>
-                {/* {fetchData} */}
+                {fetchData?.primary_class?.spells?.map((spell, i) => {
+                    console.log(spell)
+                    const max = 3
+                    const chosenSpell = (fetchData?.primary_class[`chosen_spell_${i}`])
+                    const isChecked = chosenSpell?.some(obj => obj.name === option.item.name)
+                    const isDisabled = chosenSpell?.length >= max && !isChecked
+                    
+
+                    const handleCheck = (e) => {
+                        const beenChecked = e.target.checked
+
+                        if(beenChecked){
+                            console.log(spell.name)
+                            console.log(spell)
+                            console.log(e.target.value)
+                            setFetchData(prevData => ({
+                                ...prevData,
+                                primary_class: {
+                                    ...prevData.primary_class,
+                                    [`chosen_spell_${i}`]:[
+                                            ...(prevData.primary_class[`chosen_spell_${i}`] || []),
+                                        {
+                                            name: e.target.value,
+                                            url:e.target.getAttribute('data-url'),
+                                            index:e.target.name
+                                        }    
+                                    ]
+                                }
+                            }))
+                            
+                        }else if (!beenChecked){
+                            console.log('unchecked')
+                            setFetchData((prevData) => ({
+                                ...prevData,
+                                primary_class:{
+                                    ...prevData.primary_class,
+                                    [`chosen_spell_${i}`]:[
+                                        ...prevData.primary_class[`chosen_spell_${i}`].filter((x) => x.name !== e.target.value)
+                                    ]
+                                }
+                            }))
+                            console.log(fetchData.primary_class[`chosen_spell_${i}`])
+                        }
+                        
+                    }
+
+                    return(
+                        <p key={i}>
+                            <input
+                                type='checkbox'
+                                name={spell.index}
+                                className='spells'
+                                onChange={handleCheck}
+                                disabled={isChecked ? false : isDisabled}
+                                data-url={spell.url}
+                                />
+                            <label htmlFor={spell.index}>{spell.name}</label>
+                        </p>
+                    )
+                })}
             </div>
         </div>
     )

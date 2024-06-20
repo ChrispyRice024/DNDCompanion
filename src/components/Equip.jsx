@@ -1,5 +1,5 @@
 import { useState, React, useEffect } from "react";
-import InfoCard from "./InfoCard";
+import InfoCard from "./InfoCard"
 
 export default function Equip({ functions }) {
   const { character, setCharacter } = functions;
