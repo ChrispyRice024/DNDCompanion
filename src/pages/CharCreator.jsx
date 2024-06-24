@@ -219,82 +219,98 @@ export default function CharCreator () {
 
     const [counter, setCounter] = useState(0)
 
+    let spells = []
+
+    useEffect(() => {
+        console.log('spells', spells)
+    }, [spells])
+
     //class fetch
     const classFetchCall = async (url, targetKey) => { 
         try{
-            console.log(url)
-            
             // initial fetch
             const res = await fetch(`https://dnd5eapi.co${url}`)
             const data = await res.json()
             console.log(data.spells)
-            // if(!res.ok){
-            //     console.error('fetch one failed')
-            // }
 
-            console.log(counter)
             console.log('data', data)
-            let spells = []
-            // spell Fetch
-            if(data.spells){
+            
+            let dataUrl = [
+                data.class_levels,
+                data.spells
+            ]
+            console.log(data.class_levels, data.spells)
+            // fetch spell data for the class
+            if(targetKey === 'primary_class' || targetKey === 'secondary_class'){
+
+                // FETCH THE SPELL DATA
                 const spellRes = await fetch(`https://dnd5eapi.co${data.spells}`)
                 const spellData = await spellRes.json()
                 console.log('spellData', spellData)
+                // FETCH THE LEVEL DATA
+                const levelsRes = await fetch(`https://www.dnd5eapi.co${data.class_levels}`)
+                const levelsData = await levelsRes.json()
+                console.log('level data', levelsData)
 
-                
+                const equipRes = await fetch(`https://www.dnd5eapi.co${url}/starting-equipment`)
+                const equipData = await equipRes.json()
+                console.log(equipData)
 
-                for(const item of spellData.results){
-                    if(item.level === 1 || item.level=== 0){
-                        spells.push(item)
-                        // setFetchData(prevData => ({
-                        //     ...prevData,
-                        //     [targetKey]:{
-                        //         ...prevData[targetKey],
-                        //         spells:[
-                        //             ...(prevData[targetKey]?.spells ||[]),
-                        //             item
-                        //         ]
-                        //     }
-                        // }))
-                        
+                for(let item of spellData.results){
+                    let level = item.level
+
+                    if(!spells[`level_${level}_spells`]){
+                        spells[`level_${level}_spells`] = []
                     }
+                    spells[`level_${level}_spells`].push(item)
                 }
-console.log(spells)
+
+                console.log('spells', spells)
+
+                setFetchData(prevData => ({
+                    ...prevData,
+                    [targetKey]:{
+                        index:data.index,
+                        name:data.name,
+                        levels:data.class_levels,
+                        hit_die:data.hit_die,
+                        multi_classing:data.multi_classing,
+                        equip:{
+                            starting_equip:data.starting_equipment,
+                            equip_options:data.starting_equipment_options
+                        },
+                        proficiencies:{
+                            starting_proficiencies:data.proficiencies,
+                            proficiency_choices:data.proficiency_choices
+                        },
+                        saving_throws:data.saving_throws,
+                        spellcasting:data.spellcasting,
+                        spells:spells,
+                        level_data:levelsData,
+                        url:data.url,
+                        spells_url:data.spells
+                    }
+                }))
             }
-            // if(!spellRes.ok){
-            //     console.error('fetch 2 failed')
-            // }
+            // fetch level data for the class
             
-            setFetchData(prevData => ({
-                ...prevData,
-                [targetKey]:{
-                    index:data.index,
-                    name:data.name,
-                    levels:data.class_levels,
-                    hit_die:data.hit_die,
-                    multi_classing:data.multi_classing,
-                    equip:{
-                        starting_equip:data.starting_equipment,
-                        equip_options:data.starting_equipment_options
-                    },
-                    proficiencies:{
-                        starting_proficiencies:data.proficiencies,
-                        proficiency_choices:data.proficiency_choices
-                    },
-                    saving_throws:data.saving_throws,
-                    spellcasting:data.spellcasting,
-                    spells:[
-                        spells
-                    ],
-                    url:data.url
-                }
-            }))
+            if(url && res){
+                
+            }
             console.log(fetchData)
             console.log('spellData', spellData)
         }catch(err){
-            console.error(err)
+            console.error(err, res.status, spellRes.status)
         }
     }
+
+    // const raceFetch = (url, targetKey) => {
+    //     try{
+
+    //     }catch(err){
+    //         console.error(err)
+    //     }
+    // }
 
     useEffect(() => {
         console.log('fetchData useEffect', fetchData)
@@ -377,22 +393,22 @@ useEffect(() => {
                                         classFetchCall:classFetchCall}} />
                 </div>
 
-                <div>
+                {/* <div>
                     <ProInfo functions={{character: character,
                                         setCharacter: setCharacter,
                                         fetchData:fetchData,
                                         setFetchData:setFetchData}} />
-                </div>
-
-                {fetchData.primary_class || fetchData.secondary_class ? 
+                </div> */}
+ 
+                {/* {fetchData.primary_class || fetchData.secondary_class ? 
                     <div>
                         <Spellcasting functions={{character: character,
                                                 setCharacter: setCharacter,
                                                 fetchData:fetchData,
                                                 setFetchData:setFetchData}} />
                     </div>
-                :''}
-                
+                :''}  */}
+
 
                 <div>
                     <Equip functions={{character: character,

@@ -21,7 +21,7 @@ export default function Class ({functions}) {
                 }))
                 console.log(fetchData)
             }catch(err){
-                console.error(err)
+                console.error(err, err.message)
             }
         }
         
@@ -84,9 +84,9 @@ export default function Class ({functions}) {
 
         const compare = fetchData.class_list.results.some(element => element.name === input) || fetchData.class_list.results.some(element => element.name.toLowerCase() === input)
         const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
-
+console.log(url)
         if(inputName === 'primaryClass' && compare){
-
+            console.log(url)
             classFetchCall(url, 'primary_class')
             multiClassFetch()
         }else if(inputName === 'secondaryClass' && compare){

@@ -19,17 +19,18 @@ export default function ProInfo ({functions}) {
 	const [spawnCount, setSpawnCount] = useState(0)
 	const [key, setKey] = useState(null)
 	const [hoveredKey, setHoveredKey] = useState(null)
+    useEffect(() => {
+        console.log('hoveredKey', isHovering)
+    }, [isHovering])
 
     const handleMouseOver = (e, key) => {
         console.log(key)
 		setIsHovering(true)
-		setEvent(e)
-		setKey(key)
 		setHoveredKey(key)
         console.log(isHovering)
 	}
 
-    const handleMouseOut = e => {
+    const handleMouseOut = (e) => {
 		setIsHovering(false)
 		setEvent(null)
 		setSpawnCount(prevCount => prevCount + 1)
@@ -95,7 +96,7 @@ export default function ProInfo ({functions}) {
                                             }
                                             
                                         }
-                                        console.log(option.item.url)
+                                        // console.log(option.item.url)
 
                                         return(
                                             <div key={`${i}${j}`}>
@@ -111,8 +112,8 @@ export default function ProInfo ({functions}) {
                                                         />
                                                     <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={option.item.index}>{option.item.name}</label>
                                                 </p>
-                                                {/* && hoveredKey === `primary_pro_${i}${j}` */}
-                                                {/* {isHovering  ? */}
+                                                {/*  */}
+                                                {/* {isHovering && hoveredKey === `primary_pro_${i}${j}` ? 
                                                     <InfoCard
                                                         functions={{
                                                             fetchData: fetchData,
@@ -120,12 +121,11 @@ export default function ProInfo ({functions}) {
                                                             isHovering: isHovering,
                                                             spawnCount: spawnCount,
                                                             setSpawnCount: setSpawnCount,
-                                                            className: hoveredKey,
                                                             hoveredKey: hoveredKey,
                                                             url: option.item.url,
                                                             parentName: parentName,
                                                     }}/>
-                                                {/* : ''} */}
+                                                : ''}  */}
                                                 
                                             </div>
                                         )
@@ -205,7 +205,7 @@ export default function ProInfo ({functions}) {
                                                     <label htmlFor={option?.item?.index} onMouseOver={(e) => {handleMouseOver(e, `secondary_pro_${i}${j}`)}}>{option?.item?.name}</label>
                                                 </p>
                                                 {console.log(key)}
-                                                {isHovering && hoveredKey === `secondary_pro_${i}${j}` ?
+                                                {/* {isHovering && hoveredKey === `secondary_pro_${i}${j}` ?
                                                     <InfoCard 
                                                         functions={{
                                                             character: character,
@@ -218,7 +218,7 @@ export default function ProInfo ({functions}) {
                                                             url: option.item.url,
                                                             parentName: parentName,
                                                     }}/>
-                                                : ''}
+                                                : ''} */}
                                                 
                                             </div>
                                             
@@ -236,7 +236,7 @@ export default function ProInfo ({functions}) {
         primaryProChoice()
         secondaryProChoice()
 
-    }, [fetchData])
+    }, [fetchData, isHovering])
 
     //Proficiencies
     const [primaryProDiv, setPrimaryProDiv] = useState()
@@ -256,13 +256,14 @@ export default function ProInfo ({functions}) {
                         <strong>{character?.class?.primary?.className}</strong>
 
                         {primary.map((element, i) => (
+                            
 
-
-                            <div>
-                                <p onMouseOver={(e) => {handleMouseOver(e, `primary_pro${i}`)}} key={i} className='classProficiencies' >
+                            <div key={`sec_pro_${i}`}>
+                            {console.log('element', element)}
+                                <p onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}`)}} onMouseOut={handleMouseOut} key={i} className='classProficiencies' >
                                     {element.name}
                                 </p>
-                                {isHovering && hoveredKey === `primary_pro_${i}` ?
+                                {/* {isHovering && hoveredKey === `primary_pro_${i}` ?
                                     <InfoCard 
                                         functions={{
                                             character: character,
@@ -272,10 +273,10 @@ export default function ProInfo ({functions}) {
                                             setSpawnCount: setSpawnCount,
                                             className: hoveredKey,
                                             hoveredKey: hoveredKey,
-                                            url: option.item.url,
+                                            url: element.url,
                                             parentName: parentName,
                                     }}/>
-                                : ''}
+                                : ''} */}
                             </div>
                             
                         ))}
@@ -303,7 +304,7 @@ export default function ProInfo ({functions}) {
                                     {element.name}
                                 </p>
                                 
-                                {isHovering && hoveredKey === `secondary_pro_${i}` ?
+                                {/* {isHovering && hoveredKey === `secondary_pro_${i}` ?
                                     <InfoCard 
                                         functions={{
                                             character: character,
@@ -316,7 +317,7 @@ export default function ProInfo ({functions}) {
                                             url: option.item.url,
                                             parentName: parentName,
                                     }}/>
-                                : ''}
+                                : ''} */}
                             </div>
                             
                         ))}
@@ -333,7 +334,7 @@ export default function ProInfo ({functions}) {
 
         
         
-    }, [fetchData])
+    }, [fetchData, isHovering])
 
 //final return statement
     return (
