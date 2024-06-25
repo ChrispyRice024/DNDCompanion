@@ -2,37 +2,318 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#raceInfo{
+  display:flex;
+  text-align:center;
+  justify-content:center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#primaryRaceInfo{
+  background-color:green;
+  border-style:solid;
+  width:50%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#secondaryRaceInfo{
+  background-color:blue;
+  border-style:solid;
+  width:50%;
+}
+
+#proficiencies{
+  text-align:center;
+  display:flex;
+  flex-wrap: wrap;
+  width:100%;
+}
+
+#classInfo{
+  display:grid;
+}
+
+.proficiencies{
+  background-color:blue;
+  /* display:grid; */
+  width:20%;
+}
+
+.primary_pro{
+  background-color:green;
+  /* display:grid; */
+  width:20%;
+  border-style:solid;
+}
+
+.secondary_pro{
+  background-color:blue;
+  width:20%;
+  border-style:solid;
+}
+
+.title{
+  display:grid;
+}
+
+#RaceInfo_infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+#secondary_RaceInfo_infoCard{
+  position:absolute;
+  left:50%;
+  /* bottom:-80%; */
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+#Spellcasting_infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:400px;
+  padding:5px;
+}
+
+.Equipment_infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:400px;
+  padding:5px;
+}
+
+.secondaryInfoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+.raceProList{
+  /* position:relative; */
+  display:inline-block;
+  max-width:100px;
+}
+
+.primaryTraits{
+  justify-content:center;
+  position:relative;
+  display:inline-block;
+  /* width:150px; */
+}
+
+.secondaryTraits{
+  /* justify-content:center; */
+  position:relative;
+  display:inline-block;
+}
+
+.innerMapProRaceDiv{
+  position:relative;
+  width:150px;
+  text-align:center;
+}
+
+.racialTraits{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.infoCard{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:350px;
+  padding:5px;
+}
+
+#infoDiv{
+  position:absolute;
+  left:50%;
+  background-color:white;
+  z-index:1000;
+  border-style:solid;
+  box-shadow:5px 5px 1px grey;
+  width:150px;
+  padding:5px;
+}
+
+/* General Styles */
+body {
+  background-color: #1E1E1E; /* Dark Background */
+  color: #FFFFFF; /* Main Text */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container Styling */
+#outer_equip_parent {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  padding: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+#inner_equip_parent {
+  background-color: #2E2E2E; /* Slightly lighter dark background */
+  border: 2px solid #FFD700; /* Gold Border */
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Section Styling */
+#primary_starting_equip, #primary_equip_options {
+  margin-bottom: 20px;
 }
+
+#primary_starting_equip p strong, #primary_equip_options strong {
+  color: #FFD700; /* Gold for titles */
+  font-size: 1.2em;
+}
+
+/* Equipment Items Styling */
+#primary_starting_equip p, #primary_equip_options p {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #4169E1; /* Royal Blue */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#primary_starting_equip p:hover, #primary_equip_options p:hover {
+  background-color: #228B22; /* Forest Green on hover */
+  cursor: pointer;
+}
+
+/* Equipment Options Styling */
+.equip_options {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #8B0000; /* Deep Red */
+  border-radius: 5px;
+}
+
+/* Input and Label Styling */
+input[type='radio'] {
+  margin-right: 10px;
+}
+
+/* Container Styling */
+#spell_info {
+  background-color: #2E2E2E; /* Slightly lighter dark background */
+  border: 2px solid #FFD700; /* Gold Border */
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  /* width:48%; */
+}
+
+#spell_info_item {
+  margin-bottom: 15px;
+}
+
+#spell_info_item p strong {
+  color: #FFD700; /* Gold for titles */
+  font-size: 1.2em;
+}
+
+/* Spell Sections */
+h3 {
+  color: #FFD700; /* Gold for headings */
+  margin-bottom: 10px;
+}
+
+/* Spell List Styling */
+#cantrips, #spells {
+  background-color: #4169E1; /* Royal Blue */
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#cantrips:hover, #spells:hover {
+  background-color: #228B22; /* Forest Green on hover */
+  cursor: pointer;
+}
+
+/* Input and Label Styling */
+input[type='checkbox'] {
+  margin-right: 10px;
+}
+
+label {
+  cursor: pointer;
+}
+
+/* InfoCard Styling */
+.infocard {
+  background-color: #800080; /* Purple for InfoCard */
+  border: 1px solid #FFD700; /* Gold Border */
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  z-index: 10;
+  max-width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#spell_sections {
+  display: flex;
+  gap: 20px;
+}
+
+/* Spell List Styling */
+#cantrips, #spells {
+  background-color: #4169E1; /* Royal Blue */
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#cantrips:hover, #spells:hover {
+  background-color: #228B22; /* Forest Green on hover */
+  cursor: pointer;
+}
+
+#cantrip_section, #level_1_spells_section {
+  flex: 1;
+}
+
+/* Input and Label Styling */
+input[type='checkbox'] {
+  margin-right: 10px;
+}
+
