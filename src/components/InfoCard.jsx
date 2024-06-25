@@ -21,11 +21,13 @@ export default function InfoCard({functions}) {
         'saving-throw',
         'skill',
         'weapon',
-        'armor'
+        'armor',
+        'equipment'
     ]
     useEffect(() => {
-        console.log(info)
-    }, [info])
+        console.log('info', info)
+        console.log('url', url)
+    }, [info, url])
 
     console.log(hoveredKey)
     useEffect(() => {
@@ -105,7 +107,7 @@ export default function InfoCard({functions}) {
     useEffect(() => {
         const populate = () => {
             // SPELLS
-            if(url.includes('spells') && info.url){
+            if(url?.includes('spells') && info.url){
                 setInfoDiv(
                     <>
                         <p>
@@ -135,7 +137,6 @@ export default function InfoCard({functions}) {
                         </p>
                         
                         <p>
-                            {/* {info.concentration} needs conditional and label */}
                             {info.concentration ? ' Concentration' : ' No'} | 
                             {info.school.name}
                         </p>
@@ -191,44 +192,61 @@ export default function InfoCard({functions}) {
                             {info.name}
                         </p>
                         <p>
-                            {info.weapon_category}
+                            {info.weapon_category} Weapon
                         </p>
                         <p>
-                            Range: {info.range.normal}ft | Throw Range: ({info.throw_range.normal}/{info.throw_range.long})
+                            Range: {info?.range?.normal}ft {info?.throw_range?.normal ? ` | Throw Range: (${info?.throw_range?.normal}/${info?.throw_range?.long})` : ''}
+                            
                         </p>
                         <p>
-                            {info.damage.damage_dice} {info.damage.damage_type.name}
+                            {info?.damage?.damage_dice} {info?.damage?.damage_type?.name}
                         </p>
                         <p>
-                            {info.weight} lbs | {info.cost.quantity} {info.cost.unit}
+                            {info?.weight} lbs | {info?.cost?.quantity} {info?.cost?.unit}
                         </p>
                         <p>
-                            {info.properties.map((prop, i) => (
+                            Properties: 
+                            {info?.properties?.map((prop, i) => (
                                 <span key={i}>
-                                    {i >= info.properties.length -1 ? `${prop.name}` : `${prop.name} | `}
+                                    {i >= info?.properties?.length -1 ? ` ${prop?.name}` : `${prop?.name} | `}
                                 </span>
                             ))}
                         </p>
                         <p>
-                            {info.cost.quantity} {info.cost.unit} | {info.weight} lbs
+                            {info?.cost?.quantity} {info?.cost?.unit} | {info?.weight} lbs
                         </p>
                     </>
                 )
-                
+                // ADVENTURING GEAR
             }else if(info?.equipment_category?.name === 'Adventuring Gear'){
+                setInfoDiv(
+                    <>
+                        <p>
+                            {info?.name}
+                        </p>
+                        <p>
+                            {info?.gear_category?.name}
+                        </p>
+                        <>
+                            {info?.desc?.map(desc => <p>{desc}</p>)}
+                        </>
+                        <p>
+                            {info?.cost?.quantity} {info?.cost?.unit} | {info?.weight} lbs
+                        </p>
+                    </>
+                )
+                // TOOLS
+            }else if(info?.equipment_category?.name === 'Tools'){
                 setInfoDiv(
                     <>
                         <p>
                             {info.name}
                         </p>
                         <p>
-                            {info.gear_category.name}
+                            {info?.tool_category}
                         </p>
-                        <>
-                            {info.desc.map(desc => <p>{desc}</p>)}
-                        </>
                         <p>
-                            {info.cost.quantity} {info.cost.unit} | {info.weight} lbs
+                            {info?.cost?.quantity} {info?.cost?.unit} | {info?.weight} lbs
                         </p>
                     </>
                 )

@@ -393,21 +393,21 @@ useEffect(() => {
                                         classFetchCall:classFetchCall}} />
                 </div>
 
-                {/* <div>
+                <div>
                     <ProInfo functions={{character: character,
                                         setCharacter: setCharacter,
                                         fetchData:fetchData,
                                         setFetchData:setFetchData}} />
-                </div> */}
+                </div>
  
-                {/* {fetchData.primary_class || fetchData.secondary_class ? 
+                {fetchData.primary_class || fetchData.secondary_class ? 
                     <div>
                         <Spellcasting functions={{character: character,
                                                 setCharacter: setCharacter,
                                                 fetchData:fetchData,
                                                 setFetchData:setFetchData}} />
                     </div>
-                :''}  */}
+                :''}
 
 
                 <div>
