@@ -2,11 +2,10 @@ import { useState, React, useEffect } from "react";
 import InfoCard from "./InfoCard"
 
 export default function Equip({ functions }) {
-  const { character, setCharacter, fetchData, setFetchData } = functions;
+  const { fetchData } = functions;
 
   const [isHovering, setIsHovering] = useState(null);
   const [hoveredKey, setHoveredKey] = useState(null);
-
 
   const [choiceData, setChoiceData] = useState({})
 
@@ -32,10 +31,16 @@ export default function Equip({ functions }) {
       console.error(err)
     }
   }
+  let isHidden
+  if(fetchData.primary_class || fetchData.secondary_class){
+    isHidden = ''
+  }else{
+    isHidden = 'hidden'
+  }
 
   return (
-    <div id='outer_equip_parent'>
-      <div id='inner_equip_parent'>
+    <div id='outer_equip_parent' style={{visibility:`${isHidden}`}}>
+      <div id='inner_equip_parent' style={{visibility:`${isHidden}`}}>
         {fetchData?.primary_class ?
         <div id='outer_equip_conditional'>
           <div id='primary_starting_equip'>
@@ -46,12 +51,11 @@ export default function Equip({ functions }) {
               {fetchData.primary_class.equip.starting_equip?.map((item, i) => {
 
                 return(
-                  <div key={`1${i}`}>
+                  <div key={`1_${i}`}>
                     <p onMouseOver={(e) => {handleMouseOver(e, `primary_start_equip_${i}`)}} onMouseOut={handleMouseOut}>
                       {item.equipment.name}
-                      {console.log('item', item)}
                     </p>
-                    {console.log(item)}
+
                     {isHovering && hoveredKey === `primary_start_equip_${i}` ? 
                       <InfoCard 
                         functions={{
@@ -67,15 +71,13 @@ export default function Equip({ functions }) {
           <div id='primary_equip_options'>
             <span>
               <strong>Equip Choices</strong>
-              {console.log(fetchData?.primary_class?.equip?.equip_options)}
               {fetchData.primary_class?.equip?.equip_options?.map((option, i) => {
-                console.log(option.from.option_set_type)
 
                 // OPTIONS ARRAY
                 if(option?.from?.option_set_type === 'options_array'){
 
                   return (
-                    <div className='equip_options'>
+                    <div key={`2_${i}`} className='equip_options'>
                       <p>
                         Choose 1
                       </p>
@@ -83,8 +85,7 @@ export default function Equip({ functions }) {
                         if(choice.option_type === 'counted_reference'){
                           return(
                             
-                            <p>
-                              {console.log('choice', choice)}
+                            <p key={`j_${i}_${j}`}>
                               <input
                                   type='radio'
                                   name={i}
@@ -102,9 +103,9 @@ export default function Equip({ functions }) {
                           )
                         }else if(choice.option_type === 'multiple'){
                           return(
-                            <p>
+                            <p key={`j_${i}_${j}`}>
                               {choice.items.map((item, k) => (
-                                <span>
+                                <span key={`k_${k}`}>
                                   <input
                                     type='radio'
                                     name={i}
@@ -129,8 +130,7 @@ export default function Equip({ functions }) {
                           return(
                             <>
                               {choiceData[`choice${i}_${j}`]?.equipment?.map((item, k) => (
-                                <p>
-                                  {/* {console.log('item', item)} */}
+                                <p key={`i_j_${i}_${j}_${k}`}>
                                   <input
                                     type='radio'
                                     name={i}
@@ -148,7 +148,6 @@ export default function Equip({ functions }) {
                               ))}
                             </>
                           )
-                          console.log(choice?.from)
                         }else{
                           return(
                             <p>
@@ -165,11 +164,9 @@ export default function Equip({ functions }) {
                   if(!choiceData[`choice${i}`]){
                     choiceFetch(choice?.choice?.from?.equipment_category?.url, `choice${i}`)
                   }
-                  console.log('url', choice?.choice?.from?.equipment_category?.url)
                   return(
                     <>
-                    hello
-                      {/* {choiceData[`choice${i}`]} */}
+                    {/* {console.log('hello!!!!!', choiceData)} */}
                     </>
                   )
                 }

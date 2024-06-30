@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 
 export default function Race({functions}) {
 
-    const {setCharacter, character, proBonus} = functions
+    const {fetchData, raceFetch} = functions
     // const racesFetch = fetch('https://www.dnd5eapi.co/api/classes').then((res) =>res.json()).then((res) => console.log(res.results))
     const [raceList, setRaceList] = useState([])
     const [primaryRaceData, setPrimaryRaceData] = useState('')
@@ -22,56 +22,20 @@ export default function Race({functions}) {
         })
     }, [])
 
-    useEffect(() => {
-        if(primaryRaceData !== ''){
-        fetch(`https://www.dnd5eapi.co/api/races/${primaryRaceData}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log('Race.js', {data})
-                setCharacter(prevCharacter => ({
-                    ...prevCharacter,
-                    race:{
-                        ...prevCharacter.race,
-                        primary: data
-                    }
-                }))
-            }).catch(err => {
-                console.error('Error ', err)
-            })
-        }
-
-    }, [primaryRaceData])
-
-    useEffect(() => {
-        if(secondaryRaceData !== ''){
-        fetch(`https://www.dnd5eapi.co/api/races/${secondaryRaceData}`)
-        .then(res => res.json())
-        .then(data => {
-            setCharacter(prevCharacter => ({
-                ...prevCharacter,
-                race:{
-                    ...prevCharacter.race,
-                    secondary: data
-                }
-            }))
-        }).catch(err => {
-            console.error('Error ', err)
-        })
-    }
-    }, [secondaryRaceData])
-
-
     const verifyInput = (e) => {
         const input = e.target.value
         const inputName = e.target.name
+        const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
+        // console.log(e.tareget.list)
+
         const compare = raceList.some(element => element.name === input) || raceList.some(element => element.name.toLowerCase() === input)
 
         if(inputName === 'primaryRace' && compare){
-            setPrimaryRaceData(input.toLowerCase())
+            raceFetch(url, 'primary_race')
             
         }else if(inputName === 'secondaryRace' && compare){
-            setSecondaryRaceData(input.toLowerCase())
-        
+            console.log('url verifyInput', url)
+            raceFetch(url, 'secondary_race')
         }
     }
     
@@ -92,6 +56,7 @@ export default function Race({functions}) {
                     {raceList.map((race, i) => (
                         <option
                         key={i}
+                        data-url={race.url}
                         value={race.name}/>
                     ))}
                 </datalist>
@@ -103,6 +68,7 @@ export default function Race({functions}) {
                     {raceList.map((race, i) => (
                         <option
                         key={i}
+                        data-url={race.url}
                         value={race.name}/>
                     ))}
                 </datalist>

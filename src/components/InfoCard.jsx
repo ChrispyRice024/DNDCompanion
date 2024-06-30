@@ -5,10 +5,6 @@ export default function InfoCard({functions}) {
     const {
         fetchData,
         url,
-        parentName,
-        spawnCount,
-        setSpawnCount,
-        className,
         hoveredKey,
     } = functions
     const api = `https://www.dnd5eapi.co`
@@ -58,9 +54,9 @@ export default function InfoCard({functions}) {
         fetchCall(url)
         // console.log('info.reference', info.reference.url)
         //  && info?.reference?.url.contains('saving-throw')
-        if(info){
+        // if(info){
             logs()
-        }
+        // }
         
 
     },[hoveredKey])
@@ -107,19 +103,20 @@ export default function InfoCard({functions}) {
     useEffect(() => {
         const populate = () => {
             // SPELLS
-            if(url?.includes('spells') && info.url){
+            if(Object.keys(info)?.includes('school')){
+                console.log('includes spells')
                 setInfoDiv(
                     <>
                         <p>
-                           Level {info.level} | {info.name} | {info.casting_time}
+                           Level {info?.level} | {info?.name} | {info?.casting_time}
+                        </p>
+                        hello
+                        <p>
+                            {info?.dc_type?.name} Save | {info?.range} | {info?.duration}
                         </p>
                         
                         <p>
-                            {info.dc_type?.name} Save | {info.range} | {info.duration}
-                        </p>
-                        
-                        <p>
-                            {info.desc.map((item, i) => (
+                            {info?.desc?.map((item, i) => (
                                 <>
                                     {item}
                                 </>
@@ -127,18 +124,18 @@ export default function InfoCard({functions}) {
                         </p>
 
                         <p>
-                            {info.material} | 
-                            Components {info.components.map((item, i) => (
+                            {info?.material} | 
+                            Components {info?.components?.map((item, i) => (
                                 <>
                                     {item}
                                 </>
                             ))} |
-                            {info.ritual ? ' Ritual' : ' No Ritual'}
+                            {info?.ritual ? ' Ritual' : ' No Ritual'}
                         </p>
                         
                         <p>
-                            {info.concentration ? ' Concentration' : ' No'} | 
-                            {info.school.name}
+                            {info?.concentration ? ' Concentration' : ' No'} | 
+                            {info?.school?.name}
                         </p>
                     </>
                 )
@@ -229,6 +226,12 @@ export default function InfoCard({functions}) {
                         </p>
                         <>
                             {info?.desc?.map(desc => <p>{desc}</p>)}
+                        </>
+                        <>
+                        <p>
+                            Contents
+                        </p>
+                            {info?.contents?.map(item => <p style={{backgroundColor:'#800080'}}>{item?.quantity} {item?.item?.name} </p>)}
                         </>
                         <p>
                             {info?.cost?.quantity} {info?.cost?.unit} | {info?.weight} lbs

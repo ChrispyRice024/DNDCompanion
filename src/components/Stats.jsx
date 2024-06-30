@@ -53,17 +53,6 @@ export default function Stats({functions}) {
         }
     }
 
-    // const handleProChange = (e) => {
-    //     setCharacter(prevCharacter => ({
-    //         ...prevCharacter,
-    //         proficiencies:{
-    //             ...prevCharacter.proficiencies,
-    //             [e.target.name]: e.target.checked
-    //         }
-    //     })) 
-    // }
-
-
     useEffect(() => {
             const updatedSkills = {...character.skills}
 
@@ -121,7 +110,7 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                
+                    {/* CHANGE TO A NUMBER NOT AN INPUT */}
                 <input
                     name='strBonus'
                     id='str-bonus-input'

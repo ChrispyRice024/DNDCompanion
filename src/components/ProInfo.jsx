@@ -19,15 +19,10 @@ export default function ProInfo ({functions}) {
 	const [spawnCount, setSpawnCount] = useState(0)
 	const [key, setKey] = useState(null)
 	const [hoveredKey, setHoveredKey] = useState(null)
-    useEffect(() => {
-        console.log('hoveredKey', isHovering)
-    }, [isHovering])
 
     const handleMouseOver = (e, key) => {
-        console.log(key)
 		setIsHovering(true)
 		setHoveredKey(key)
-        console.log(isHovering)
 	}
 
     const handleMouseOut = (e) => {
@@ -36,13 +31,12 @@ export default function ProInfo ({functions}) {
 		setSpawnCount(prevCount => prevCount + 1)
 	}
 
-
     //Proficiency Options
     useEffect(() => {
 
         const primaryProChoice = () => {
         
-            const primaryChoices = fetchData?.primary_class?.proficiencies?.proficiency_choices
+            const primaryChoices = fetchData?.primary_class?.proficiencies?.proficiency_choices 
 
                 setPrimaryProChoiceDiv(
                     <div className='proficiency_choice'>
@@ -55,17 +49,14 @@ export default function ProInfo ({functions}) {
                                         const chosenPro = (fetchData?.primary_class[`chosen_pro_${i}`])
                                         const max = choice?.choose
                                
-                                        const isChecked = chosenPro?.some(obj => obj.name === option.item.name)
+                                        const isChecked = chosenPro?.some(obj => obj?.name === option?.item?.name)
                                         const isDisabled = chosenPro?.length >= max && !isChecked
                           
                                         const handleCheck = (e) => {
                                             const beenChecked = e.target.checked
 
                                             if(beenChecked){
-                                                console.log(option.item.name)
 
-                                                console.log(choice)
-                                                console.log(e.target.value)
                                                 setFetchData(prevData => ({
                                                     ...prevData,
                                                     primary_class: {
@@ -82,7 +73,6 @@ export default function ProInfo ({functions}) {
                                                 }))
                                                 
                                             }else if (!beenChecked){
-                                                console.log('unchecked')
                                                 setFetchData((prevData) => ({
                                                     ...prevData,
                                                     primary_class:{
@@ -92,43 +82,49 @@ export default function ProInfo ({functions}) {
                                                         ]
                                                     }
                                                 }))
-                                                console.log(fetchData.primary_class[`chosen_pro_${i}`])
                                             }
                                             
                                         }
-                                        // console.log(option.item.url)
-
-                                        return(
-                                            <div key={`${i}${j}`}>
-                                                <p>
+                                        if(option.option_type === 'reference'){
+                                            return(
+                                                <div key={j}>
+                                                    <p>
                                                     <input
                                                         type='checkbox'
-                                                        value={option.item.name}
+                                                        value={option?.item?.name}
                                                         checked={isChecked}
-                                                        name={option.item.index}
+                                                        name={option?.item?.index}
                                                         onChange={handleCheck}
                                                         disabled={isChecked ? false : isDisabled}
-                                                        data-url={option.item.url}
+                                                        data-url={option?.item?.url}
                                                         />
-                                                    <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={option.item.index}>{option.item.name}</label>
-                                                </p>
-                                                {/*  */}
-                                                {/* {isHovering && hoveredKey === `primary_pro_${i}${j}` ? 
-                                                    <InfoCard
-                                                        functions={{
-                                                            fetchData: fetchData,
-                                                            event: event,
-                                                            isHovering: isHovering,
-                                                            spawnCount: spawnCount,
-                                                            setSpawnCount: setSpawnCount,
-                                                            hoveredKey: hoveredKey,
-                                                            url: option.item.url,
-                                                            parentName: parentName,
-                                                    }}/>
-                                                : ''}  */}
-                                                
-                                            </div>
-                                        )
+                                                    <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={option?.item?.index}>{option?.item?.name}</label>
+                                                </p>    
+                                                </div>
+                                            )
+                                        }else if(option.option_type === 'choice'){
+
+                                            return(
+                                                <div>
+                                                    {option?.choice?.from?.options?.map((item, k) => {
+                                                        return(
+                                                            <p key={k}>
+                                                                <input
+                                                                    type='checkbox'
+                                                                    value={item?.item?.name}
+                                                                    checked={isChecked}
+                                                                    name={item?.item?.index}
+                                                                    onChange={handleCheck}
+                                                                    disabled={isChecked ? false : isDisabled}
+                                                                    data-url={item?.item?.url}
+                                                                    />
+                                                                <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={item?.item?.index}>{item?.item?.name}</label>
+                                                            </p>
+                                                        )
+                                                    })}
+                                                </div>
+                                            )
+                                        }
                                     })}
                                 </div>
                             )
@@ -136,7 +132,7 @@ export default function ProInfo ({functions}) {
                     </div>
                 )}
             const secondaryProChoice = () => {
-                const secondaryChoices = fetchData?.secondary_class?.proficiencies?.proficiency_choices
+                const secondaryChoices = fetchData?.secondary_class?.multi_classing?.proficiency_choices
 
                 setSecondaryProChoiceDiv(
                     <div className='proficiency_choice'>
@@ -147,11 +143,8 @@ export default function ProInfo ({functions}) {
                                     {choice.from.options.map((option, j) => {
 
                                         const chosenPro = fetchData?.secondary_class[`chosen_pro_${i}`]
-                                        // console.log(chosenPro)
-                                        console.log(choice.type)
-                                        // console.log(fetchData)
                                         const max = choice?.choose
-                                        // console.log(chosenPro)
+                                
                                         const isChecked = chosenPro?.some(obj => obj.name === option.item.name)
                                         const isDisabled = chosenPro?.length >= max && !isChecked
 
@@ -160,7 +153,6 @@ export default function ProInfo ({functions}) {
 
                                             if(beenChecked){
 
-                                                console.log(choice)
                                                 setFetchData(prevData => ({
                                                     ...prevData,
                                                     secondary_class: {
@@ -187,7 +179,6 @@ export default function ProInfo ({functions}) {
                                                     }
                                                 }))
                                             }
-                                            console.log(fetchData)
                                         }
 
                                         return(
@@ -204,7 +195,6 @@ export default function ProInfo ({functions}) {
                                                         />
                                                     <label htmlFor={option?.item?.index} onMouseOver={(e) => {handleMouseOver(e, `secondary_pro_${i}${j}`)}}>{option?.item?.name}</label>
                                                 </p>
-                                                {console.log(key)}
                                                 {/* {isHovering && hoveredKey === `secondary_pro_${i}${j}` ?
                                                     <InfoCard 
                                                         functions={{
@@ -236,7 +226,7 @@ export default function ProInfo ({functions}) {
         primaryProChoice()
         secondaryProChoice()
 
-    }, [fetchData, isHovering])
+    }, [fetchData, isHovering, fetchData.is_multi_classing])
 
     //Proficiencies
     const [primaryProDiv, setPrimaryProDiv] = useState()
@@ -246,10 +236,6 @@ export default function ProInfo ({functions}) {
         const primaryPro = () => {
 
             const primary = fetchData?.primary_class?.proficiencies?.starting_proficiencies
-            console.log('primary', primary)
-            // const isEmpty = ("className" in character.class.primary)
-
-            // if(!isEmpty){
 
                 setPrimaryProDiv(
                     <div key='sec_pro' className='proficiencies'>
@@ -259,7 +245,6 @@ export default function ProInfo ({functions}) {
                             
 
                             <div key={`sec_pro_${i}`}>
-                            {console.log('element', element)}
                                 <p onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}`)}} onMouseOut={handleMouseOut} key={i} className='classProficiencies' >
                                     {element.name}
                                 </p>
@@ -282,15 +267,11 @@ export default function ProInfo ({functions}) {
                         ))}
                     </div>
                 )
-            // }
         }
 
         const secondaryPro = () => {
 
-            const secondary = fetchData?.secondary_class.proficiencies.starting_proficiencies
-            // const isEmpty = ("className" in character.class.secondary)
-
-            // if(!isEmpty){
+            const secondary = fetchData?.secondary_class?.multi_classing.proficiencies
                 setSecondaryProDiv(
 
                     <div className='proficiencies'>
@@ -299,7 +280,6 @@ export default function ProInfo ({functions}) {
 
                         {secondary.map((element, i) => (
                             <div>
-                                {console.log(element)}
                                 <p onMouseOver={(e) => {`secondary_pro_${i}`}} key={i} className='classProficiencies'>
                                     {element.name}
                                 </p>

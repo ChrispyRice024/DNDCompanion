@@ -3,13 +3,16 @@ import { useState, useEffect, useRef } from 'react'
 import InfoCard from './InfoCard'
 
 export default function RaceInfo({ functions }) {
-	const { character, setCharacter } = functions
+	const { character, setCharacter, fetchData } = functions
 
 	const parentName = 'RaceInfo_infoCard'
 	const secondaryParentName = 'secondary_RaceInfo_infoCard'
 
-	const primaryInfo = character?.race?.primary
-	const secondaryInfo = character?.race?.secondary
+	const isHidden = fetchData?.primary_race?.name ? '' : 'none'
+	const isHidden2 = fetchData?.secondary_race?.name ? '' : 'none'
+
+	const primaryInfo = fetchData?.primary_race
+	const secondaryInfo = fetchData?.secondary_race
 
 	const [primaryDiv, setPrimaryDiv] = useState()
 	const [secondaryDiv, setSecondaryDiv] = useState()
@@ -45,16 +48,6 @@ export default function RaceInfo({ functions }) {
 		setEvent(null)
 		setSpawnCount(prevCount => prevCount + 1)
 	}
-	useEffect(() => {
-		console.log({ primaryInfo })
-		console.log(primaryInfo)
-	}, [primaryInfo])
-
-	useEffect(() => {
-		if (spawnCount > 5) {
-			setTimeout(() => setSpawnCount(0), 2000)
-		}
-	}, [spawnCount])
 
 	const [chosenProPrimary, setChosenProPrimary] = useState([])
 
@@ -69,10 +62,6 @@ export default function RaceInfo({ functions }) {
 			const skills = Object.keys(character.skills)
 
 			setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
-			
-			console.log(e.target.name)
-			console.log(chosenProPrimary)
-			console.log(chosenSkill)
 
 			setCharacter((prevCharacter) => {
 				const updatedSkills = {...prevCharacter.skills}
@@ -88,59 +77,57 @@ export default function RaceInfo({ functions }) {
 					skills: updatedSkills
 				}
 			})
-			console.log(character)
-
 	   
 		}else if (!beenChecked){
 
 			setChosenProPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
 		}
 	}
-	//populate the racial divs
-	useEffect(() => {
 
-		const fillPrimaryDiv = () => {
+	return (
+		<div id="raceInfo" >
+			{/* {primaryDiv}
+			{secondaryDiv} */}
 
-			setPrimaryDiv(
-				<div id="primaryRaceInfo">
+			<div id="primaryRaceInfo" style={{display:isHidden}}>
 					<p>
-						<strong>{primaryInfo.name}</strong>
+						<strong>{primaryInfo?.name}</strong>
 					</p>
 					<p>
 						{/* Age */}
-						{primaryInfo.age ? (
+						{primaryInfo?.age ? (
 							<>
-								<strong>Age:</strong> {primaryInfo.age}
+								<strong>Age:</strong> {primaryInfo?.age}
 							</>)
 							 :''}
 					</p>
 					<p>
 						{/* Alignment */}
-						{primaryInfo.alignment ? (
+						{primaryInfo?.alignment ? (
 							<>
-								<strong>Alignment: </strong>{primaryInfo.alignment}
+								<strong>Alignment: </strong>{primaryInfo?.alignment}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Language description */}
-						{primaryInfo.language_desc ? (
+						{primaryInfo?.language_desc ? (
 							<>
-								<strong>Languages: </strong> {primaryInfo.language_desc}
+								<strong>Languages: </strong> {primaryInfo?.language_desc}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Size */}
-						{primaryInfo.size ? (
+						{primaryInfo?.size ? (
 							<>
-								<strong>Size: </strong> {primaryInfo.size}
+								<strong>Size: </strong> {primaryInfo?.size}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Size Description */}
-						{primaryInfo.size_description ? (
+						{primaryInfo?.size_description ? (
 							<>
 								{primaryInfo?.size_description}
 							</>
@@ -148,7 +135,7 @@ export default function RaceInfo({ functions }) {
 						</p>
 					<p>
 						{/* Speed */}
-						{primaryInfo.speed ? (
+						{primaryInfo?.speed ? (
 							<>
 								<strong>Speed:</strong> {primaryInfo?.speed}
 							</>
@@ -158,8 +145,7 @@ export default function RaceInfo({ functions }) {
 
 					
 					<span>
-						{console.log(primaryInfo.starting_proficiencies)}
-						{primaryInfo.starting_proficiencies.length > 0 ? (
+						{primaryInfo?.starting_proficiencies?.length > 0 ? (
 								<>
 									<p>
 										<strong>Starting Proficiencies</strong>
@@ -167,9 +153,9 @@ export default function RaceInfo({ functions }) {
 									<span className="raceProList">
 										{primaryInfo?.starting_proficiencies?.map(
 											(proficiency, i) => (
-												<div>
-													<p className="raceProList" key={i}>
-														{proficiency.name}
+												<div key={i}>
+													<p className="raceProList">
+														{proficiency?.name}
 													</p>
 												</div>
 											)
@@ -178,7 +164,7 @@ export default function RaceInfo({ functions }) {
 								</>
 							):''}
 					</span>
-					{primaryInfo.starting_proficiency_options ? (
+					{primaryInfo?.starting_proficiency_options ? (
 						<>
 							<p>
 								{primaryInfo?.starting_proficiency_options?.desc}
@@ -186,7 +172,7 @@ export default function RaceInfo({ functions }) {
 							<span>
 								{primaryInfo?.starting_proficiency_options?.from?.options?.map(
 								(option, i) => (
-									<span>
+									<span key={i}>
 										<p>
 											<input
 												type="checkbox"
@@ -197,11 +183,10 @@ export default function RaceInfo({ functions }) {
 													handleMouseOver(e, `primary_proficiency_options_${i}`)
 												}
 												onMouseOut={handleMouseOut}
-												data-url={option.url}
-												htmlFor={primaryInfo.name}>
+												data-url={option?.url}
+												htmlFor={primaryInfo?.name}>
 												{option?.item?.name}
 											</label>
-											{console.log(isHovering)}
 										</p>
 										{isHovering &&
 										event &&
@@ -229,7 +214,7 @@ export default function RaceInfo({ functions }) {
 							</span>
 						</>
 					): ''}
-					{primaryInfo.traits ? (
+					{primaryInfo?.traits ? (
 						<>
 							<p>
 								<strong>Traits</strong>
@@ -269,57 +254,50 @@ export default function RaceInfo({ functions }) {
 										)}
 									</div>
 								))
-								// spawnCount < 5
 								}	
 							</span>
 						</>
 					): ''}
 				</div>
-			)
-		}
-
-		const fillSecondaryDiv = () => {
-
-			setSecondaryDiv(
-				<div id="secondaryRaceInfo">
+				<div style={{display: isHidden2}} id="secondaryRaceInfo">
 					<p>
-						<strong>{secondaryInfo.name}</strong>
+						<strong>{secondaryInfo?.name}</strong>
 					</p>
 					<p>
 						{/* Age */}
-						{secondaryInfo.age ? (
+						{secondaryInfo?.age ? (
 							<>
-								<strong>Age:</strong> {secondaryInfo.age}
+								<strong>Age:</strong> {secondaryInfo?.age}
 							</>)
 							 :''}
 					</p>
 					<p>
 						{/* Alignment */}
-						{secondaryInfo.alignment ? (
+						{secondaryInfo?.alignment ? (
 							<>
-								<strong>Alignment: </strong>{secondaryInfo.alignment}
+								<strong>Alignment: </strong>{secondaryInfo?.alignment}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Language description */}
-						{secondaryInfo.language_desc ? (
+						{secondaryInfo?.language_desc ? (
 							<>
-								<strong>Languages: </strong> {secondaryInfo.language_desc}
+								<strong>Languages: </strong> {secondaryInfo?.language_desc}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Size */}
-						{secondaryInfo.size ? (
+						{secondaryInfo?.size ? (
 							<>
-								<strong>Size: </strong> {secondaryInfo.size}
+								<strong>Size: </strong> {secondaryInfo?.size}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Size Description */}
-						{secondaryInfo.size_description ? (
+						{secondaryInfo?.size_description ? (
 							<>
 								{secondaryInfo?.size_description}
 							</>
@@ -327,7 +305,7 @@ export default function RaceInfo({ functions }) {
 						</p>
 					<p>
 						{/* Speed */}
-						{secondaryInfo.speed ? (
+						{secondaryInfo?.speed ? (
 							<>
 								<strong>Speed:</strong> {secondaryInfo?.speed}
 							</>
@@ -337,7 +315,7 @@ export default function RaceInfo({ functions }) {
 
 					
 					<span>
-						{secondaryInfo.starting_proficiencies ? (
+						{secondaryInfo?.starting_proficiencies ? (
 								<>
 									<p>
 										<strong>Starting Proficiencies</strong>
@@ -347,7 +325,7 @@ export default function RaceInfo({ functions }) {
 											(proficiency, i) => (
 												<div>
 													<p className="raceProList" key={i}>
-														{proficiency.name}
+														{proficiency?.name}
 													</p>
 												</div>
 											)
@@ -356,7 +334,7 @@ export default function RaceInfo({ functions }) {
 								</>
 							):''}
 					</span>
-					{secondaryInfo.starting_proficiency_options ? (
+					{secondaryInfo?.starting_proficiency_options ? (
 						<>
 							<p>
 								{secondaryInfo?.starting_proficiency_options?.desc}
@@ -368,7 +346,7 @@ export default function RaceInfo({ functions }) {
 										<p>
 											<input
 												type="checkbox"
-												name={secondaryInfo.name}
+												name={secondaryInfo?.name}
 											/>
 											<label
 												onMouseOver={e =>
@@ -376,11 +354,10 @@ export default function RaceInfo({ functions }) {
 													)
 												}
 												onMouseOut={handleMouseOut}
-												data-url={option.url}
-												htmlFor={secondaryInfo.name}>
+												data-url={option?.url}
+												htmlFor={secondaryInfo?.name}>
 												{option?.item?.name}
 											</label>
-											{console.log(option)}
 										</p>
 										{isHovering &&
 										event &&
@@ -408,7 +385,7 @@ export default function RaceInfo({ functions }) {
 							</span>
 						</>
 					): ''}
-					{secondaryInfo.traits ? (
+					{secondaryInfo?.traits ? (
 						<>
 							<p>
 								<strong>Traits</strong>
@@ -448,27 +425,11 @@ export default function RaceInfo({ functions }) {
 										)}
 									</div>
 								))
-								// spawnCount < 5
 								}	
 							</span>
 						</>
 					): ''}
 				</div>
-			)
-		}
-
-		if(!primaryRaceEmpty){
-			fillPrimaryDiv()
-		}
-		if(!secondaryRaceEmpty){
-			fillSecondaryDiv()
-		}
-	}, [primaryInfo, secondaryInfo, isHovering])
-
-	return (
-		<div id="raceInfo">
-			{primaryDiv}
-			{secondaryDiv}
 		</div>
 	)
 }

@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-#raceInfo{
+/* #raceInfo{
   display:flex;
   text-align:center;
   justify-content:center;
@@ -29,17 +29,17 @@
 
 #classInfo{
   display:grid;
-}
-
+} */
+/* 
 .proficiencies{
   background-color:blue;
-  /* display:grid; */
+  display:grid;
   width:20%;
 }
 
 .primary_pro{
   background-color:green;
-  /* display:grid; */
+  display:grid;
   width:20%;
   border-style:solid;
 }
@@ -52,8 +52,8 @@
 
 .title{
   display:grid;
-}
-
+} */
+/* 
 #RaceInfo_infoCard{
   position:absolute;
   left:50%;
@@ -63,21 +63,21 @@
   box-shadow:5px 5px 1px grey;
   width:350px;
   padding:5px;
-}
+} */
 
-#secondary_RaceInfo_infoCard{
+/* #secondary_RaceInfo_infoCard{
   position:absolute;
   left:50%;
-  /* bottom:-80%; */
+  bottom:-80%;
   background-color:white;
   z-index:1000;
   border-style:solid;
   box-shadow:5px 5px 1px grey;
   width:350px;
   padding:5px;
-}
+} */
 
-#Spellcasting_infoCard{
+/* #Spellcasting_infoCard{
   position:absolute;
   left:50%;
   background-color:white;
@@ -86,9 +86,9 @@
   box-shadow:5px 5px 1px grey;
   width:400px;
   padding:5px;
-}
+} */
 
-.Equipment_infoCard{
+/* .Equipment_infoCard{
   position:absolute;
   left:50%;
   background-color:white;
@@ -97,9 +97,9 @@
   box-shadow:5px 5px 1px grey;
   width:400px;
   padding:5px;
-}
+} */
 
-.secondaryInfoCard{
+/* .secondaryInfoCard{
   position:absolute;
   left:50%;
   background-color:white;
@@ -108,7 +108,7 @@
   box-shadow:5px 5px 1px grey;
   width:350px;
   padding:5px;
-}
+} */
 
 .raceProList{
   /* position:relative; */
@@ -133,6 +133,7 @@
   position:relative;
   width:150px;
   text-align:center;
+  color:blue;
 }
 
 .racialTraits{
@@ -143,7 +144,7 @@
 }
 
 .infoCard{
-  position:absolute;
+  /* position:absolute; */
   left:50%;
   background-color:white;
   z-index:1000;
@@ -153,7 +154,7 @@
   padding:5px;
 }
 
-#infoDiv{
+/* #infoDiv{
   position:absolute;
   left:50%;
   background-color:white;
@@ -162,7 +163,7 @@
   box-shadow:5px 5px 1px grey;
   width:150px;
   padding:5px;
-}
+} */
 
 /* General Styles */
 body {
@@ -255,7 +256,7 @@ h3 {
 }
 
 /* Spell List Styling */
-#cantrips, #spells {
+#cantrips p, #spells p {
   background-color: #4169E1; /* Royal Blue */
   border-radius: 5px;
   padding: 10px;
@@ -278,15 +279,16 @@ label {
 }
 
 /* InfoCard Styling */
-.infocard {
-  background-color: #800080; /* Purple for InfoCard */
-  border: 1px solid #FFD700; /* Gold Border */
+.infocard p {
+  background-color: #800080; 
+  border: 1px solid #FFD700;
   border-radius: 5px;
   padding: 10px;
-  position: absolute;
+  position: fixed;
   z-index: 10;
   max-width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
 }
 
 #spell_sections {
@@ -295,7 +297,7 @@ label {
 }
 
 /* Spell List Styling */
-#cantrips, #spells {
+#cantrips p, #spells p {
   background-color: #4169E1; /* Royal Blue */
   border-radius: 5px;
   padding: 10px;
@@ -317,3 +319,62 @@ input[type='checkbox'] {
   margin-right: 10px;
 }
 
+
+
+#primaryRaceInfo, #secondaryRaceInfo {
+  background-color: #2E2E2E; /* Slightly lighter dark background */
+  border: 2px solid #FFD700; /* Gold Border */
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#primaryRaceInfo p strong, #secondaryRaceInfo p strong {
+  color: #FFD700; /* Gold for titles */
+  font-size: 1.2em;
+}
+
+/* Paragraph Styling */
+#primaryRaceInfo p, #secondaryRaceInfo p {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #4169E1; /* Royal Blue */
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#primaryRaceInfo p:hover, #secondaryRaceInfo p:hover {
+  background-color: #228B22; /* Forest Green on hover */
+  cursor: pointer;
+}
+
+/* Proficiency List Styling */
+.raceProList {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #8B0000; /* Deep Red */
+  border-radius: 5px;
+}
+
+/* Input and Label Styling */
+input[type='checkbox'] {
+  margin-right: 10px;
+}
+
+label {
+  cursor: pointer;
+}
+
+/* InfoCard Styling */
+.infocard p {
+  background-color: #800080; 
+  border: 1px solid #FFD700;
+  border-radius: 5px;
+  padding: 10px;
+  position: fixed;
+  z-index: 10;
+  max-width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+}

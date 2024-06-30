@@ -3,5 +3,8 @@
     "dotnet.codeLens.enableReferencesCodeLens": false,
     "dotnet.codeLens.enableTestsCodeLens": false,
     "prettier.singleQuote": true,
-    "prettier.tabWidth": 4
+    "prettier.tabWidth": 4,
+    "gitlens.mode.statusBar.enabled": false,
+    "editor.hover.above": false,
+    "editor.hover.enabled": false
 }

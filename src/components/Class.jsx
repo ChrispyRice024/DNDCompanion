@@ -19,7 +19,6 @@ export default function Class ({functions}) {
                     ...prevData,
                     class_list:data
                 }))
-                console.log(fetchData)
             }catch(err){
                 console.error(err, err.message)
             }
@@ -71,11 +70,11 @@ export default function Class ({functions}) {
                             </datalist>
                         </div>
                 )
+
                 classFetchCall()
             }catch(err){
                 console.error(err)
             }
-            console.log('multiClassData', multiClassData)
     }
 
     const verifyInput = (e) => {
@@ -84,22 +83,28 @@ export default function Class ({functions}) {
 
         const compare = fetchData.class_list.results.some(element => element.name === input) || fetchData.class_list.results.some(element => element.name.toLowerCase() === input)
         const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
-console.log(url)
+
         if(inputName === 'primaryClass' && compare){
-            console.log(url)
             classFetchCall(url, 'primary_class')
             multiClassFetch()
         }else if(inputName === 'secondaryClass' && compare){
 
             classFetchCall(url, 'secondary_class')
+                setFetchData(prevData => ({
+                    ...prevData,
+                    is_multi_classing:true
+                }))
         }else{
             alert('please select an existing class')
+            setFetchData(prevData => ({
+                ...prevData,
+                is_multi_classing:false
+            }))
         }
 
     }
 
     useEffect(() => {
-        console.log({fetchData})
         setOptionDiv(
             <div>
                 <div>

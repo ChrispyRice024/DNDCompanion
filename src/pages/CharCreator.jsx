@@ -10,8 +10,8 @@ import Class from '../components/Class'
 import ProInfo from '../components/ProInfo'
 import Spellcasting from '../components/Spellcasting'
 import Equip from '../components/Equip'
-import Api from '../components/Api'
 import InfoCard from '../components/InfoCard'
+import ClassFeatures from '../components/ClassFeatures'
 
 export default function CharCreator () {
 
@@ -217,13 +217,15 @@ export default function CharCreator () {
 
     const [fetchData, setFetchData] = useState({})
 
-    const [counter, setCounter] = useState(0)
+    
 
-    let spells = []
+    const [classFeatures, setClassFeatures] = useState()
 
-    useEffect(() => {
-        console.log('spells', spells)
-    }, [spells])
+    // useEffect(() => {
+    //     console.log('spells', spells)
+    //     console.log(fetchData)
+    //     console.log(classFeatures)
+    // }, [spells, fetchData, classFeatures])
 
     //class fetch
     const classFetchCall = async (url, targetKey) => { 
@@ -231,42 +233,47 @@ export default function CharCreator () {
             // initial fetch
             const res = await fetch(`https://dnd5eapi.co${url}`)
             const data = await res.json()
-            console.log(data.spells)
-
-            console.log('data', data)
             
-            let dataUrl = [
-                data.class_levels,
-                data.spells
-            ]
-            console.log(data.class_levels, data.spells)
             // fetch spell data for the class
             if(targetKey === 'primary_class' || targetKey === 'secondary_class'){
 
                 // FETCH THE SPELL DATA
-                const spellRes = await fetch(`https://dnd5eapi.co${data.spells}`)
-                const spellData = await spellRes.json()
-                console.log('spellData', spellData)
+                let spells = {}
+                if(data.spells){
+                    const spellRes = await fetch(`https://dnd5eapi.co${data.spells}`)
+                    const spellData = await spellRes.json()
+
+                    for(let item of spellData.results){
+                        let level = item.level
+    
+                        if(!spells[`level_${level}_spells`]){
+                            spells[`level_${level}_spells`] = []
+                        }
+                        spells[`level_${level}_spells`].push(item)
+                    }
+                }
+                
                 // FETCH THE LEVEL DATA
                 const levelsRes = await fetch(`https://www.dnd5eapi.co${data.class_levels}`)
                 const levelsData = await levelsRes.json()
-                console.log('level data', levelsData)
 
                 const equipRes = await fetch(`https://www.dnd5eapi.co${url}/starting-equipment`)
                 const equipData = await equipRes.json()
-                console.log(equipData)
 
-                for(let item of spellData.results){
-                    let level = item.level
+                let features = []
+                // const classFeatures =  levelsData[0]?.features.map(async url => {
+                //     const featureRes = await fetch(`https://www.dnd5eapi.co${url.url}`)
+                //     const featureData = await featureRes.json()
+                    
+                //     features.push(featureData)
+                // })
 
-                    if(!spells[`level_${level}_spells`]){
-                        spells[`level_${level}_spells`] = []
-                    }
-                    spells[`level_${level}_spells`].push(item)
+                for(let item of levelsData[0]?.features){
+                    const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
+                    const featureData = await featureRes.json()
+                    features.push(featureData)
                 }
-
-                console.log('spells', spells)
-
+                console.log('classFeatures', classFeatures)
                 setFetchData(prevData => ({
                     ...prevData,
                     [targetKey]:{
@@ -275,6 +282,7 @@ export default function CharCreator () {
                         levels:data.class_levels,
                         hit_die:data.hit_die,
                         multi_classing:data.multi_classing,
+                        features:features,
                         equip:{
                             starting_equip:data.starting_equipment,
                             equip_options:data.starting_equipment_options
@@ -292,30 +300,27 @@ export default function CharCreator () {
                     }
                 }))
             }
-            // fetch level data for the class
-            
-            if(url && res){
-                
-            }
-            console.log(fetchData)
-            console.log('spellData', spellData)
         }catch(err){
-            console.error(err, res.status, spellRes.status)
+            console.error(err)
         }
     }
 
-    // const raceFetch = (url, targetKey) => {
-    //     try{
+    const raceFetch = async (url, targetKey) => {
+        try{
+            console.log('url raceFetch', url)
+            const res = await fetch(`https://www.dnd5eapi.co${url}`)
+            const data = await res.json()
+            console.log('raceData', data)
 
-    //     }catch(err){
-    //         console.error(err)
-    //     }
-    // }
-
-    useEffect(() => {
-        console.log('fetchData useEffect', fetchData)
-    }, [fetchData])
-
+            setFetchData(prevData => ({
+                ...prevData,
+                [targetKey]:data
+            }))
+            console.log(fetchData)
+        }catch(err){
+            console.error(err)
+        }
+    }
 
     const highestAbilityBonus = (character) => {
         const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
@@ -367,14 +372,9 @@ useEffect(() => {
 
     return(
         <div>
-            <p>
-            <Api functions={{fetchData:fetchData,
-                            setFetchData:setFetchData}}/>
-            </p>
             <form>
                 <div>
-                    <Race functions={{setCharacter: setCharacter,
-                                    character:character,
+                    <Race functions={{raceFetch: raceFetch,
                                     fetchData:fetchData}} />
                 </div>
                 
@@ -394,6 +394,11 @@ useEffect(() => {
                 </div>
 
                 <div>
+                    <ClassFeatures functions={{fetchData,
+                                                setFetchData}}/>
+                </div>
+
+                <div>
                     <ProInfo functions={{character: character,
                                         setCharacter: setCharacter,
                                         fetchData:fetchData,
@@ -407,7 +412,7 @@ useEffect(() => {
                                                 fetchData:fetchData,
                                                 setFetchData:setFetchData}} />
                     </div>
-                :''}
+                 :''} 
 
 
                 <div>
@@ -425,6 +430,10 @@ useEffect(() => {
                 </div>
 
                 <div>
+                    {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
+                </div>
+
+                <div>
                     <Combat functions={{setCharacter: setCharacter,
                                         character:character,
                                         fetchData:fetchData,
@@ -437,9 +446,7 @@ useEffect(() => {
                                         fetchData:fetchData,
                                         setFetchData:setFetchData}}/>
                 </div>
-                <div>
-                    {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
-                </div>
+                
                 <p>
                     {/* <input type='submit' onClick/> */}
                 </p>
