@@ -3,14 +3,27 @@ import {useState, useEffect} from 'react'
 
 
 export default function SavingThrows ({functions}) {
-    const {sendSavingThrow, mods} = functions
+    const {fetchData, character} = functions
 
-    const decideST = (e) => {
-        e.preventDefault()
+    const proBonus = fetchData?.primary_class?.level_data[0]?.prof_bonus
 
-        const STMod = `${e.target.dataset.skill}Mod`
+    console.log(fetchData?.primary_class?.level_data[0]?.prof_bonus)
 
-        setSavingThrow(mods.STMod.value)
+    const decideST = (stat) => {
+        let isProficient
+        const statValue = character?.stats[stat]?.value
+        
+        fetchData?.primary_class?.saving_throws?.forEach((obj) => {
+            if(obj.name === stat){
+                isProficient = true
+            }
+        })
+
+        if(isProficient){
+            return(proBonus + statValue)
+        }else{
+            return(statValue)
+        }
     }
 
     const [savingThrow, setSavingThrow] = useState({
@@ -21,13 +34,13 @@ export default function SavingThrows ({functions}) {
         wis:'0',
         cha:'0'
     })
-    useEffect(() => {
-        sendSavingThrow(savingThrow)
-    })
+
     return(
         <div>
-            <label htmlFor='stStr'>Strength</label>
-            <input name='stStr'type='number' data-stat='str' readOnly onLoad={decideST} defaultValue={savingThrow.str}/>
+            <p>
+                <label htmlFor='str_st'>STR</label>
+                {decideST('STR')}
+            </p>
         </div>
     )
 }

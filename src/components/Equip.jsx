@@ -2,7 +2,7 @@ import { useState, React, useEffect } from "react";
 import InfoCard from "./InfoCard"
 
 export default function Equip({ functions }) {
-  const { fetchData } = functions;
+  const { fetchData, setFetchData } = functions;
 
   const [isHovering, setIsHovering] = useState(null);
   const [hoveredKey, setHoveredKey] = useState(null);
@@ -12,11 +12,23 @@ export default function Equip({ functions }) {
   const handleMouseOver = (e, key) => {
     setIsHovering(true);
     setHoveredKey(key);
+    console.log(fetchData)
   };
 
   const handleMouseOut = (e) => {
     setIsHovering(false);
   };
+
+  const handleCheck = (e, choice) => {
+    console.log(choice, e.target)
+    setFetchData(prevData => ({
+      ...prevData,
+      chosen_equip:[
+        ...prevData.chosen_equip || [],
+        choice
+      ]
+    }))
+  }
 
   const choiceFetch = async (url, targetKey) => {
     try{

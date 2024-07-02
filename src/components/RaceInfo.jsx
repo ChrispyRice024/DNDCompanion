@@ -6,29 +6,10 @@ export default function RaceInfo({ functions }) {
 	const { character, setCharacter, fetchData } = functions
 
 	const parentName = 'RaceInfo_infoCard'
-	const secondaryParentName = 'secondary_RaceInfo_infoCard'
 
-	const isHidden = fetchData?.primary_race?.name ? '' : 'none'
-	const isHidden2 = fetchData?.secondary_race?.name ? '' : 'none'
+	const isHidden = fetchData?.race?.name ? '' : 'none'
 
-	const primaryInfo = fetchData?.primary_race
-	const secondaryInfo = fetchData?.secondary_race
-
-	const [primaryDiv, setPrimaryDiv] = useState()
-	const [secondaryDiv, setSecondaryDiv] = useState()
-
-	const primaryRaceEmpty = (
-		character &&
-		character.race &&
-		character.race.primary &&
-		Object.keys(character.race.primary).length === 0
-	)
-	const secondaryRaceEmpty = (
-		character &&
-		character.race &&
-		character.race.primary &&
-		Object.keys(character.race.secondary).length === 0
-	)
+	const racialInfo = fetchData?.race
 
 	const [isHovering, setIsHovering] = useState(false)
 	const [event, setEvent] = useState(null)
@@ -91,70 +72,70 @@ export default function RaceInfo({ functions }) {
 
 			<div id="primaryRaceInfo" style={{display:isHidden}}>
 					<p>
-						<strong>{primaryInfo?.name}</strong>
+						<strong>{racialInfo?.name}</strong>
 					</p>
 					<p>
 						{/* Age */}
-						{primaryInfo?.age ? (
+						{racialInfo?.age ? (
 							<>
-								<strong>Age:</strong> {primaryInfo?.age}
+								<strong>Age:</strong> {racialInfo?.age}
 							</>)
 							 :''}
 					</p>
 					<p>
 						{/* Alignment */}
-						{primaryInfo?.alignment ? (
+						{racialInfo?.alignment ? (
 							<>
-								<strong>Alignment: </strong>{primaryInfo?.alignment}
+								<strong>Alignment: </strong>{racialInfo?.alignment}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Language description */}
-						{primaryInfo?.language_desc ? (
+						{racialInfo?.language_desc ? (
 							<>
-								<strong>Languages: </strong> {primaryInfo?.language_desc}
+								<strong>Languages: </strong> {racialInfo?.language_desc}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Size */}
-						{primaryInfo?.size ? (
+						{racialInfo?.size ? (
 							<>
-								<strong>Size: </strong> {primaryInfo?.size}
+								<strong>Size: </strong> {racialInfo?.size}
 							</>
 						):''}
 					</p>
 					<p>
 						{/* Size Description */}
-						{primaryInfo?.size_description ? (
+						{racialInfo?.size_description ? (
 							<>
-								{primaryInfo?.size_description}
+								{racialInfo?.size_description}
 							</>
 						):''}
 						</p>
 					<p>
 						{/* Speed */}
-						{primaryInfo?.speed ? (
+						{racialInfo?.speed ? (
 							<>
-								<strong>Speed:</strong> {primaryInfo?.speed}
+								<strong>Speed:</strong> {racialInfo?.speed}
 							</>
 						):''}
 						
 					</p>
 
 					
-					<span>
-						{primaryInfo?.starting_proficiencies?.length > 0 ? (
+					<div className="raceProList">
+						{racialInfo?.starting_proficiencies?.length > 0 ? (
 								<>
-									<p>
+									<p className="raceProList">
 										<strong>Starting Proficiencies</strong>
 									</p>
-									<span className="raceProList">
-										{primaryInfo?.starting_proficiencies?.map(
+									<span>
+										{racialInfo?.starting_proficiencies?.map(
 											(proficiency, i) => (
 												<div key={i}>
-													<p className="raceProList">
+													<p className="raceProListItem">
 														{proficiency?.name}
 													</p>
 												</div>
@@ -163,20 +144,20 @@ export default function RaceInfo({ functions }) {
 									</span>
 								</>
 							):''}
-					</span>
-					{primaryInfo?.starting_proficiency_options ? (
+					</div>
+					{racialInfo?.starting_proficiency_options ? (
 						<>
 							<p>
-								{primaryInfo?.starting_proficiency_options?.desc}
+								{racialInfo?.starting_proficiency_options?.desc}
 							</p>
 							<span>
-								{primaryInfo?.starting_proficiency_options?.from?.options?.map(
+								{racialInfo?.starting_proficiency_options?.from?.options?.map(
 								(option, i) => (
 									<span key={i}>
 										<p>
 											<input
-												type="checkbox"
-												name={primaryInfo.name}
+												type="radio"
+												name={racialInfo.name}
 											/>
 											<label
 												onMouseOver={e =>
@@ -184,7 +165,7 @@ export default function RaceInfo({ functions }) {
 												}
 												onMouseOut={handleMouseOut}
 												data-url={option?.url}
-												htmlFor={primaryInfo?.name}>
+												htmlFor={racialInfo?.name}>
 												{option?.item?.name}
 											</label>
 										</p>
@@ -214,13 +195,13 @@ export default function RaceInfo({ functions }) {
 							</span>
 						</>
 					): ''}
-					{primaryInfo?.traits ? (
-						<>
+					{racialInfo?.traits ? (
+						<div className='racialTraitsParent'>
 							<p>
 								<strong>Traits</strong>
 							</p>
-							<span className="racialTraits">
-								{primaryInfo?.traits?.map((traits, i) => (
+							<div className="racialTraits">
+								{racialInfo?.traits?.map((traits, i) => (
 									<div
 										className="innerMapProRaceDiv"
 										key={`primary_${i}`}>
@@ -255,179 +236,8 @@ export default function RaceInfo({ functions }) {
 									</div>
 								))
 								}	
-							</span>
-						</>
-					): ''}
-				</div>
-				<div style={{display: isHidden2}} id="secondaryRaceInfo">
-					<p>
-						<strong>{secondaryInfo?.name}</strong>
-					</p>
-					<p>
-						{/* Age */}
-						{secondaryInfo?.age ? (
-							<>
-								<strong>Age:</strong> {secondaryInfo?.age}
-							</>)
-							 :''}
-					</p>
-					<p>
-						{/* Alignment */}
-						{secondaryInfo?.alignment ? (
-							<>
-								<strong>Alignment: </strong>{secondaryInfo?.alignment}
-							</>
-						):''}
-					</p>
-					<p>
-						{/* Language description */}
-						{secondaryInfo?.language_desc ? (
-							<>
-								<strong>Languages: </strong> {secondaryInfo?.language_desc}
-							</>
-						):''}
-					</p>
-					<p>
-						{/* Size */}
-						{secondaryInfo?.size ? (
-							<>
-								<strong>Size: </strong> {secondaryInfo?.size}
-							</>
-						):''}
-					</p>
-					<p>
-						{/* Size Description */}
-						{secondaryInfo?.size_description ? (
-							<>
-								{secondaryInfo?.size_description}
-							</>
-						):''}
-						</p>
-					<p>
-						{/* Speed */}
-						{secondaryInfo?.speed ? (
-							<>
-								<strong>Speed:</strong> {secondaryInfo?.speed}
-							</>
-						):''}
-						
-					</p>
-
-					
-					<span>
-						{secondaryInfo?.starting_proficiencies ? (
-								<>
-									<p>
-										<strong>Starting Proficiencies</strong>
-									</p>
-									<span className="raceProList">
-										{secondaryInfo?.starting_proficiencies?.map(
-											(proficiency, i) => (
-												<div>
-													<p className="raceProList" key={i}>
-														{proficiency?.name}
-													</p>
-												</div>
-											)
-										)}
-									</span>
-								</>
-							):''}
-					</span>
-					{secondaryInfo?.starting_proficiency_options ? (
-						<>
-							<p>
-								{secondaryInfo?.starting_proficiency_options?.desc}
-							</p>
-							<span>
-								{secondaryInfo?.starting_proficiency_options?.from?.options?.map(
-								(option, i) => (
-									<span>
-										<p>
-											<input
-												type="checkbox"
-												name={secondaryInfo?.name}
-											/>
-											<label
-												onMouseOver={e =>
-													handleMouseOver(e, `secondary_proficiency_options_${i}`
-													)
-												}
-												onMouseOut={handleMouseOut}
-												data-url={option?.url}
-												htmlFor={secondaryInfo?.name}>
-												{option?.item?.name}
-											</label>
-										</p>
-										{isHovering &&
-										event &&
-										hoveredKey ===
-											`secondary_proficiency_options_${i}` ? (
-											<InfoCard
-												functions={{
-													character: character,
-													event: event,
-													isHovering: isHovering,
-													spawnCount: spawnCount,
-													setSpawnCount: setSpawnCount,
-													className: hoveredKey,
-													hoveredKey: hoveredKey,
-													url: `/api/equipment/${option.item.index}`,
-													parentName: parentName,
-												}}
-											/>
-										) : (
-											''
-										)}
-									</span>
-								)
-							)}
-							</span>
-						</>
-					): ''}
-					{secondaryInfo?.traits ? (
-						<>
-							<p>
-								<strong>Traits</strong>
-							</p>
-							<span className="racialTraits">
-								{secondaryInfo?.traits?.map((traits, i) => (
-									<div
-										className="innerMapProRaceDiv"
-										key={`secondary_${i}`}>
-										<p
-											className="secondaryTraits"
-											onMouseOver={e =>
-												handleMouseOver(e, `secondary_${i}`)
-											}
-											onMouseOut={handleMouseOut}
-											data-url={traits.url}>
-											{traits.name}
-										</p>
-										{isHovering &&
-										event &&
-										hoveredKey === `secondary_${i}` ? (
-											<InfoCard
-												functions={{
-													character: character,
-													event: event,
-													isHovering: isHovering,
-													spawnCount: spawnCount,
-													setSpawnCount: setSpawnCount,
-													className: hoveredKey,
-													hoveredKey: hoveredKey,
-													url: traits.url,
-													parentName: parentName,
-												}}
-											/>
-										) : (
-											''
-										)}
-									</div>
-								))
-								}	
-							</span>
-						</>
+							</div>
+						</div>
 					): ''}
 				</div>
 		</div>

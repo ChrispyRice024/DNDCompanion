@@ -215,9 +215,24 @@ export default function CharCreator () {
             }
     })
 
-    const [fetchData, setFetchData] = useState({})
-
-    
+    const [fetchData, setFetchData] = useState({
+        stats:{
+            str:10,
+            dex:10,
+            con:10,
+            int:10,
+            wis:10,
+            cha:10
+        },
+        mods:{
+            str:0,
+            dex:0,
+            con:0,
+            int:0,
+            wis:0,
+            cha:0
+        }
+    })
 
     const [classFeatures, setClassFeatures] = useState()
 
@@ -305,7 +320,7 @@ export default function CharCreator () {
         }
     }
 
-    const raceFetch = async (url, targetKey) => {
+    const raceFetch = async (url) => {
         try{
             console.log('url raceFetch', url)
             const res = await fetch(`https://www.dnd5eapi.co${url}`)
@@ -314,7 +329,7 @@ export default function CharCreator () {
 
             setFetchData(prevData => ({
                 ...prevData,
-                [targetKey]:data
+                race:data
             }))
             console.log(fetchData)
         }catch(err){
@@ -322,53 +337,53 @@ export default function CharCreator () {
         }
     }
 
-    const highestAbilityBonus = (character) => {
-        const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
-        const highestBonuses = {}
+    // const highestAbilityBonus = (character) => {
+    //     const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+    //     const highestBonuses = {}
         
-        const primaryBonus = character?.race?.primary?.ability_bonuses
-        const secondaryBonus = character?.race?.secondary?.ability_bonuses
+    //     const primaryBonus = character?.race?.primary?.ability_bonuses
+    //     const secondaryBonus = character?.race?.secondary?.ability_bonuses
 
-        abilities.forEach(ability => {
-            let highestBonus = 0
-            let raceName
+    //     abilities.forEach(ability => {
+    //         let highestBonus = 0
+    //         let raceName
 
-            if(primaryBonus){
-                primaryBonus.forEach(bonus => {
-                    if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
-                        highestBonus = bonus.bonus
-                        raceName = character?.race?.primary?.name
-                    }
-                })
-            }
+    //         if(primaryBonus){
+    //             primaryBonus.forEach(bonus => {
+    //                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+    //                     highestBonus = bonus.bonus
+    //                     raceName = character?.race?.primary?.name
+    //                 }
+    //             })
+    //         }
 
-            if(secondaryBonus) {
-                secondaryBonus.forEach(bonus => {
-                    if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
-                        highestBonus = bonus.bonus
-                        raceName = character?.race?.secondary?.name
-                    }
-                })
-            }
-        highestBonuses[ability] = {
-            bonus: highestBonus,
-            race: raceName
-        }
+    //         if(secondaryBonus) {
+    //             secondaryBonus.forEach(bonus => {
+    //                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
+    //                     highestBonus = bonus.bonus
+    //                     raceName = character?.race?.secondary?.name
+    //                 }
+    //             })
+    //         }
+    //     highestBonuses[ability] = {
+    //         bonus: highestBonus,
+    //         race: raceName
+    //     }
 
-        })
-        setCharacter(prevCharacter => ({
-            ...prevCharacter,
-            race:{
-                ...prevCharacter.race,
-                racialAbilityBonus: highestBonuses
-            }
-        }))
+    //     })
+    //     setCharacter(prevCharacter => ({
+    //         ...prevCharacter,
+    //         race:{
+    //             ...prevCharacter.race,
+    //             racialAbilityBonus: highestBonuses
+    //         }
+    //     }))
 
-    }
+    // }
 
-useEffect(() => {
-   highestAbilityBonus(character)
-}, [character?.race?.primary, character?.race?.secondary])
+// useEffect(() => {
+//    highestAbilityBonus(character)
+// }, [character?.race?.primary, character?.race?.secondary])
 
     return(
         <div>
@@ -430,7 +445,9 @@ useEffect(() => {
                 </div>
 
                 <div>
-                    {/* <SavingThrows functions= {{sendSavingThrow: getSavingThrow, mods: mods}}/> */}
+                    <SavingThrows functions= {{fetchData:fetchData,
+                                                character: character
+                    }}/>
                 </div>
 
                 <div>

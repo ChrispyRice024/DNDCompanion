@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 import {debounce} from 'lodash' 
 
 export default function Stats({functions}) {
-    const {setCharacter, character} = functions
+    const {setCharacter, character, fetchData, setFetchData} = functions
 
     const [infoDiv, setInfoDiv] = useState()
 
@@ -11,50 +11,33 @@ export default function Stats({functions}) {
         return Math.ceil((stat - 10) / 2);
     }
 
-    const handleChange = (e) => {
-        const statValue = parseInt(e.target.value, 10);
-
-        const proficiency = () => {
-            if(character?.race?.racialAbilityBonus[e.target.name].isProficient){
-                console.log('hello')
-                console.log(character?.race?.racialAbilityBonus[e.target.name].isProficient)
-            }else{
-                console.log('goodbye')
+    const decideBonus = (stat) => {
+        const bonuses = fetchData?.race?.ability_bonuses
+        let statBonus
+        bonuses?.forEach(bonus => {
+            console.log(stat, bonus?.ability_score?.index)
+            if(bonus?.ability_score?.index === stat){
+                console.log('right', bonus?.bonus)
+                statBonus = bonus?.bonus
             }
-        }
-        const modValue = Math.ceil(((statValue) - 10) / 2);
-    
-        setCharacter(prevCharacter => ({
-            ...prevCharacter,
-            stats: {
-                ...prevCharacter.stats,
-                [e.target.name]: statValue
-            },
-            mods: {
-                ...prevCharacter.mods,
-                [`${e.target.name}Mod`]: modValue
-            },
-        }))
-
-    };
-    
-    
-    const decideBonus = (e) => {
-        const proChoicePrimary = character?.race?.primary?.ability_bonuses
-        
-        for(let i=0; i < proChoicePrimary.length; i++){
-            
-            const primaryChoice = proChoicePrimary[i].ability_score.index
-
-            if(e.target.name === primaryChoice){
-                return 'hidden'
-            }
-            
-        }
+        })
+        console.log(statBonus)
+        return(statBonus)
     }
 
-    useEffect(() => {
-            const updatedSkills = {...character.skills}
+    const handleChange = (e) => {
+        const statValue = parseInt(e.target.value, 10);
+        // decideBonus()
+        // const proficiency = () => {
+        //     if(character?.race?.racialAbilityBonus[e.target.name].isProficient){
+        //         console.log('hello')
+        //         console.log(character?.race?.racialAbilityBonus[e.target.name].isProficient)
+        //     }else{
+        //         console.log('goodbye')
+        //     }
+        // }
+        decideBonus('str')
+        const updatedSkills = {...character.skills}
 
             for(const skillName in updatedSkills){
                 const skill = updatedSkills[skillName]
@@ -71,30 +54,66 @@ export default function Stats({functions}) {
                 ...prevCharacter,
                 skills: updatedSkills
             }))
-    }, [character?.stats, character?.mods, character?.proficiencies])
+        const modValue = Math.ceil(((statValue) - 10) / 2);
+    
+        setFetchData(prevData => ({
+            ...prevData,
+            stats: {
+                ...prevData.stats,
+                [e.target.name]: statValue
+            },
+            mods: {
+                ...prevData.mods,
+                [`${e.target.name}_mod`]: modValue
+            },
+        }))
 
-      const handleMouseOver = (e) => {
-        const race = e.target.getAttribute('data-race')
-        if(e.target.value !== '0'){
-            setInfoDiv(
-                <div id='infoDiv'>
-                    <p>
-                        {e.target.name.toUpperCase()}
-                    </p>
-                    <p>
-                        {race}
-                    </p>
-                </div>
-            )    
-        }else{
-            setInfoDiv()
-        }
+    };
+
+    // useEffect(() => {
             
-      }
+    // }, [character?.stats, character?.mods, character?.proficiencies])
 
-      const handleMouseOut = (e) => {
-        setInfoDiv()
-      }
+    //   const handleMouseOver = (e) => {
+    //     const race = e.target.getAttribute('data-race')
+    //     if(e.target.value !== '0'){
+    //         setInfoDiv(
+    //             <div id='infoDiv'>
+    //                 <p>
+    //                     {e.target.name.toUpperCase()}
+    //                 </p>
+    //                 <p>
+    //                     {race}
+    //                 </p>
+    //             </div>
+    //         )    
+    //     }else{
+    //         setInfoDiv()
+    //     }
+            
+    //   }
+
+    //   const handleMouseOut = (e) => {
+    //     setInfoDiv()
+    //   }
+
+
+    // [
+    //     {
+    //         ability_bonus:{
+    //             index:'str',
+    //             name:'STR'
+    //         },
+    //         bonus:2
+    //     },
+    //     {
+    //         ability_bonus:{
+    //             index:'wis',
+    //             name:'WIS'
+    //         },
+    //         bonus:1
+    //     }
+    // ]
 
     return(
         <div>
@@ -110,29 +129,13 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* CHANGE TO A NUMBER NOT AN INPUT */}
-                <input
-                    name='strBonus'
-                    id='str-bonus-input'
-                    type='number'
-                    className='stat'
-                    value={character?.race?.racialAbilityBonus?.str?.bonus || 0}
-                    data-race={character?.race?.racialAbilityBonus?.str?.race || ''}
-                    readOnly
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                    />
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span><strong>STR Bonus From {fetchData?.race?.name}: </strong> {decideBonus('str')} | </span> :''}
+                <strong>STR Mod: </strong> {fetchData?.mods?.str_mod || 0}
 
-                <input
-                    name='strTotal'
-                    id='str-total-input'
-                    type='number'
-                    readOnly
-                    value={((character?.stats?.str ?? 0) + (character?.race?.racialAbilityBonus?.str?.bonus ?? 0)).toString()}
-                    />
-
+                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.str) + parseInt(decideBonus('str'))}</span> : <span><strong> | Total STR: </strong> {fetchData?.stats?.str}</span>}
+  
                 <span>
-                    {character?.class.secondary?.multiClassing?.prerequisites
+                    {character?.secondary_class?.multi_classing?.prerequisites
                         ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
                             if(prereq.ability_score.index === 'str'){
                                 return(
@@ -157,30 +160,12 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                
-                <input
-                    name='dexBonus'
-                    id='dex-bonus-input'
-                    type='number'
-                    className='stat'
-                    value={character?.race?.racialAbilityBonus?.dex?.bonus || 0}
-                    data-race={character?.race?.racialAbilityBonus?.dex?.race || ''}
-                    readOnly
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                    />
-
-                <input
-                    name='dexTotal'
-                    id='dex-total-input'
-                    type='number'
-                    readOnly
-                    value={((character?.stats?.dex ?? 0) + (character?.race?.racialAbilityBonus?.dex?.bonus ?? 0)).toString()}
-                    />
-
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span><strong>DEX Bonus From {fetchData?.race?.name}: </strong> {decideBonus('dex')} | </span> :''}
+                <strong>DEX Mod: </strong> {fetchData?.mods?.dex_mod || 0}
+                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.dex) + parseInt(decideBonus('dex'))}</span> : <span><strong> | Total DEX: </strong> {fetchData?.stats?.dex}</span>}
                 <span>
-                    {character?.class.secondary?.multiClassing?.prerequisites
-                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                    {fetchData?.secondary_class?.multi_classing?.prerequisites
+                        ? fetchData?.secondary_class?.multi_classing?.prerequisites.map((prereq, i) => {
                             if(prereq.ability_score.index === 'dex'){
                                 return(
                                     <span>
@@ -204,30 +189,12 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                
-                <input
-                    name='conBonus'
-                    id='con-bonus-input'
-                    type='number'
-                    className='stat'
-                    value={character?.race?.racialAbilityBonus?.con?.bonus || 0}
-                    data-race={character?.race?.racialAbilityBonus?.con?.race || ''}
-                    readOnly
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                    />
-
-                <input
-                    name='conTotal'
-                    id='con-total-input'
-                    type='number'
-                    readOnly
-                    value={((character?.stats?.con ?? 0) + (character?.race?.racialAbilityBonus?.con?.bonus ?? 0)).toString()}
-                    />
-
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'con') ? <span><strong>CON Bonus From {fetchData?.race?.name}: </strong> {decideBonus('con')} | </span> :''}
+                <strong>CON Mod: </strong> {fetchData?.mods?.con_mod || 0}
+                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'con') ? <span> | <strong>Total CON: </strong>{parseInt(fetchData?.stats?.con) + parseInt(decideBonus('con'))}</span> : <span><strong> | Total CON: </strong> {fetchData?.stats?.con}</span>}
                 <span>
                     {character?.class.secondary?.multiClassing?.prerequisites
-                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                        ? fetchData?.secondary_class?.multi_classing?.prerequisites.map((prereq, i) => {
                             if(prereq.ability_score.index === 'con'){
                                 return(
                                     <span>
@@ -251,30 +218,12 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                
-                <input
-                    name='intBonus'
-                    id='int-bonus-input'
-                    type='number'
-                    className='stat'
-                    value={character?.race?.racialAbilityBonus?.int?.bonus || 0}
-                    data-race={character?.race?.racialAbilityBonus?.int?.race || ''}
-                    readOnly
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                    />
-
-                <input
-                    name='intTotal'
-                    id='int-total-input'
-                    type='number'
-                    readOnly
-                    value={((character?.stats?.int ?? 0) + (character?.race?.racialAbilityBonus?.int?.bonus ?? 0)).toString()}
-                    />
-
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span><strong>INT Bonus From {fetchData?.race?.name}: </strong> {decideBonus('int')} | </span> :''}
+                <strong>INT Mod: </strong> {fetchData?.mods?.int_mod || 0}
+                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span> | <strong>Total INT: </strong>{parseInt(fetchData?.stats?.int) + parseInt(decideBonus('int'))}</span> : <span><strong> | Total INT: </strong> {fetchData?.stats?.int}</span>}
                 <span>
-                    {character?.class.secondary?.multiClassing?.prerequisites
-                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                    {fetchData?.secondary_class?.multi_classing?.prerequisites
+                        ? fetchData?.secondary_class?.multi_classing?.prerequisites.map((prereq, i) => {
                             if(prereq.ability_score.index === 'int'){
                                 return(
                                     <span>
@@ -298,30 +247,12 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                
-                <input
-                    name='wisBonus'
-                    id='wis-bonus-input'
-                    type='number'
-                    className='stat'
-                    value={character?.race?.racialAbilityBonus?.wis?.bonus || 0}
-                    data-race={character?.race?.racialAbilityBonus?.wis?.race || ''}
-                    readOnly
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                    />
-
-                <input
-                    name='wisTotal'
-                    id='wis-total-input'
-                    type='number'
-                    readOnly
-                    value={((character?.stats?.wis ?? 0) + (character?.race?.racialAbilityBonus?.wis?.bonus ?? 0)).toString()}
-                    />
-
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span><strong>WIS Bonus From {fetchData?.race?.name}: </strong> {decideBonus('wis')} | </span> :''}
+                <strong>WIS Mod: </strong> {fetchData?.mods?.wis_mod || 0}
+                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span> | <strong>Total WIS: </strong>{parseInt(fetchData?.stats?.wis) + parseInt(decideBonus('wis'))}</span> : <span><strong> | Total WIS: </strong> {fetchData?.stats?.wis}</span>}
                 <span>
-                    {character?.class.secondary?.multiClassing?.prerequisites
-                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                    {fetchData?.secondary_class?.multi_classing?.prerequisites
+                        ? fetchData?.secondary_class?.multi_classing?.prerequisites.map((prereq, i) => {
                             if(prereq.ability_score.index === 'wis'){
                                 return(
                                     <span>
@@ -345,30 +276,12 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                
-                <input
-                    name='chaBonus'
-                    id='cha-bonus-input'
-                    type='number'
-                    className='stat'
-                    value={character?.race?.racialAbilityBonus?.cha?.bonus || 0}
-                    data-race={character?.race?.racialAbilityBonus?.cha?.race || ''}
-                    readOnly
-                    onMouseOver={handleMouseOver}
-                    onMouseOut={handleMouseOut}
-                    />
-
-                <input
-                    name='chaTotal'
-                    id='cha-total-input'
-                    type='number'
-                    readOnly
-                    value={((character?.stats?.cha ?? 0) + (character?.race?.racialAbilityBonus?.cha?.bonus ?? 0)).toString()}
-                    />
-
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span><strong>CHA Bonus From {fetchData?.race?.name}: </strong> {decideBonus('cha')} | </span> :''}
+                <strong>CHA Mod: </strong> {fetchData?.mods?.cha_mod || 0}
+                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span> | <strong>Total CHA: </strong>{parseInt(fetchData?.stats?.cha) + parseInt(decideBonus('cha'))}</span> : <span><strong> | Total CHA: </strong> {fetchData?.stats?.cha}</span>}
                 <span>
-                    {character?.class.secondary?.multiClassing?.prerequisites
-                        ? character.class.secondary.multiClassing.prerequisites.map((prereq, i) => {
+                    {fetchData?.secondary_class?.multi_classing?.prerequisites
+                        ? fetchData?.secondary_class?.multi_classing?.prerequisites.map((prereq, i) => {
                             if(prereq.ability_score.index === 'cha'){
                                 return(
                                     <span>

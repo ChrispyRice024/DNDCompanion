@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 
 export default function Combat ({functions}) {
 
-const {setCharacter, character, sendCharacter} = functions
+const {setCharacter, character, sendCharacter, fetchData} = functions
 
     const handleResistChange = (i, value) => {
 
@@ -26,6 +26,10 @@ const {setCharacter, character, sendCharacter} = functions
             }
         }))
     }
+
+    const decideHP = () => {
+        return (parseInt(fetchData?.primary_class?.hit_die) + parseInt(fetchData?.mods?.con))
+    }
     
     const handleChange = (e) => {
         const statValue = parseInt(e.target.value, 10)
@@ -43,16 +47,17 @@ const {setCharacter, character, sendCharacter} = functions
         <div>
             <h2>Combat</h2>
             <p>
-                <label htmlFor='hp'>HP</label>
-                <input name='hp' type='number' onChange={handleChange} placeholder='Max Hit Points'/>
+                <strong>HP: </strong>
+                {/* <input name='hp' type='number' onChange={handleChange} placeholder='Max Hit Points'/> */}
+                {fetchData?.primary_class?.name ? parseInt(fetchData?.primary_class?.hit_die) + parseInt(fetchData?.mods?.con) : <span>{fetchData?.mods?.con}</span>}
             </p>
             <p>
                 <label htmlFor='ac'>Armor Class</label>
                 <input name='ac' type="number" onChange={handleChange} defaultValue='0'/>
             </p>
             <p>
-                <label htmlFor='proBonus'>Proficiency Bonus</label>
-                <input name='proBonus' type='number' onChange={handleChange} defaultValue='0'/>
+                <strong>Proficiency Bonus: </strong>
+                {fetchData?.primary_class ? <span>{fetchData?.primary_class?.level_data[0]?.prof_bonus}</span> : '0'}
             </p>
             <p>
                 <label htmlFor='initBonus'>Initiative Bonus</label>
