@@ -19,15 +19,35 @@ export default function Equip({ functions }) {
     setIsHovering(false);
   };
 
-  const handleCheck = (e, choice) => {
+  const handleChange = (e, choice, index) => {
+    console.log('choice', choice)
+    const choiceIndex = {
+      ...choice.of || choice,
+      index:index
+    }
+    const isChosen = fetchData?.chosen_equip?.some(item => item.index === index)
+    console.log('choiceIndex', choiceIndex, choice)
+    // console.log(fetchData?.chosen_equip.filter(x => x.index !== index))
+    if(isChosen){
+      setFetchData(prevData => ({
+        ...prevData,
+        chosen_equip:[
+          ...prevData.chosen_equip.filter(x => x.index !== index),
+          choiceIndex
+        ]
+      }))
+      console.log('hello')
+    }else{
+      setFetchData(prevData => ({
+        ...prevData,
+        chosen_equip:[
+          ...prevData.chosen_equip || [],
+          choiceIndex
+        ]
+      }))
+    }
     console.log(choice, e.target)
-    setFetchData(prevData => ({
-      ...prevData,
-      chosen_equip:[
-        ...prevData.chosen_equip || [],
-        choice
-      ]
-    }))
+    
   }
 
   const choiceFetch = async (url, targetKey) => {
@@ -102,8 +122,14 @@ export default function Equip({ functions }) {
                                   type='radio'
                                   name={i}
                                   className='optionsArray equipChoice'
-                                  onChange={(e) => {handleCheck(e, choice)}}/>
+                                  onChange={(e) => {handleChange(e, choice, i)}}/>
                                 <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_${i}_${j}`)}} onMouseOut={handleMouseOut} htmlFor={choice?.of?.name}>{choice.count} {choice?.of?.name}</label>
+                                {/* {console.log(option)} */}
+                                {choice?.prerequisites?.length > 0 ? choice?.prerequisites?.map((prereq, j) =>(
+                                  <span>
+                                    <strong style={{color:'#8B0000'}}>{' '}Requires {prereq?.type.charAt(0).toUpperCase() + prereq?.type.slice(1)} in {prereq?.proficiency?.name}</strong>
+                                  </span>
+                                )) :''}
                                 {isHovering && hoveredKey === `primary_equip_${i}_${j}` ? 
                                   <InfoCard 
                                     functions={{
@@ -116,23 +142,33 @@ export default function Equip({ functions }) {
                         }else if(choice.option_type === 'multiple'){
                           return(
                             <p key={`j_${i}_${j}`}>
-                              {choice.items.map((item, k) => (
-                                <span key={`k_${k}`}>
-                                  <input
+                              <input
                                     type='radio'
                                     name={i}
                                     className='optionsArray multiple'
-                                    onChange={(e) => {handleCheck(e, choice)}}/>
-                                  <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_${i}_${k}`)}} onMouseOut={handleMouseOut} htmlFor={i}>{item?.count} {item?.of?.name}{item?.count > 1 ? 's': ''} {k !== choice.items.length - 1 ? ' and ' :''}</label>
-                                  {isHovering && hoveredKey === `primary_equip_${i}_${k}` ? 
+                                    onChange={(e) => {handleCheck(e, choice, i)}}/>
+
+                              {choice.items.map((item, k) => (
+                                <span key={`k_${k}`}>
+                                  
+                                  <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_multiple_${i}`)}} onMouseOut={handleMouseOut} htmlFor={i}>{item?.count} {item?.of?.name}{item?.count > 1 ? 's': ''} {k !== choice.items.length - 1 ? ' and ' :''}</label>
+                                  
+                                </span>
+                              ))}
+
+                              {choice?.prerequisites?.length > 0 ? choice?.prerequisites?.map((prereq, j) =>(
+                                  <span>
+                                    <strong style={{color:'#8B0000'}}>{' '}Requires {prereq?.type.charAt(0).toUpperCase() + prereq?.type.slice(1)} in {prereq?.proficiency?.name}</strong>
+                                  </span>
+                                )) :''}
+                              {console.log(choice)}
+                              {isHovering && hoveredKey === `primary_equip_multiple_${i}` ? 
                                     <InfoCard 
                                       functions={{
                                         isHovering: isHovering,
-                                        url: item.url,
+                                        url: choice.items[0].of.url,
                                       }}/>
                                   : ''}
-                                </span>
-                              ))}
                             </p>
                           )
                         }else if(choice.option_type === 'choice'){
@@ -147,8 +183,15 @@ export default function Equip({ functions }) {
                                     type='radio'
                                     name={i}
                                     className='optionsArray choice'
-                                    onChange={(e) => {handleChange(e, choice)}}/>
+                                    onChange={(e) => {handleChange(e, item, i)}}/>
                                   <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_${i}_${j}_${k}`)}} onMouseOut={handleMouseOut} htmlFor={i}>{item.name}</label>
+
+                                  {choice?.prerequisites?.length > 0 ? choice?.prerequisites?.map((prereq, j) =>(
+                                    <span>
+                                      <strong style={{color:'#8B0000'}}>{' '}Requires {prereq?.type.charAt(0).toUpperCase() + prereq?.type.slice(1)} in {prereq?.proficiency?.name}</strong>
+                                    </span>
+                                  )) :''}
+
                                   {isHovering && hoveredKey === `primary_equip_${i}_${j}_${k}` ? 
                                     <InfoCard 
                                         functions={{
@@ -179,6 +222,7 @@ export default function Equip({ functions }) {
                   return(
                     <>
                     {/* {console.log('hello!!!!!', choiceData)} */}
+                    you need logic here (line205)
                     </>
                   )
                 }

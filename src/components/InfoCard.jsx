@@ -21,11 +21,11 @@ export default function InfoCard({functions}) {
         'equipment'
     ]
     useEffect(() => {
-        console.log('info', info)
-        console.log('url', url)
+        // console.log('info', info)
+        // console.log('url', url)
     }, [info, url])
 
-    console.log(hoveredKey)
+    // console.log(hoveredKey)
     useEffect(() => {
 
         const fetchCall = async (endpoint) => {
@@ -34,8 +34,8 @@ export default function InfoCard({functions}) {
                 const data = await res.json()
                 
                 setInfo(data)
-                console.log(data)
-                console.log(data.url)
+                // console.log(data)
+                // console.log(data.url)
 
             }catch(err){
                 console.error(err.name, err.message, err.stack)
@@ -45,9 +45,9 @@ export default function InfoCard({functions}) {
 
 
         const logs = () => {
-            console.log('hoveredKey', hoveredKey)
-            console.log('url', url)
-            console.log('info', info)
+            // console.log('hoveredKey', hoveredKey)
+            // console.log('url', url)
+            // console.log('info', info)
 
         }
         
@@ -65,7 +65,7 @@ export default function InfoCard({functions}) {
 
         const secondaryFetch = async (endpoint) => {
             try{
-                console.log('endpoint',endpoint)
+                // console.log('endpoint',endpoint)
                 const res = await fetch(`https://www.dnd5eapi.co${endpoint}`)
                 const data = await res.json()
     
@@ -80,8 +80,8 @@ export default function InfoCard({functions}) {
             secondaryFetch(info?.reference?.url)
             console.log('it includes item')
         }else{
-            console.log('it does not include item')
-            console.log('info.reference.url', info)
+            // console.log('it does not include item')
+            // console.log('info.reference.url', info)
         }
     }, [info])
     const secondaryFetch = async (endpoint) => {
@@ -90,7 +90,7 @@ export default function InfoCard({functions}) {
             const res = await fetch(`https://www.dnd5eapi.co${endpoint}`)
             const data = await res.json()
 
-            console.log('secondary fetch', data)
+            // console.log('secondary fetch', data)
             setNewInfo(data)
         }catch(err){
             console.error(err)
@@ -141,7 +141,7 @@ export default function InfoCard({functions}) {
                 )
                 console.log('includes spells')
                 // TRAITS
-            }else if(url.includes('traits')){
+            }else if(url?.includes('traits')){
                 console.log('includes traits')
                 setInfoDiv(
                     <>
