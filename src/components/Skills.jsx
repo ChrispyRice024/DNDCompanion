@@ -22,20 +22,26 @@ export default function Skills ({functions}) {
 
     // }
 
-    const decideProficiency = (e, skill) => {
+    const decideProficiency = (skill) => {
+        
         const proficiencies = fetchData?.primary_class?.chosen_pro_0 || []
-        console.log(proficiencies)
+        console.log('proficiencies', proficiencies)
+        proficiencies.some(pro => console.log(pro))
+        // console.log(e?.target?.name)
         if( proficiencies.some(pro => pro.name === `Skill: ${skill}`)){
+            console.log('isProficient', skill)
             return 2
         }else{
+            console.log('isNotProficient', skill)
             return 0
         }
     }
 
     useEffect(() => {
-        const labels = document.querySelectorAll('.skill_label label')
-        const skills = Array.from(labels).map(label => label.textContent)
-        console.log(skills)
+        // const labels = document.querySelectorAll('.skill_label label')
+        // const skills = Array.from(labels).map(label => label.textContent)
+        // console.log(skills)
+        decideProficiency('e', 'Arcana')
     }, [fetchData])
 
     const decideValue = (e, skill) => {
@@ -74,97 +80,95 @@ export default function Skills ({functions}) {
     return(
         <div id='skills'>
             <h2>Skills</h2>
+            <button onClick={decideProficiency('Arcana')}/>
              <p>
-                <label className='skill_label' htmlFor='acrobatics'>Acrobatics</label>
-                <input name='acrobatics' value={character.skills.acrobatics.isProficient ? (character.skills.acrobatics.value + character.proficiencies.bonus).toString() : character.skills.acrobatics.toString()} type='number' readOnly data-stat='dex'/>
-                <span>
-                    {}
-                </span>
+                <strong>Acrobatics: </strong>
+                {parseInt(decideProficiency('Acrobatics')) + fetchData.mods.dex}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='animalHandling'>Animal Handling</label>
-                <input name='animalHandling' value={(skills?.animalHandling?.value + wisBonus).toString()} type='number' readOnly data-stat='wis'/>
+                <strong>AnimalHandling: </strong>
+                {parseInt(decideProficiency('Animal Handling')) + fetchData.mods.wis}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='arcana'>Arcana</label>
-                <input name='arcana' value={decideProficiency('arcana')} type='number' readOnly data-stat='int'/>
+                <strong>Arcana: </strong>
+                {parseInt(decideProficiency('Arcana')) + fetchData.mods.int}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='athletics'>Athletics</label>
-                <input name='athletics' value={(skills?.athletics?.value + strBonus).toString()} type='number' readOnly data-stat='str'/>
+                <strong>Athletics: </strong>
+                {parseInt(decideProficiency('Athletics')) + fetchData.mods.str}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='deception'>Deception</label>
-                <input name='deception' value={(skills?.deception?.value + chaBonus).toString()} type='number' readOnly data-stat='cha'/>
+                <strong>Deception: </strong>
+                {parseInt(decideProficiency('Deception')) + fetchData.mods.cha}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='history'>History</label>
-                <input name='history' value={(skills?.history?.value + intBonus).toString()} type='number' readOnly data-stat='int'/>
+                <strong>History: </strong>
+                {parseInt(decideProficiency('History')) + fetchData.mods.int}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='insight'>Insight</label>
-                <input name='insight' value={(skills?.insight?.value  + wisBonus).toString()} type='number' readOnly data-stat='wis' />
+                <strong>Insight: </strong>
+                {parseInt(decideProficiency('Insight')) + fetchData.mods.wis}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='intimidation'>Intimidation</label>
-                <input name='intimidation' value={(skills?.intimidation?.value + chaBonus).toString()} type='number' readOnly data-stat='cha' />
+                <strong>Intimidation: </strong>
+                {parseInt(decideProficiency('Intimidation')) + fetchData.mods.cha}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='investigation'>Investigation</label>
-                <input name='investigation' value={(skills?.investigation?.value + intBonus).toString()} type='number' readOnly data-stat='int' />
+                <strong>Investigation: </strong>
+                {parseInt(decideProficiency('Investigation')) + fetchData.mods.int}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='medicine'>Medicine</label>
-                <input name='medicine' value={(skills?.medicine?.value + wisBonus).toString()} type='number' readOnly data-stat='wis' />
+                <strong>Medicine: </strong>
+                {parseInt(decideProficiency('Medicine')) + fetchData.mods.wis}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='nature'>Nature</label>
-                <input name='nature' value={(skills?.nature?.value + intBonus).toString()} type='number' readOnly data-stat='int' />
+                <strong>Nature: </strong>
+                {parseInt(decideProficiency('Nature')) + fetchData.mods.int}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='perception'>Perception</label>
-                <input name='perception' value={(skills?.perception?.value + wisBonus).toString()} type='number' readOnly data-stat='wis' />
+                <strong>Perception: </strong>
+                {parseInt(decideProficiency('Perception')) + fetchData.mods.wis}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='performance'>Performance</label>
-                <input name='performance' value={(skills?.performance?.value + chaBonus).toString()} type='number' readOnly data-stat='cha' />
+                <strong>Performance: </strong>
+                {parseInt(decideProficiency('Performance')) + fetchData.mods.cha}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='persuasion'>Persuasion</label>
-                <input name='persuasion' value={(skills?.persuassion?.value + chaBonus).toString()} type='number' readOnly data-stat='cha' />
+                <strong>Persuassion: </strong>
+                {parseInt(decideProficiency('Persuassion')) + fetchData.mods.cha}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='religion'>Religion</label>
-                <input name='religion' value={(skills?.religion?.value + intBonus).toString()} type='number' readOnly data-stat='int' />
+                <strong>Religion: </strong>
+                {parseInt(decideProficiency('Religion')) + fetchData.mods.int}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='sleightOfHand'>Sleight of Hand</label>
-                <input name='sleightOfHand' value={(skills?.sleightOfHand?.value + dexBonus).toString()} type='number' readOnly data-stat='dex' />
+                <strong>Slight Of Hand: </strong>
+                {parseInt(decideProficiency('Slight Of Hand')) + fetchData.mods.dex}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='stealth'>Stealth</label>
-                <input name='stealth' value={(skills?.stealth?.value + dexBonus + intBonus).toString()} type='number' readOnly data-stat='dex' />
+                <strong>Stealth: </strong>
+                {parseInt(decideProficiency('Stealth')) + fetchData.mods.dex}
             </p>
 
             <p>
-                <label className='skill_label' htmlFor='survival'>Survival</label>
-                <input name='survival' value={(skills?.survival?.value + wisBonus).toString()} type='number' readOnly data-stat='wis' />
+                <strong>Survival: </strong>
+                {parseInt(decideProficiency('Survival')) + fetchData.mods.wis}
             </p>
         </div>
     )

@@ -9,23 +9,6 @@ const {setCharacter, character, sendCharacter, fetchData} = functions
 
     const [baseAc, setBaseAc] = useState(10 + parseInt(fetchData.mods.dex))
 
-    const decideAC = async () => {
-        if(fetchData?.chosen_equip.length > 0){
-            const equipUrls = fetchData?.chosen_equip?.map((item, i) => {
-                return item.url
-            })
-            console.log(equipUrls)
-            try{
-                const res = await new Promise.all(equipUrls)
-                const data = res.json()
-
-                console.log(data)
-            }catch(err){
-
-            }
-        }
-    }
-    console.log(fetchData?.primary_class)
     useEffect(() => {
 
         const decideAC = async () => {
@@ -48,7 +31,7 @@ const {setCharacter, character, sendCharacter, fetchData} = functions
                         if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
                             console.log('light armor')
                             setBaseAc(parseInt(item.armor_class.base) + parseInt(fetchData.mods.dex))
-                            console.log(baseAc)
+                            console.log('AC', baseAc)
                         }else if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && item.armor_class.max_bonus > 0 && fetchData?.mods.dex >= 2){
                             console.log('medium armor')
                             setBaseAc(parseInt(item.armor_class.base) + parseInt(item.armor_class.max_bonus))
