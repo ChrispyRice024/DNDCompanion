@@ -231,7 +231,99 @@ export default function CharCreator () {
             int:0,
             wis:0,
             cha:0
-        }
+        },
+        skills: {
+            'acrobatics': {
+              value: 0,
+              stat: 'dex',
+              isProficient: false
+            },
+            'animal-handling': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'arcana': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'athletics': {
+              value: 0,
+              stat: 'str',
+              isProficient: false
+            },
+            'deception': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'history': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'insight': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'intimidation': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'investigation': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'medicine': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'nature': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'perception': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            },
+            'performance': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'persuassion': {
+              value: 0,
+              stat: 'cha',
+              isProficient: false
+            },
+            'religion': {
+              value: 0,
+              stat: 'int',
+              isProficient: false
+            },
+            'sleight-of-hand': {
+              value: 0,
+              stat: 'dex',
+              isProficient: false
+            },
+            'stealth': {
+              value: 0,
+              stat: 'dex',
+              isProficient: false
+            },
+            'survival': {
+              value: 0,
+              stat: 'wis',
+              isProficient: false
+            }
+          },
     })
 
     const [classFeatures, setClassFeatures] = useState()
@@ -325,16 +417,19 @@ export default function CharCreator () {
             console.log('url raceFetch', url)
             const res = await fetch(`https://www.dnd5eapi.co${url}`)
             const data = await res.json()
-            console.log('raceData', data)
 
             setFetchData(prevData => ({
                 ...prevData,
                 race:data
             }))
-            console.log(fetchData)
         }catch(err){
             console.error(err)
         }
+    }
+
+    const logs = (e) => {
+        e.preventDefault()
+        console.log('fetchData', fetchData)
     }
 
     // const highestAbilityBonus = (character) => {
@@ -466,6 +561,7 @@ export default function CharCreator () {
                 
                 <p>
                     {/* <input type='submit' onClick/> */}
+                    <button onClick={logs}>fetchData</button>
                 </p>
             </form>
         </div>

@@ -25,14 +25,14 @@ export default function Skills ({functions}) {
     const decideProficiency = (skill) => {
         
         const proficiencies = fetchData?.primary_class?.chosen_pro_0 || []
-        console.log('proficiencies', proficiencies)
-        proficiencies.some(pro => console.log(pro))
+        // console.log('proficiencies', proficiencies)
+        // proficiencies.some(pro => console.log(pro))
         // console.log(e?.target?.name)
         if( proficiencies.some(pro => pro.name === `Skill: ${skill}`)){
-            console.log('isProficient', skill)
+            // console.log('isProficient', skill)
             return 2
         }else{
-            console.log('isNotProficient', skill)
+            // console.log('isNotProficient', skill)
             return 0
         }
     }
@@ -80,7 +80,6 @@ export default function Skills ({functions}) {
     return(
         <div id='skills'>
             <h2>Skills</h2>
-            <button onClick={decideProficiency('Arcana')}/>
              <p>
                 <strong>Acrobatics: </strong>
                 {parseInt(decideProficiency('Acrobatics')) + fetchData.mods.dex}

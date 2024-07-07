@@ -29,6 +29,8 @@ export default function Spellcating ({functions}) {
             return 2
         }else if(charClass === 'Ranger'){
             return 2
+        }else if(charClass === 'Bard'){
+            return 4
         }
     }
 

@@ -77,6 +77,9 @@ const {setCharacter, character, sendCharacter, fetchData} = functions
         <div>
             <h2>Combat</h2>
             <p>
+                {fetchData?.primary_class?.name ? <span><strong>Hit Die: </strong>1d{fetchData?.primary_class?.hit_die}</span> :''}
+            </p>
+            <p>
                 <strong>HP: </strong>
                 {fetchData?.primary_class?.name ? parseInt(fetchData?.primary_class?.hit_die) + parseInt(fetchData?.mods?.con) : <span>{fetchData?.mods?.con}</span>}
             </p>

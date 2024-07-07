@@ -211,18 +211,37 @@ export default function Equip({ functions }) {
                           )
                         }
                         
+                        
                   })}
                     </div>
                   )
-                }else if(option?.from?.options_set_type === 'equipment_category'){
-                  
+                }else if(option?.from?.option_set_type === 'equipment_category'){
+                  console.log(option)
                   if(!choiceData[`choice${i}`]){
-                    choiceFetch(choice?.choice?.from?.equipment_category?.url, `choice${i}`)
+                    choiceFetch(option?.from?.equipment_category?.url, `choice${i}`)
+                    // choiceFetch(choice?.choice?.from?.equipment_category?.url, `choice${i}`)
                   }
+                  console.log('choiceData', choiceData)
                   return(
                     <>
-                    {/* {console.log('hello!!!!!', choiceData)} */}
-                    you need logic here (line205)
+                    
+                    {choiceData?.[`choice${i}`]?.equipment.map((choice, j) => (
+                      <p>
+                        <input
+                          type='radio'
+                          name={i}
+                          className='equip_cat choice'
+                          onChange={(e) => {handleChange(e, choice, i)}}/>
+                        <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_${i}_${j}`)}} onMouseOut={handleMouseOut} htmlFor={i}>{choice?.name}</label>
+                        {isHovering && hoveredKey === `primary_equip_${i}_${j}` ? 
+                          <InfoCard 
+                              functions={{
+                                isHovering: isHovering,
+                                url: choice.url,
+                              }}/>
+                        : ''}
+                      </p>
+                    ))}
                     </>
                   )
                 }

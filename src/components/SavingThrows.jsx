@@ -11,18 +11,20 @@ export default function SavingThrows ({functions}) {
 
     const decideST = (stat) => {
         let isProficient
-        const statValue = character?.stats[stat]?.value
+        const statValue = fetchData?.mods?.[stat]
+        console.log('statValue', statValue)
         
         fetchData?.primary_class?.saving_throws?.forEach((obj) => {
-            if(obj.name === stat){
+            console.log(obj)
+            if(obj.index === stat){
                 isProficient = true
             }
         })
 
         if(isProficient){
-            return(proBonus + statValue)
+            return proBonus + statValue
         }else{
-            return(statValue)
+            return statValue
         }
     }
 
@@ -38,8 +40,31 @@ export default function SavingThrows ({functions}) {
     return(
         <div>
             <p>
-                <label htmlFor='str_st'>STR</label>
-                {decideST('STR')}
+                <h2>Saving Throws</h2>
+            </p>
+            <p>
+                <strong>STR: </strong>
+                <span>{decideST('str')}</span>
+            </p>
+            <p>
+                <strong>DEX: </strong>
+                <span>{decideST('dex')}</span>
+            </p>
+            <p>
+                <strong>CON: </strong>
+                <span>{decideST('con')} </span>
+            </p>
+            <p>
+                <strong>INT: </strong>
+                <span>{decideST('int')} </span>
+            </p>
+            <p>
+                <strong>WIS: </strong>
+                <span>{decideST('wis')} </span>
+            </p>
+            <p>
+                <strong>CHA: </strong>
+                <span>{decideST('cha')} </span>
             </p>
         </div>
     )
