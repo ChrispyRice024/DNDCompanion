@@ -80,7 +80,7 @@ export default function Stats({functions}) {
             
             <h2>Stats</h2>
             <p className='str'>
-                <label className='str' htmlFor='str-input'>STR</label>
+                <label className='str statLabel' htmlFor='str-input'>STR</label>
                 <input
                     name='str'
                     id='str-input'
@@ -89,15 +89,18 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* RACIAL MOD */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span><strong>STR Bonus From {fetchData?.race?.name}: </strong> {decideBonus('str')} | </span> :''}
-                    {/* STAT MOD */}
+                                        {/* STAT MOD */}
                 <strong>STR Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'str') ? <span>{Math.round((((fetchData?.stats.str + decideBonus('str')) - 10) / 2))}</span> : <span>{fetchData?.mods.str}</span>}
                     {/* TOTAL STAT */}
                 {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.str) + parseInt(decideBonus('str'))}</span> : <span><strong> | Total STR: </strong> {fetchData?.stats?.str}</span>}
                     
                     {/* CASTING MOD */}
                 {castingMod === 'STR' ? ' | Casting Mod Is Str' : ''}
+                </p>
+                <p>
+                {/* RACIAL MOD */}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span><strong>STR Bonus From {fetchData?.race?.name}: </strong> {decideBonus('str')} | </span> :''}
+
                     {/* PREREQUISITES */}
                 <span>
                     {character?.secondary_class?.multi_classing?.prerequisites
@@ -116,7 +119,7 @@ export default function Stats({functions}) {
             </p>
 
             <p className='dex'>
-                <label className='dex' htmlFor='dex-input'>DEX</label>
+                <label className='dex statLabel' htmlFor='dex-input'>DEX</label>
                 <input
                     name='dex'
                     id='dex-input'
@@ -125,14 +128,17 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span><strong>DEX Bonus From {fetchData?.race?.name}: </strong> {decideBonus('dex')} | </span> :''}
                         {/* STAT MOD */}
                 <strong>DEX Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'dex') ? <span>{Math.ceil((((fetchData?.stats.dex + decideBonus('dex')) - 10) / 2))}</span> : <span>{fetchData?.mods.dex}</span>}
                         {/* TOTAL STAT */}
                 {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.dex) + parseInt(decideBonus('dex'))}</span> : <span><strong> | Total DEX: </strong> {fetchData?.stats?.dex}</span>}
                         {/* CASTING MOD */}
                 {castingMod === 'DEX' ? ' | Casting Mod Is Dex' :''}
+                </p>
+                <p>
+                {/* RACIAL BONUS */}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span><strong>DEX Bonus From {fetchData?.race?.name}: </strong> {decideBonus('dex')} | </span> :''}
+
                         {/* PREREQUISITES */}
                 <span>
                     {fetchData?.secondary_class?.multi_classing?.prerequisites
@@ -151,7 +157,7 @@ export default function Stats({functions}) {
             </p>
 
             <p className='con'>
-                <label className='con' htmlFor='con-input'>CON</label>
+                <label className='con statLabel' htmlFor='con-input'>CON</label>
                 <input
                     name='con'
                     id='con-input'
@@ -160,14 +166,17 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'con') ? <span><strong>CON Bonus From {fetchData?.race?.name}: </strong> {decideBonus('con')} | </span> :''}
                         {/* STAT MOD */}
                 <strong>CON Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'con') ? <span>{Math.ceil((((fetchData?.stats.con + decideBonus('con')) - 10) / 2))}</span> : <span>{fetchData?.mods.con}</span>}
                         {/* TOTAL STAT */}
                 {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'con') ? <span> | <strong>Total CON: </strong>{parseInt(fetchData?.stats?.con) + parseInt(decideBonus('con'))}</span> : <span><strong> | Total CON: </strong> {fetchData?.stats?.con}</span>}
                         {/* CASTING MOD */}
                 {castingMod === 'Con' ? ' | Casting Mod Is CON' :''}
+                </p>
+                <p>
+                {/* RACIAL BONUS */}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'con') ? <span><strong>CON Bonus From {fetchData?.race?.name}: </strong> {decideBonus('con')}</span> :''}
+
                         {/* PREREQUISITES */}
                 <span>
                     {character?.class.secondary?.multiClassing?.prerequisites
@@ -186,7 +195,7 @@ export default function Stats({functions}) {
             </p>
 
             <p className='int'>
-                <label className='int' htmlFor='int-input'>INT</label>
+                <label className='int statLabel' htmlFor='int-input'>INT</label>
                 <input
                     name='int'
                     id='int-input'
@@ -195,14 +204,17 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span><strong>INT Bonus From {fetchData?.race?.name}: </strong> {decideBonus('int')} | </span> :''}
                     {/* STAT MOD */}
                 <strong>INT Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'int') ? <span>{Math.ceil((((fetchData?.stats.int + decideBonus('int')) - 10) / 2))}</span> : <span>{fetchData?.mods.int}</span>}
                     {/* TOTAL STAT */}
                 {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span> | <strong>Total INT: </strong>{parseInt(fetchData?.stats?.int) + parseInt(decideBonus('int'))}</span> : <span><strong> | Total INT: </strong> {fetchData?.stats?.int}</span>}
                         {/* CASTING MOD */}
                 {castingMod === 'INT' ? ' | Casting Mod Is INT' :''}
+            </p>
+            <p>
+                {/* RACIAL BONUS */}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span><strong>INT Bonus From {fetchData?.race?.name}: </strong> {decideBonus('int')} | </span> :''}
+
                         {/* PREREQUISITES */}
                 <span>
                     {fetchData?.secondary_class?.multi_classing?.prerequisites
@@ -221,7 +233,7 @@ export default function Stats({functions}) {
             </p>
 
             <p className='wis'>
-                <label className='wis' htmlFor='wis-input'>WIS</label>
+                <label className='wis statLabel' htmlFor='wis-input'>WIS</label>
                 <input
                     name='wis'
                     id='wis-input'
@@ -230,14 +242,16 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span><strong>WIS Bonus From {fetchData?.race?.name}: </strong> {decideBonus('wis')} | </span> :''}
                     {/* STAT MOD */}
-                    <strong>WIS Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'wis') ? <span>{Math.ceil((((fetchData?.stats.wis + decideBonus('wis')) - 10) / 2))}</span> : <span>{fetchData?.mods.wis}</span>}
+                <strong>WIS Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'wis') ? <span>{Math.ceil((((fetchData?.stats.wis + decideBonus('wis')) - 10) / 2))}</span> : <span>{fetchData?.mods.wis}</span>}
                     {/* TOTAL STAT */}
                 {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span> | <strong>Total WIS: </strong>{parseInt(fetchData?.stats?.wis) + parseInt(decideBonus('wis'))}</span> : <span><strong> | Total WIS: </strong> {fetchData?.stats?.wis}</span>}
                     {/* CASTING MOD */}
                 {castingMod === 'WIS' ? ' | Casting Mod Is Wis' : ''}
+                {/* RACIAL BONUS */}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span><strong>WIS Bonus From {fetchData?.race?.name}: </strong> {decideBonus('wis')} | </span> :''}
+                </p>
+                <p>
                     {/* PREREQUISITES */}
                 <span>
                     {fetchData?.secondary_class?.multi_classing?.prerequisites
@@ -256,7 +270,7 @@ export default function Stats({functions}) {
             </p>
 
             <p className='cha'>
-                <label className='cha' htmlFor='cha-input'>CHA</label>
+                <label className='cha statLabel' htmlFor='cha-input'>CHA</label>
                 <input
                     name='cha'
                     id='cha-input'
@@ -265,14 +279,17 @@ export default function Stats({functions}) {
                     defaultValue='10'
                     onChange={handleChange}
                     />
-                    {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span><strong>CHA Bonus From {fetchData?.race?.name}: </strong> {decideBonus('cha')} | </span> :''}
                     {/* STAT MOD */}
                 <strong>CHA Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'cha') ? <span>{Math.ceil((((fetchData?.stats.cha + decideBonus('cha')) - 10) / 2))}</span> : <span>{fetchData?.mods.cha}</span>}
                     {/* TOTAL STAT */}
                 {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span> | <strong>Total CHA: </strong>{Math.ceil(parseInt(fetchData?.stats?.cha) + parseInt(decideBonus('cha')))}</span> : <span><strong> | Total CHA: </strong> {fetchData?.stats?.cha}</span>}
                     {/* CASTING MOD */}
                 {castingMod === 'CHA' ? ' | Casting Mod Is CHA' :''}
+                </p>
+                <p>
+                {/* RACIAL BONUS */}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span><strong>CHA Bonus From {fetchData?.race?.name}: </strong> {decideBonus('cha')} | </span> :''}
+
                     {/* PREREQUISITES */}
                 <span>
                     {fetchData?.secondary_class?.multi_classing?.prerequisites

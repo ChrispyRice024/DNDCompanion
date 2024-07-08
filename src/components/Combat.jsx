@@ -79,21 +79,21 @@ const {setCharacter, character, sendCharacter, fetchData} = functions
             <p>
                 {fetchData?.primary_class?.name ? <span><strong>Hit Die: </strong>1d{fetchData?.primary_class?.hit_die}</span> :''}
             </p>
-            <p>
+            <p className='con'>
                 <strong>HP: </strong>
                 {fetchData?.primary_class?.name ? parseInt(fetchData?.primary_class?.hit_die) + parseInt(fetchData?.mods?.con) : <span>{fetchData?.mods?.con}</span>}
             </p>
-            <p>
+            <p className='dex'>
                 <strong>Armor Class: </strong>
                 {baseAc}
+            </p>
+            <p className='dex'>
+                <strong>Initiative Bonus: </strong>
+                {fetchData.mods.dex}
             </p>
             <p>
                 <strong>Proficiency Bonus: </strong>
                 {fetchData?.primary_class ? <span>{fetchData?.primary_class?.level_data[0]?.prof_bonus}</span> : '0'}
-            </p>
-            <p>
-                <strong>Initiative Bonus: </strong>
-                {fetchData.mods.dex}
             </p>
             <p>
                 <strong>Speed: </strong>

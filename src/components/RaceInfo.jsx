@@ -66,15 +66,15 @@ export default function RaceInfo({ functions }) {
 	}
 
 	return (
-		<div id="raceInfo" >
+		<div id='raceInfoOuter'>
 			{/* {primaryDiv}
 			{secondaryDiv} */}
 
-			<div id="primaryRaceInfo" style={{display:isHidden}}>
-					<p>
+			<div id="raceInfoInner" style={{display:isHidden}}>
+					<p className='raceName'>
 						<strong>{racialInfo?.name}</strong>
 					</p>
-					<p>
+					<p className='loneRace'>
 						{/* Age */}
 						{racialInfo?.age ? (
 							<>
@@ -82,7 +82,7 @@ export default function RaceInfo({ functions }) {
 							</>)
 							 :''}
 					</p>
-					<p>
+					<p className='loneRace'>
 						{/* Alignment */}
 						{racialInfo?.alignment ? (
 							<>
@@ -90,7 +90,7 @@ export default function RaceInfo({ functions }) {
 							</>
 						):''}
 					</p>
-					<p>
+					<p className='loneRace'>
 						{/* Language description */}
 						{racialInfo?.language_desc ? (
 							<>
@@ -98,23 +98,26 @@ export default function RaceInfo({ functions }) {
 							</>
 						):''}
 					</p>
-					<p>
-						{/* Size */}
-						{racialInfo?.size ? (
-							<>
-								<strong>Size: </strong> {racialInfo?.size}
-							</>
-						):''}
-					</p>
-					<p>
-						{/* Size Description */}
-						{racialInfo?.size_description ? (
-							<>
-								{racialInfo?.size_description}
-							</>
-						):''}
+					<div id='raceSize'>
+						<p className='raceTitle'>
+							{/* Size */}
+							{racialInfo?.size ? (
+								<>
+									<strong>Size: </strong> {racialInfo?.size}
+								</>
+							):''}
 						</p>
-					<p>
+						<p className='raceDesc'>
+							{/* Size Description */}
+							{racialInfo?.size_description ? (
+								<>
+									{racialInfo?.size_description}
+								</>
+							):''}
+						</p>
+					</div>
+					
+					<p className='loneRace'>
 						{/* Speed */}
 						{racialInfo?.speed ? (
 							<>
@@ -128,33 +131,30 @@ export default function RaceInfo({ functions }) {
 					<div className="raceProList">
 						{racialInfo?.starting_proficiencies?.length > 0 ? (
 								<>
-									<p className="raceProList">
+									<p className="raceTitle">
 										<strong>Starting Proficiencies</strong>
 									</p>
-									<span>
+									
 										{racialInfo?.starting_proficiencies?.map(
 											(proficiency, i) => (
-												<div key={i}>
 													<p className="raceProListItem">
 														{proficiency?.name}
 													</p>
-												</div>
 											)
 										)}
-									</span>
 								</>
 							):''}
 					</div>
 					{racialInfo?.starting_proficiency_options ? (
-						<>
-							<p>
+						<div id='raceOptionsParent'>
+							<p className='raceTitle'>
 								{racialInfo?.starting_proficiency_options?.desc}
 							</p>
-							<span>
+							{/* <span> */}
 								{racialInfo?.starting_proficiency_options?.from?.options?.map(
 								(option, i) => (
-									<span key={i}>
-										<p>
+									<div id='raceOptionsList' key={i}>
+										<p className='raceOption'>
 											<input
 												type="radio"
 												name={racialInfo.name}
@@ -189,15 +189,15 @@ export default function RaceInfo({ functions }) {
 										) : (
 											''
 										)}
-									</span>
+									</div>
 								)
 							)}
-							</span>
-						</>
+							{/* </span> */}
+						</div>
 					): ''}
 					{racialInfo?.traits ? (
 						<div className='racialTraitsParent'>
-							<p>
+							<p className='raceTitle'>
 								<strong>Traits</strong>
 							</p>
 							<div className="racialTraits">

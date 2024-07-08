@@ -42,27 +42,27 @@ export default function SavingThrows ({functions}) {
             <p>
                 <h2>Saving Throws</h2>
             </p>
-            <p>
+            <p className='str'>
                 <strong>STR: </strong>
                 <span>{decideST('str')}</span>
             </p>
-            <p>
+            <p className='dex'>
                 <strong>DEX: </strong>
                 <span>{decideST('dex')}</span>
             </p>
-            <p>
+            <p className='con'>
                 <strong>CON: </strong>
                 <span>{decideST('con')} </span>
             </p>
-            <p>
+            <p className='int'>
                 <strong>INT: </strong>
                 <span>{decideST('int')} </span>
             </p>
-            <p>
+            <p className='wis'>
                 <strong>WIS: </strong>
                 <span>{decideST('wis')} </span>
             </p>
-            <p>
+            <p className='cha'>
                 <strong>CHA: </strong>
                 <span>{decideST('cha')} </span>
             </p>

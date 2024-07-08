@@ -15,8 +15,11 @@ export default function Race({functions}) {
         .then((res) => res.json())
 
         .then((data) => {
+            console.log(data)
             setRaceList(data.results)
         })
+
+        
         .catch((err) => {
             console.error('Error fetching data: ', err)
         })
@@ -37,16 +40,11 @@ export default function Race({functions}) {
     return(
         <div>
             <p>
-                {/* needs to be added to the character model */}
-                <label htmlFor='charName'>Character Name</label>
-                <input name='charName' id='charName' className='race'placeholder='Character Name' />
+            <h2>Race</h2>
             </p>
-
-            <p>
-                {/* needs to be added to the character model */}
-                <label htmlFor='race'>Race</label>
-                <input name='race' list='raceList' autoComplete='on' onChange={verifyInput} id='race' className='race' placeholder='Race'/>
-                <datalist id='raceList'>
+            <p> 
+                <input name='race' list='raceSet' autoComplete='on' onChange={verifyInput} id='raceList' placeholder='Race'/>
+                <datalist id='raceSet'>
                     {raceList.map((race, i) => (
                         <option
                         key={i}

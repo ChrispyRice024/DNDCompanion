@@ -3,172 +3,133 @@ import {useState, useEffect} from 'react'
 
 export default function Skills ({functions}) {
 
-    const {character, setCharacter, fetchData} = functions
-    const skills = character?.skills
-    
-    const proBonus = 2
-
-    const racialBonus = character?.race?.racialAbilityBonus
-    const strBonus = racialBonus?.str
-    const dexBonus = racialBonus?.dex
-    const intBonus = racialBonus?.int
-    const chaBonus = racialBonus?.cha
-    const wisBonus = racialBonus?.wis
-
-    // const decideProficiency = () => {
-    //     const labels = document.querySelectorAll('#skill_label label')
-        
-    //     console.log(skills)
-
-    // }
+    const {fetchData} = functions
 
     const decideProficiency = (skill) => {
         
         const proficiencies = fetchData?.primary_class?.chosen_pro_0 || []
-        // console.log('proficiencies', proficiencies)
-        // proficiencies.some(pro => console.log(pro))
-        // console.log(e?.target?.name)
+
         if( proficiencies.some(pro => pro.name === `Skill: ${skill}`)){
-            // console.log('isProficient', skill)
             return 2
         }else{
-            // console.log('isNotProficient', skill)
             return 0
         }
     }
 
-    useEffect(() => {
-        // const labels = document.querySelectorAll('.skill_label label')
-        // const skills = Array.from(labels).map(label => label.textContent)
-        // console.log(skills)
-        decideProficiency('e', 'Arcana')
-    }, [fetchData])
-
-    const decideValue = (e, skill) => {
-        const isProficient = character.skills[skill].isProficient
-        const stat = e.target.getAttribute('data-stat')
-        // const stat = 'dex'
-    
-        const mod = stat === 'dex' ? character?.mods?.dexMod :
-                    stat === 'str' ? character?.mods?.strMod :
-                    stat === 'con' ? character?.mods?.conMod :
-                    stat === 'int' ? character?.mods?.intMod :
-                    stat === 'cha' ? character?.mods?.chaMod :
-                    stat === 'wis' ? character?.mods?.wisMod : 0
-
-        const modNum = parseInt(mod, 10)
-        console.log(mod)
-
-        console.log(`Skill: ${skill}`);
-        console.log(`Is proficient: ${isProficient}`);
-        console.log(`Stat: ${stat}`);
-        console.log(`Mod: ${mod}`);
-        // console.log(`Proficiency Bonus: ${character.proficiencies.bonus}`);
-
-        if(isProficient){
-            setCharacter((prevCharacter) => ({
-                ...prevCharacter,
-                skills:{
-                    ...prevCharacter.skills,
-                    [skill]: character.proficiencies.bonus + mod
-                }
-            }))
-            return proBonus + mod
-        }
-    }
-// console.log(decideValue('e', 'acrobatics'))
     return(
-        <div id='skills'>
+        <div id='skillsOuter'>
             <h2>Skills</h2>
-             <p>
-                <strong>Acrobatics: </strong>
-                {parseInt(decideProficiency('Acrobatics')) + fetchData.mods.dex}
-            </p>
+            <div id='skillsInner'>
+                <p className='dex'>
+                    <strong>Acrobatics: </strong>
+                    {parseInt(decideProficiency('Acrobatics')) + fetchData.mods.dex}<br></br>
+                    {parseInt(decideProficiency('Acrobatics')) === 2 ? <strong> | Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>AnimalHandling: </strong>
-                {parseInt(decideProficiency('Animal Handling')) + fetchData.mods.wis}
-            </p>
+                <p className='wis'>
+                    <strong>AnimalHandling: </strong>
+                    {parseInt(decideProficiency('Animal Handling')) + fetchData.mods.wis}<br></br>    
+                    {parseInt(decideProficiency('Acrobatics')) === 2 ? <strong>Proficient</strong> :''}
+                
+                </p>
 
-            <p>
-                <strong>Arcana: </strong>
-                {parseInt(decideProficiency('Arcana')) + fetchData.mods.int}
-            </p>
+                <p className='int'>
+                    <strong>Arcana: </strong>
+                    {parseInt(decideProficiency('Arcana')) + fetchData.mods.int}<br></br>    
+                    {parseInt(decideProficiency('Arcana')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Athletics: </strong>
-                {parseInt(decideProficiency('Athletics')) + fetchData.mods.str}
-            </p>
+                <p className='str'>
+                    <strong>Athletics: </strong>
+                    {parseInt(decideProficiency('Athletics')) + fetchData.mods.str}<br></br>    
+                    {parseInt(decideProficiency('Athletics')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Deception: </strong>
-                {parseInt(decideProficiency('Deception')) + fetchData.mods.cha}
-            </p>
+                <p className='cha'>
+                    <strong>Deception: </strong>
+                    {parseInt(decideProficiency('Deception')) + fetchData.mods.cha}<br></br>    
+                    {parseInt(decideProficiency('Deception')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>History: </strong>
-                {parseInt(decideProficiency('History')) + fetchData.mods.int}
-            </p>
+                <p className='int'>
+                    <strong>History: </strong>
+                    {parseInt(decideProficiency('History')) + fetchData.mods.int}<br></br>    
+                    {parseInt(decideProficiency('History')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Insight: </strong>
-                {parseInt(decideProficiency('Insight')) + fetchData.mods.wis}
-            </p>
+                <p className='wis'>
+                    <strong>Insight: </strong>
+                    {parseInt(decideProficiency('Insight')) + fetchData.mods.wis}<br></br>    
+                    {parseInt(decideProficiency('Insight')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Intimidation: </strong>
-                {parseInt(decideProficiency('Intimidation')) + fetchData.mods.cha}
-            </p>
+                <p className='cha'>
+                    <strong>Intimidation: </strong>
+                    {parseInt(decideProficiency('Intimidation')) + fetchData.mods.cha}<br></br>    
+                    {parseInt(decideProficiency('Intimidation')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Investigation: </strong>
-                {parseInt(decideProficiency('Investigation')) + fetchData.mods.int}
-            </p>
+                <p className='int'>
+                    <strong>Investigation: </strong>
+                    {parseInt(decideProficiency('Investigation')) + fetchData.mods.int}<br></br>    
+                    {parseInt(decideProficiency('Investigation')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Medicine: </strong>
-                {parseInt(decideProficiency('Medicine')) + fetchData.mods.wis}
-            </p>
+                <p className='wis'>
+                    <strong>Medicine: </strong>
+                    {parseInt(decideProficiency('Medicine')) + fetchData.mods.wis}<br></br>    
+                    {parseInt(decideProficiency('Medicine')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Nature: </strong>
-                {parseInt(decideProficiency('Nature')) + fetchData.mods.int}
-            </p>
+                <p className='int'>
+                    <strong>Nature: </strong>
+                    {parseInt(decideProficiency('Nature')) + fetchData.mods.int}<br></br>    
+                    {parseInt(decideProficiency('Nature')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Perception: </strong>
-                {parseInt(decideProficiency('Perception')) + fetchData.mods.wis}
-            </p>
+                <p className='wis'>
+                    <strong>Perception: </strong>
+                    {parseInt(decideProficiency('Perception')) + fetchData.mods.wis}<br></br>    
+                    {parseInt(decideProficiency('Perception')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Performance: </strong>
-                {parseInt(decideProficiency('Performance')) + fetchData.mods.cha}
-            </p>
+                <p className='cha'>
+                    <strong>Performance: </strong>
+                    {parseInt(decideProficiency('Performance')) + fetchData.mods.cha}<br></br>    
+                    {parseInt(decideProficiency('Performance')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Persuassion: </strong>
-                {parseInt(decideProficiency('Persuassion')) + fetchData.mods.cha}
-            </p>
+                <p className='cha'>
+                    <strong>Persuassion: </strong>
+                    {parseInt(decideProficiency('Persuassion')) + fetchData.mods.cha}<br></br>    
+                    {parseInt(decideProficiency('Persuassion')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Religion: </strong>
-                {parseInt(decideProficiency('Religion')) + fetchData.mods.int}
-            </p>
+                <p className='int'>
+                    <strong>Religion: </strong>
+                    {parseInt(decideProficiency('Religion')) + fetchData.mods.int}<br></br>    
+                    {parseInt(decideProficiency('Religion')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Slight Of Hand: </strong>
-                {parseInt(decideProficiency('Slight Of Hand')) + fetchData.mods.dex}
-            </p>
+                <p className='dex'>
+                    <strong>Slight Of Hand: </strong>
+                    {parseInt(decideProficiency('Slight Of Hand')) + fetchData.mods.dex}<br></br>    
+                    {parseInt(decideProficiency('Slight Of Hand')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Stealth: </strong>
-                {parseInt(decideProficiency('Stealth')) + fetchData.mods.dex}
-            </p>
+                <p className='dex'>
+                    <strong>Stealth: </strong>
+                    {parseInt(decideProficiency('Stealth')) + fetchData.mods.dex}<br></br>    
+                    {parseInt(decideProficiency('Stealth')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
 
-            <p>
-                <strong>Survival: </strong>
-                {parseInt(decideProficiency('Survival')) + fetchData.mods.wis}
-            </p>
+                <p className='wis'>
+                    <strong>Survival: </strong>
+                    {parseInt(decideProficiency('Survival')) + fetchData.mods.wis}<br></br>    
+                    {parseInt(decideProficiency('Survival')) === 2 ? <strong>Proficient</strong> :''}
+                </p>
+            </div>
+             
         </div>
     )
 }

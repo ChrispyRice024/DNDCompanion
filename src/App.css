@@ -1,264 +1,289 @@
-.App {
-  text-align: center;
+.App{
+    text-align:center;
 }
 
-.primaryTraits{
-  justify-content:center;
-  /* position:relative;
-  display:inline-block; */
-  /* width:150px; */
+body{
+    background-color: #1E1E1E;
+}
+/* background-color:#2E2E2E */
+* input[type=number]{
+    width:32px;
 }
 
-.secondaryTraits{
-  justify-content:center;
-  position:relative;
-  display:inline-block;
+* strong, h2, h3{
+    color:#FFD700;
 }
 
-
-.racialTraits{
-  /* display:flex; */
-  /* flex-direction:column; */
-  margin:10px 0;
-  padding:10px;
-  justify-content:center;
-  align-items:center;
-  background-color:#8B4513;
+#name,
+#race,
+#raceInfo,
+#class,
+#classFeatures,
+#proInfo,
+#spellcasting,
+#equip,
+#stats,
+#savingThrows,
+#combat,
+#skills{
+    border-style:solid;
+    border-color:#FFD700;
+    background-color:#2E2E2E;
+    color:white;
+    width:700px;
+    margin:10px 10px 15px 10px;
+    padding:3px;
+    border-radius:15px;
+    /* display:flex;
+    justify-content:center; */
 }
 
-.infoCard{
-  /* position:absolute; */
-  left:50%;
-  background-color:white;
-  z-index:1000;
-  border-style:solid;
-  box-shadow:5px 5px 1px grey;
-  width:350px;
-  padding:5px;
+#raceInfo{
+    /* background-color:#001480; */
+}
+#raceInfoInner{
+    width:90%;
 }
 
-body {
-  background-color: #1E1E1E; /* Dark Background */
-  color: #FFFFFF; /* Main Text */
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
+#raceInfoInner p{
+    /* border-style:groove; */
+    border-radius:15px;
+    /* margin:40px; */
+    padding:8px;
 }
 
-
-#outer_equip_parent {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+#raceInfoInner p:nth-child(odd){
+    /* background-color:#0028ff; */
+}
+#raceInfoInner p:nth-child(even){
+    /* background-color:#0092ff; */
+}
+.raceName{
+    background-color:#0028ff;
+    border-style:groove;
+}
+.raceTitle{
+    background-color:#0028ff;
+    margin-top:0px;
+}
+.loneRace{
+    border-style:groove;
+    border-color:#FFD700;
+    background-color:#3e00ff;
+}
+.raceDesc{
+    background-color:#0092ff;
+    /* border-style:dashed; */
+}
+.raceProList{
+    text-align:center;
+    background-color:#0092ff;
+    border-radius:15px;
+    border-style:groove;
+}
+.raceProList p:not(.raceTitle){
+    /* width:80%; */
+    display:inline-block;
+    text-align:center;
+    background-color:#159e00;
+    border-style:groove;
+    box-shadow:3px 2px black;
+    margin:0px 5px 20px;
 }
 
-#inner_equip_parent {
-  background-color: #2E2E2E;
-  border: 2px solid #FFD700;
-  border-radius: 10px;
-  padding: 20px;
-  max-width: 800px;
-  width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+#raceSize{
+    text-align:center;
+    background-color:#0092ff;
+    border-radius:15px;
+    border-style:groove;
+    margin-bottom:15px;
+}
+#raceOptionsParent{
+    margin-top:15px;
+    border-radius:15px;
+    border-style:groove;
+    background-color:#0092ff;
+}
+#raceOptionsList{
+    display:flex;
+    justify-content:center;
+}
+.raceOption{
+    box-shadow:3px 2px black;
+    width:40%;
+    background-color:#159e00;
+    border-style:groove;
 }
 
-#primary_starting_equip, #primary_equip_options {
-  margin-bottom: 20px;
+#raceInfoOuter{
+    display:flex;
+    justify-content:center;
 }
 
-#primary_starting_equip p strong, #primary_equip_options strong {
-  color: #FFD700;
-  font-size: 1.2em;
-}
-
-#primary_starting_equip p, #primary_equip_options p {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #4169E1;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-#primary_starting_equip p:hover, #primary_equip_options p:hover {
-  background-color: #228B22;
-  cursor: pointer;
-}
-
-/* Equipment Options Styling */
-.equip_options {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #8B0000;
-  border-radius: 5px;
-}
-
-/* Input and Label Styling */
-input[type='radio'] {
-  margin-right: 10px;
-}
-
-/* Container Styling */
-#spell_info {
-  background-color: #2E2E2E;
-  border: 2px solid #FFD700;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  /* width:48%; */
-}
-
-#spell_info_item {
-  margin-bottom: 15px;
-}
-
-#spell_info_item p strong {
-  color: #FFD700;
-  font-size: 1.2em;
-}
-
-/* Spell Sections */
-h3 {
-  color: #FFD700; 
-  margin-bottom: 10px;
-}
-
-/* Spell List Styling */
-#cantrips p, #spells p {
-  background-color: #4169E1;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease;
-}
-
-#cantrips:hover, #spells:hover {
-  background-color: #228B22;
-  cursor: pointer;
-}
-
-/* Input and Label Styling */
-input[type='checkbox'] {
-  margin-right: 10px;
-}
-
-label {
-  cursor: pointer;
-}
-
-/* InfoCard Styling */
-.infocard p {
-  background-color: #800080; 
-  border: 1px solid #FFD700;
-  border-radius: 5px;
-  padding: 10px;
-  position: fixed;
-  z-index: 10;
-  max-width: 300px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transform: translate(-50%, -50%);
-}
-
-#spell_sections {
-  display: flex;
-  gap: 20px;
-}
-
-/* Spell List Styling */
-#cantrips p, #spells p {
-  background-color: #4169E1;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease;
-}
-
-#cantrips:hover, #spells:hover {
-  background-color: #228B22;
-  cursor: pointer;
-}
-
-#cantrip_section, #level_1_spells_section {
-  flex: 1;
-}
-
-/* Input and Label Styling */
-input[type='checkbox'] {
-  margin-right: 10px;
-}
-
-
-
-#primaryRaceInfo, #secondaryRaceInfo {
-  background-color: #2E2E2E;
-  border: 2px solid #FFD700;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-#primaryRaceInfo p strong, #secondaryRaceInfo p strong {
-  color: #FFD700;
-  font-size: 1.2em;
-}
-
-/* Paragraph Styling */
-#primaryRaceInfo p, #secondaryRaceInfo p {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #4169E1;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-#primaryRaceInfo p:hover, #secondaryRaceInfo p:hover {
-  background-color: #228B22;
-  cursor: pointer;
-}
-
-/* Proficiency List Styling */
-.raceProList {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #8B0000;
-  border-radius: 5px;
-}
-
-.raceProListItem{
-  margin: 10px 0;
-  padding: 10px;
-}
-
-/* Input and Label Styling */
-input[type='checkbox'] {
-  margin-right: 10px;
-}
-
-label {
-  cursor: pointer;
-}
-
-/* InfoCard Styling */
-.infocard p {
-  background-color: #800080;
-  border: 1px solid #FFD700;
-  border-radius: 5px;
-  padding: 10px;
-  position: fixed;
-  z-index: 10;
-  max-width: 300px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  /* transform: translate(-50%, -50%); */
-  z-index: 1000;
+#outerParent{
+    display:flex;
+    justify-content:center;
 }
 
 .racialTraitsParent{
-  background-color:#8B4513;
-  margin:10px 0;
-  padding:10px;
-  justify-content:center;
-  align-items:center;
-  border-radius: 5px;
+    background-color:#0092ff;
+    border-radius:15px;
+    border-style:groove;
+    margin-top:15px;
+}
+.racialTraits{
+    display:flex;
+    justify-content:center;
+    
+}
+.innerMapProRaceDiv{
+    background-color:#159e00;
+    border-style:groove;
+    border-radius:15px;
+    box-shadow:3px 2px black;
+    width:40%;
+}
+.str,
+.dex,
+.con,
+.int,
+.wis,
+.cha{
+    border-radius:15px;
+    border-style:inset;
+    padding:3px;
+}
+.str{
+    background-color:#FF6347;
+    color:white;
+}
+.str strong{
+    color:#5f4fff;
+}
+.dex{
+    background-color:#159e00;
+    color:white;
+}
+.dex strong{
+    color:#FFD700;
+}
+.con{
+    background-color:#F0A500;
+}
+.con strong{
+    color:#FFF00F;
+}
+.int{
+    background-color:#00CED1;
+    color:black;
+}
+.int strong{
+    color:#FFFF00;
+}
+.wis{
+    background-color:#9370DB;
+}
+.cha{
+    background-color:#FFD700;
+    color:black;
+}
+.cha strong{
+    color:#003FaF;
+}
+
+.statLabel{
+    border-style:hidden;
+    padding-right:5px;
+}
+
+#skillsInner{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+#skillsInner p{
+    width:200px;
+    margin:10px;
+}
+
+.proficiency_choice{
+    display:flex;
+    flex-direction:column; 
+    justify-content:center;
+    align-items:center; 
+    width:50%;
+}
+
+.primary_pro{
+    background-color:#0092ff;
+    border-style:groove;
+    margin:10px;
+    border-radius:15px;
+    padding:5px;
+    padding-top:10px;
+    /* text-align:center; */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+}
+
+.class_title{
+    background-color:#0028ff;
+    /* margin-top:0px; */
+    margin:0px;
+    padding:10px;
+    border-radius:15px;
+    border-style:groove;
+}
+
+.classChoices{
+    border-style:groove;
+    width:50%;
+    border-radius:15px;
+    margin:5px;
+    justify-content:center;
+    background-color:#159e00;
+    display:flex;
+}
+.proficiencies{
+    background-color:#0092ff;
+    border-style:groove;
+    margin:10px;
+    border-radius:15px;
+    padding:5px;
+    padding-top:10px;
+    /* text-align:center; */
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    /* align-items:center; */
+    height:600px;
+}
+.classProficiencies{
+    background-color:#159e00;
+    /* margin-top:0px; */
+    margin:0px;
+    padding:10px;
+    border-radius:15px;
+    border-style:groove;
+    /* width:100px; */
+}
+#proficiencies_parent{
+    background-color:#0092ff;
+    border-style:groove;
+    margin:10px;
+    border-radius:15px;
+    padding:5px;
+    padding-top:10px;
+    /* text-align:center; */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:50%;
+}
+
+#classInfo{
+    display:flex;
 }

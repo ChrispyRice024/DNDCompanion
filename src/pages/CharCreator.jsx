@@ -326,14 +326,6 @@ export default function CharCreator () {
           },
     })
 
-    const [classFeatures, setClassFeatures] = useState()
-
-    // useEffect(() => {
-    //     console.log('spells', spells)
-    //     console.log(fetchData)
-    //     console.log(classFeatures)
-    // }, [spells, fetchData, classFeatures])
-
     //class fetch
     const classFetchCall = async (url, targetKey) => { 
         try{
@@ -368,12 +360,6 @@ export default function CharCreator () {
                 const equipData = await equipRes.json()
 
                 let features = []
-                // const classFeatures =  levelsData[0]?.features.map(async url => {
-                //     const featureRes = await fetch(`https://www.dnd5eapi.co${url.url}`)
-                //     const featureData = await featureRes.json()
-                    
-                //     features.push(featureData)
-                // })
 
                 for(let item of levelsData[0]?.features){
                     const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
@@ -432,132 +418,98 @@ export default function CharCreator () {
         console.log('fetchData', fetchData)
     }
 
-    // const highestAbilityBonus = (character) => {
-    //     const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha']
-    //     const highestBonuses = {}
-        
-    //     const primaryBonus = character?.race?.primary?.ability_bonuses
-    //     const secondaryBonus = character?.race?.secondary?.ability_bonuses
-
-    //     abilities.forEach(ability => {
-    //         let highestBonus = 0
-    //         let raceName
-
-    //         if(primaryBonus){
-    //             primaryBonus.forEach(bonus => {
-    //                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
-    //                     highestBonus = bonus.bonus
-    //                     raceName = character?.race?.primary?.name
-    //                 }
-    //             })
-    //         }
-
-    //         if(secondaryBonus) {
-    //             secondaryBonus.forEach(bonus => {
-    //                 if(bonus.ability_score.index === ability && bonus.bonus > highestBonus){
-    //                     highestBonus = bonus.bonus
-    //                     raceName = character?.race?.secondary?.name
-    //                 }
-    //             })
-    //         }
-    //     highestBonuses[ability] = {
-    //         bonus: highestBonus,
-    //         race: raceName
-    //     }
-
-    //     })
-    //     setCharacter(prevCharacter => ({
-    //         ...prevCharacter,
-    //         race:{
-    //             ...prevCharacter.race,
-    //             racialAbilityBonus: highestBonuses
-    //         }
-    //     }))
-
-    // }
-
-// useEffect(() => {
-//    highestAbilityBonus(character)
-// }, [character?.race?.primary, character?.race?.secondary])
-
     return(
-        <div>
+        <div id='outerParent'>
             <form>
-                <div>
+                <div id='name'>
+                  <p>
+                    <label htmlFor='charName'>Character Name</label>
+                    <input name='charName' id='charName' className='race'placeholder='Character Name' />
+                  </p>
+                </div>
+                <div id='race'>
                     <Race functions={{raceFetch: raceFetch,
                                     fetchData:fetchData}} />
                 </div>
-                
-                <div>
+                {fetchData?.race?.name?
+                  <div id='raceInfo'>
                     <RaceInfo functions={{setCharacter: setCharacter,
                                         character:character,
                                         fetchData:fetchData,
                                         setFetchData:setFetchData}} />
-                </div>
+                  </div>
+                :''}
+                
 
-                <div>
+                <div id='class'>
                     <Class functions={{
                                         
                                         fetchData:fetchData,
                                         setFetchData:setFetchData,
                                         classFetchCall:classFetchCall}} />
                 </div>
-
+                {fetchData?.primary_class?.name ? 
                 <div>
+                  <div id='classFeatures'>
                     <ClassFeatures functions={{fetchData,
                                                 setFetchData}}/>
-                </div>
+                  </div>
 
-                <div>
-                    <ProInfo functions={{character: character,
-                                        setCharacter: setCharacter,
-                                        fetchData:fetchData,
-                                        setFetchData:setFetchData}} />
-                </div>
- 
-                {fetchData.primary_class || fetchData.secondary_class ? 
-                    <div>
-                        <Spellcasting functions={{character: character,
-                                                setCharacter: setCharacter,
-                                                fetchData:fetchData,
-                                                setFetchData:setFetchData}} />
-                    </div>
-                 :''} 
+                  <div id='proInfo'>
+                      <ProInfo functions={{character: character,
+                                          setCharacter: setCharacter,
+                                          fetchData:fetchData,
+                                          setFetchData:setFetchData}} />
+                  </div>
+  
+                  {fetchData.primary_class || fetchData.secondary_class ? 
+                      <div id='spellcasting'>
+                          <Spellcasting functions={{character: character,
+                                                  setCharacter: setCharacter,
+                                                  fetchData:fetchData,
+                                                  setFetchData:setFetchData}} />
+                      </div>
+                  :''} 
 
 
-                <div>
-                    <Equip functions={{character: character,
-                                    setCharacter: setCharacter,
-                                    fetchData:fetchData,
-                                    setFetchData:setFetchData}} />
+                  <div id='equip'>
+                      <Equip functions={{character: character,
+                                      setCharacter: setCharacter,
+                                      fetchData:fetchData,
+                                      setFetchData:setFetchData}} />
+                  </div>
                 </div>
+                :''}
+                
+                <div id='statsAndSuch'>
+                  <div id='stats'>
+                      <Stats functions={{setCharacter: setCharacter,
+                                      character:character,
+                                      fetchData:fetchData,
+                                      setFetchData:setFetchData}} />
+                  </div>
 
-                <div>
-                    <Stats functions={{setCharacter: setCharacter,
-                                    character:character,
-                                    fetchData:fetchData,
-                                    setFetchData:setFetchData}} />
-                </div>
+                  <div id='savingThrows'>
+                      <SavingThrows functions= {{fetchData:fetchData,
+                                                  character: character
+                      }}/>
+                  </div>
 
-                <div>
-                    <SavingThrows functions= {{fetchData:fetchData,
-                                                character: character
-                    }}/>
-                </div>
+                  <div id='combat'>
+                      <Combat functions={{setCharacter: setCharacter,
+                                          character:character,
+                                          fetchData:fetchData,
+                                          setFetchData:setFetchData}} />
+                  </div>
 
-                <div>
-                    <Combat functions={{setCharacter: setCharacter,
-                                        character:character,
-                                        fetchData:fetchData,
-                                        setFetchData:setFetchData}} />
+                  <div id='skills'>
+                      <Skills functions={{character:character,
+                                          setCharacter: setCharacter,
+                                          fetchData:fetchData,
+                                          setFetchData:setFetchData}}/>
+                  </div>
                 </div>
-
-                <div>
-                    <Skills functions={{character:character,
-                                        setCharacter: setCharacter,
-                                        fetchData:fetchData,
-                                        setFetchData:setFetchData}}/>
-                </div>
+                
                 
                 <p>
                     {/* <input type='submit' onClick/> */}
