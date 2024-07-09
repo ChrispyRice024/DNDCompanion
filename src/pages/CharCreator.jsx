@@ -325,7 +325,43 @@ export default function CharCreator () {
             }
           },
     })
+    // fetches the list of races
+    useEffect(() => {
+      const fetchCall = async () => {
+          try{
+              const res = await fetch('https://www.dnd5eapi.co/api/races')
+              const data = await res.json()
+  
+              setFetchData(prevData => ({
+                  ...prevData,
+                  race_list:data.results
+              }))
+          
+          }catch(err){
+              console.error('Error fetching data: ', err)
+          }
+      }
+      fetchCall()
+  }, [])
 
+      //fetches the list of classes
+    useEffect(() => {
+      const classList = async () => {
+          try{
+              const res = await fetch(`https://dnd5eapi.co/api/classes`)
+              const data = await res.json()
+
+              setFetchData(prevData => ({
+                  ...prevData,
+                  class_list:data
+              }))
+          }catch(err){
+              console.error(err, err.message)
+          }
+      }
+      
+      classList()
+    }, [])
     //class fetch
     const classFetchCall = async (url, targetKey) => { 
         try{
@@ -398,6 +434,7 @@ export default function CharCreator () {
         }
     }
 
+    const [raceDiv, setRaceDiv] = useState()
     const raceFetch = async (url) => {
         try{
             console.log('url raceFetch', url)
@@ -408,6 +445,16 @@ export default function CharCreator () {
                 ...prevData,
                 race:data
             }))
+
+            // setRaceDiv(
+            //   <>
+            //     <div id='raceInfo'>
+            //         <RaceInfo functions={{fetchData:fetchData,
+            //                             setFetchData:setFetchData}} />
+            //     </div>
+            //   </>
+            // )
+            console.log(fetchData)
         }catch(err){
             console.error(err)
         }
@@ -418,9 +465,37 @@ export default function CharCreator () {
         console.log('fetchData', fetchData)
     }
 
+    const [creatorCard, setCreatorCard] = useState()
+    const handleNewChar = (e) => {
+      e.preventDefault() 
+      setCreatorCard(
+        <div>
+          <div id='race'>
+              <Race functions={{raceFetch: raceFetch,
+                              fetchData:fetchData,
+                              setFetchData:setFetchData,
+                              raceDiv:raceDiv}} />
+          </div>
+          <div id='class'>
+              <Class functions={{
+                                  
+                                  fetchData:fetchData,
+                                  setFetchData:setFetchData,
+                                  classFetchCall:classFetchCall}} />
+          </div>
+        </div>
+      )
+    }
+
     return(
         <div id='outerParent'>
             <form>
+              <button onClick={handleNewChar}>Create Character</button>
+
+              <div id='creatorCards'>
+                {creatorCard}
+              </div>
+{/*               
                 <div id='name'>
                   <p>
                     <label htmlFor='charName'>Character Name</label>
@@ -509,7 +584,7 @@ export default function CharCreator () {
                                           setFetchData:setFetchData}}/>
                   </div>
                 </div>
-                
+                 */}
                 
                 <p>
                     {/* <input type='submit' onClick/> */}

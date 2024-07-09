@@ -10,6 +10,9 @@ export default function RaceInfo({ functions }) {
 	const isHidden = fetchData?.race?.name ? '' : 'none'
 
 	const racialInfo = fetchData?.race
+	useEffect(() => {
+		console.log(racialInfo)
+	},[fetchData])
 
 	const [isHovering, setIsHovering] = useState(false)
 	const [event, setEvent] = useState(null)
@@ -70,7 +73,7 @@ export default function RaceInfo({ functions }) {
 			{/* {primaryDiv}
 			{secondaryDiv} */}
 
-			<div id="raceInfoInner" style={{display:isHidden}}>
+			<div id="raceInfoInner" >
 					<p className='raceName'>
 						<strong>{racialInfo?.name}</strong>
 					</p>
