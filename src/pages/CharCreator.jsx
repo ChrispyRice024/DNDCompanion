@@ -366,7 +366,7 @@ export default function CharCreator () {
                     const featureData = await featureRes.json()
                     features.push(featureData)
                 }
-                console.log('classFeatures', classFeatures)
+                // console.log('classFeatures', classFeatures)
                 setFetchData(prevData => ({
                     ...prevData,
                     [targetKey]:{
