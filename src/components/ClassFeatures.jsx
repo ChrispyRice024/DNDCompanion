@@ -6,7 +6,7 @@
         console.log(fetchData)
 
         const features = fetchData?.primary_class?.features
-        const classSpecific = fetchData?.primary_class?.level_data[0]?.class_specific
+        const classSpecific = fetchData?.primary_class?.level_data?.[0]?.class_specific
         return(
             <div id='feature_parent'>
                 <div id='feature'>

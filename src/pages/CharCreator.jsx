@@ -216,6 +216,10 @@ export default function CharCreator () {
     })
 
     const [fetchData, setFetchData] = useState({
+        primary_class:{
+          chosen_pro_0:[],
+          chosen_pro_1:[]
+        },
         stats:{
             str:10,
             dex:10,
@@ -325,6 +329,8 @@ export default function CharCreator () {
             }
           },
     })
+
+    const [count, setCount] = useState(0)
     // fetches the list of races
     useEffect(() => {
       const fetchCall = async () => {
@@ -402,7 +408,7 @@ export default function CharCreator () {
                     const featureData = await featureRes.json()
                     features.push(featureData)
                 }
-                console.log('classFeatures', classFeatures)
+
                 setFetchData(prevData => ({
                     ...prevData,
                     [targetKey]:{
@@ -445,7 +451,7 @@ export default function CharCreator () {
                 ...prevData,
                 race:data
             }))
-
+            
             // setRaceDiv(
             //   <>
             //     <div id='raceInfo'>
@@ -465,36 +471,103 @@ export default function CharCreator () {
         console.log('fetchData', fetchData)
     }
 
-    const [creatorCard, setCreatorCard] = useState()
+    const [div, setDiv] = useState()
     const handleNewChar = (e) => {
-      e.preventDefault() 
-      setCreatorCard(
-        <div>
-          <div id='race'>
-              <Race functions={{raceFetch: raceFetch,
-                              fetchData:fetchData,
-                              setFetchData:setFetchData,
-                              raceDiv:raceDiv}} />
-          </div>
-          <div id='class'>
-              <Class functions={{
-                                  
-                                  fetchData:fetchData,
-                                  setFetchData:setFetchData,
-                                  classFetchCall:classFetchCall}} />
-          </div>
-        </div>
-      )
+      e.preventDefault()
+      setCount(prevCount => prevCount + 1)
+      
     }
 
     return(
         <div id='outerParent'>
             <form>
+            { count === 0 ?
               <button onClick={handleNewChar}>Create Character</button>
+            :count === 1 ? 
+              <div id='race_class'>
+                <div id='race'>
+                  <Race functions={{setFetchData:setFetchData,
+                                  raceFetch: raceFetch,
+                                  fetchData:fetchData,
+                                  count:count}} />
+                                  {console.log(count)}
+                </div>
+                <div>
+                  <div id='class'>
+                    <Class functions={{fetchData:fetchData,
+                                    setFetchData:setFetchData,
+                                    classFetchCall:classFetchCall}} />
+                  
+                  
+                  <div id='classFeatures'>
+                    <ClassFeatures functions={{fetchData,
+                                                setFetchData}}/>
+                  </div>
 
-              <div id='creatorCards'>
-                {creatorCard}
+                  <div id='proInfo'>
+                      <ProInfo functions={{character: character,
+                                          setCharacter: setCharacter,
+                                          fetchData:fetchData,
+                                          setFetchData:setFetchData}} />
+                  </div>
+                  </div>
+                </div>
+                <button onClick={(e) => {e.preventDefault(); setCount(prevCount => prevCount + 1)}}>Next</button>
               </div>
+            : count === 2 && fetchData?.primary_class?.spellcasting ?
+              <div>
+                {console.log('is true')}
+                <div id='spellcasting'>
+                          <Spellcasting functions={{character: character,
+                                                  setCharacter: setCharacter,
+                                                  fetchData:fetchData,
+                                                  setFetchData:setFetchData}} />
+                      </div>
+                      <button onClick={(e) => {e.preventDefault(); setCount(prevCount => prevCount + 1)}}>Next</button>
+              </div>
+            :count === 3 || count === 2 && !fetchData?.primary_class?.spellcasting ?
+              <div id='equip'>
+                <Equip functions={{character: character,
+                                  setCharacter: setCharacter,
+                                  fetchData:fetchData,
+                                  setFetchData:setFetchData}} />
+              <button onClick={(e) => {e.preventDefault(); setCount(prevCount => prevCount + 1)}}>Next</button>
+              </div>
+              
+            : count === 4 || count === 3 && !fetchData?.primary_class?.spellcasting ? 
+            <div id='statsAndSuch'>
+            <div id='stats'>
+                <Stats functions={{setCharacter: setCharacter,
+                                character:character,
+                                fetchData:fetchData,
+                                setFetchData:setFetchData}} />
+            </div>
+
+            <div id='savingThrows'>
+                <SavingThrows functions= {{fetchData:fetchData,
+                                            character: character
+                }}/>
+            </div>
+
+            <div id='combat'>
+                <Combat functions={{setCharacter: setCharacter,
+                                    character:character,
+                                    fetchData:fetchData,
+                                    setFetchData:setFetchData}} />
+            </div>
+
+            <div id='skills'>
+                <Skills functions={{character:character,
+                                    setCharacter: setCharacter,
+                                    fetchData:fetchData,
+                                    setFetchData:setFetchData}}/>
+            </div>
+            </div>
+            :''}
+
+{/* <div id='creatorCards'>
+                {creatorCard}
+              </div> */}
 {/*               
                 <div id='name'>
                   <p>

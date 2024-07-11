@@ -166,7 +166,7 @@ export default function Equip({ functions }) {
                                     <InfoCard 
                                       functions={{
                                         isHovering: isHovering,
-                                        url: choice.items[0].of.url,
+                                        url: choice?.items[0]?.of?.url,
                                       }}/>
                                   : ''}
                             </p>

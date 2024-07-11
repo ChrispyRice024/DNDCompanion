@@ -68,10 +68,15 @@ export default function Class ({functions}) {
         const inputName = e.target.name
 
         const compare = fetchData.class_list.results.some(element => element.name === input) || fetchData.class_list.results.some(element => element.name.toLowerCase() === input)
-        const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
+        // const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
+        const selected = e.target.options[e.target.selectedIndex]
+        const url = selected.getAttribute('data-url')
 
         if(inputName === 'primaryClass' && compare){
+            console.log('is true')
             classFetchCall(url, 'primary_class')
+        }else{
+            console.log('is false')
         }
     }
 
@@ -81,7 +86,7 @@ export default function Class ({functions}) {
                 <div>
                     <label htmlFor='primaryClass'>Primary Class</label>
                     {/* <input name='primaryClass' list='primaryClassList' onChange={verifyInput} autoComplete='on' id='primaryClass' className='class' placeholder='Class' /> */}
-                    <select id='primaryClassList' defaultValue=''>
+                    <select name='primaryClass' onChange={verifyInput} id='primaryClassList' defaultValue=''>
                         <option value='' disabled>Select A Class</option>
                         {fetchData?.class_list?.results?.map((item, i) => (
                             <option

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import InfoCard from './InfoCard'
 
 export default function RaceInfo({ functions }) {
-	const { character, setCharacter, fetchData } = functions
+	const { character, setCharacter, fetchData, setFetchData } = functions
 
 	const parentName = 'RaceInfo_infoCard'
 
@@ -11,7 +11,7 @@ export default function RaceInfo({ functions }) {
 
 	const racialInfo = fetchData?.race
 	useEffect(() => {
-		console.log(racialInfo)
+		console.log('racialInfo', racialInfo)
 	},[fetchData])
 
 	const [isHovering, setIsHovering] = useState(false)
@@ -36,38 +36,19 @@ export default function RaceInfo({ functions }) {
 	const [chosenProPrimary, setChosenProPrimary] = useState([])
 
 
-	const handleCheck = (e) => {
-                                
-		const beenChecked = e.target.checked
-
-		if(beenChecked){
-
-			const chosenSkill = e.target.name.replace('skill-', '')
-			const skills = Object.keys(character.skills)
-
-			setChosenProPrimary((prevPro) => [...prevPro, e.target.name])
-
-			setCharacter((prevCharacter) => {
-				const updatedSkills = {...prevCharacter.skills}
-
-				if(updatedSkills[chosenSkill]){
-					updatedSkills[chosenSkill] = {
-						...updatedSkills[chosenSkill],
-						isProficient:true
-					}
-				}
-				return {
-					...prevCharacter,
-					skills: updatedSkills
-				}
-			})
-	   
-		}else if (!beenChecked){
-
-			setChosenProPrimary((prevPro) => prevPro.filter((x) => x !== e.target.name))
-		}
+	const handleCheck = (e, option) => {
+		setFetchData(prevData => ({
+			...prevData,
+			race:{
+				...prevData.race,
+				chosen_pro: option.item
+			}
+		}))
 	}
 
+	useEffect(() => {
+		console.log(fetchData?.race?.chosen_pro)
+	}, [fetchData?.race])
 	return (
 		<div id='raceInfoOuter'>
 			{/* {primaryDiv}
@@ -161,6 +142,7 @@ export default function RaceInfo({ functions }) {
 											<input
 												type="radio"
 												name={racialInfo.name}
+												onChange={(e) => {handleCheck(e, option)}}
 											/>
 											<label
 												onMouseOver={e =>

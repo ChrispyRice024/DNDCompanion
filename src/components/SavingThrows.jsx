@@ -12,8 +12,10 @@ export default function SavingThrows ({functions}) {
     const decideST = (stat) => {
         let isProficient
         const statValue = fetchData?.mods?.[stat]
-        console.log('statValue', statValue)
+        console.log('statValue', stat, statValue, proBonus)
         
+        const hasBonus = fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === stat)
+
         fetchData?.primary_class?.saving_throws?.forEach((obj) => {
             console.log(obj)
             if(obj.index === stat){
@@ -22,20 +24,12 @@ export default function SavingThrows ({functions}) {
         })
 
         if(isProficient){
-            return proBonus + statValue
+            console.log('isProficient')
+            return statValue
         }else{
             return statValue
         }
     }
-
-    const [savingThrow, setSavingThrow] = useState({
-        str:'0',
-        dex:'0',
-        con:'0',
-        int:'0',
-        wis:'0',
-        cha:'0'
-    })
 
     return(
         <div>
@@ -45,6 +39,7 @@ export default function SavingThrows ({functions}) {
             <p className='str'>
                 <strong>STR: </strong>
                 <span>{decideST('str')}</span>
+                <span>{}</span>
             </p>
             <p className='dex'>
                 <strong>DEX: </strong>

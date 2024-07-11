@@ -12,20 +12,21 @@ export default function Race({functions}) {
     const isHidden = fetchData?.race?.name ? '' : 'none'
     
     const [raceDiv, setRaceDiv] = useState()
+    const [spawn, setSpawn] = useState(0)
 
     //this should set only the raceList variable
 
 
-    useEffect(() => {
-        setRaceDiv(
-            <>
-                <div id='raceInfo'>
-                    <RaceInfo functions={{fetchData:fetchData,
-                                        setFetchData:setFetchData}} />
-                </div>
-            </>
-        )
-    },[fetchData?.race])
+    // useEffect(() => {
+    //     setRaceDiv(
+    //         <>
+    //             <div id='raceInfo'>
+    //                 <RaceInfo functions={{fetchData:fetchData,
+    //                                     setFetchData:setFetchData}} />
+    //             </div>
+    //         </>
+    //     )
+    // },[fetchData?.race])
     const verifyInput = (e) => {
         const input = e.target.value
         // const url = e?.target?.list?.querySelector(`option[value='${e.target.value}']`)?.getAttribute('data-url')
@@ -37,6 +38,7 @@ export default function Race({functions}) {
 
         // if(compare){
             raceFetch(url)
+            setSpawn(prevSpawn => prevSpawn + 1)
         // }
     }
     useEffect(() => {
@@ -53,7 +55,7 @@ export default function Race({functions}) {
                 <p> 
                     <select onChange={verifyInput} id='raceSet' defaultValue=''>
                         <option value='' disabled >Select a Race</option>
-                        {raceList.map((race, i) => (
+                        {raceList?.map((race, i) => (
                             <option
                             key={i}
                             data-url={race.url}
@@ -67,8 +69,12 @@ export default function Race({functions}) {
             </div>
             
             <div>
-            {raceDiv}      
-                  
+                {spawn > 0 ? 
+                    <div id='raceInfo'>
+                        <RaceInfo functions={{fetchData:fetchData,
+                                            setFetchData:setFetchData}} />
+                    </div>
+                :''}
             </div>
         </div>
     )

@@ -9,6 +9,32 @@ export default function Stats({functions}) {
 
     const castingMod = fetchData?.primary_class?.spellcasting?.spellcasting_ability?.name
 
+    useEffect(() => {
+        console.log(fetchData)
+        
+        for(const [stat, value] of Object.entries(fetchData?.stats)){
+            console.log(stat, value)
+            const hasBonus = fetchData?.race?.ability_bonuses?.find(obj => obj.ability_score?.index === stat)
+            
+            if(hasBonus){
+                console.log('hasBonus')
+                setFetchData(prevData => ({
+                    ...prevData,
+                    stats:{
+                        ...prevData.stats,
+                        [stat]:hasBonus.bonus + value
+                    },
+                    mods:{
+                        ...prevData.mods,
+                        [stat]:Math.floor(((value + hasBonus.bonus) - 10) / 2)
+                    }
+                }))
+            }else{
+                console.log('no Bonus')
+            }
+        }
+    }, [fetchData?.race])
+
     const decideBonus = (stat) => {
         const bonuses = fetchData?.race?.ability_bonuses
         let statBonus
@@ -24,18 +50,12 @@ export default function Stats({functions}) {
         return(parseInt(statBonus))
     }
 
-    useEffect(() => {
-        console.log(fetchData?.primary_class?.spellcasting?.spellcasting_ability?.name)
-        if(fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'str')){
-            console.log('str is a bonus')
-            console.log(fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'str'))
-        }
-    }, [fetchData])
     const handleChange = (e) => {
         
         
 
         const statValue = parseInt(e.target.value, 10);
+        console.log(e.target.name, e.target.value)
         const updatedSkills = {...fetchData?.skills}
                 // SETS THE SKILL VALUES
             for(const skillName in updatedSkills){
@@ -60,18 +80,72 @@ export default function Stats({functions}) {
         }))
 
         // SETS THE STAT AND MOD VALUES
+        let hasRacialBonus
+        console.log(e.target.name)
+        const hasBonus = fetchData?.race?.ability_bonuses?.find(obj => obj.ability_score?.index === e.target.name)
+        console.log('hasBonus', hasBonus)
+        console.log('the bonus', hasBonus)
+        if(hasBonus){
+            // const bonus = fetchData?.race?.ability_bonuses?.some(obj => )
+            console.log(e.target.name, 'has bonus')
+            console.log('the mod', Math.floor(((statValue + hasBonus.bonus) - 10) / 2))
+            setFetchData(prevData => ({
+                ...prevData,
+                stats: {
+                    ...prevData.stats,
+                    [e.target.name]: hasBonus.bonus + statValue
+                },
+                mods:{
+                    ...prevData.mods,
+                    [`${e.target.name}`]:Math.floor(((statValue + hasBonus.bonus) - 10) / 2)
+                }
+            }))
+        }else{
+            console.log(e.target.name, 'no bonus')
+            setFetchData(prevData => ({
+                ...prevData,
+                stats: {
+                    ...prevData.stats,
+                    [e.target.name]: statValue
+                },
+                mods: {
+                    ...prevData.mods,
+                    [`${e.target.name}`]: Math.floor((statValue - 10) / 2)
+                },
+            }))
+        }
+
+        // fetchData?.race?.ability_bonuses?.forEach((obj) => {
+        //     if(obj.ability_score.index === e.target.name){
+        //         console.log(e.target.name, 'has racial bonus')
+        //         setFetchData(prevData => ({
+        //             ...prevData,
+        //             stats: {
+        //                 ...prevData.stats,
+        //                 [e.target.name]: statValue
+        //             },
+        //             mods:{
+        //                 ...prevData.mods,
+        //                 [`${e.target.name}`]:Math.floor(((statValue + obj.bonus) - 10) / 2)
+        //             }
+        //         }))
+        //     }else{
+        //         console.log(e.target.name, 'no racial bonus')
+        //         setFetchData(prevData => ({
+        //             ...prevData,
+        //             stats: {
+        //                 ...prevData.stats,
+        //                 [e.target.name]: statValue
+        //             },
+        //             mods: {
+        //                 ...prevData.mods,
+        //                 [`${e.target.name}`]: parseInt((statValue - 10) / 2)
+        //             },
+        //         }))
+        //     }
+        // })
+
         
-        setFetchData(prevData => ({
-            ...prevData,
-            stats: {
-                ...prevData.stats,
-                [e.target.name]: statValue
-            },
-            mods: {
-                ...prevData.mods,
-                [`${e.target.name}`]: parseInt((statValue - 10) / 2)
-            },
-        }))
 
     };
 
@@ -90,9 +164,9 @@ export default function Stats({functions}) {
                     onChange={handleChange}
                     />
                                         {/* STAT MOD */}
-                <strong>STR Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'str') ? <span>{Math.round((((fetchData?.stats.str + decideBonus('str')) - 10) / 2))}</span> : <span>{fetchData?.mods.str}</span>}
+                <strong>STR Mod: </strong> <span>{fetchData?.mods.str}</span>
                     {/* TOTAL STAT */}
-                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.str) + parseInt(decideBonus('str'))}</span> : <span><strong> | Total STR: </strong> {fetchData?.stats?.str}</span>}
+                <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.str)}</span>
                     
                     {/* CASTING MOD */}
                 {castingMod === 'STR' ? ' | Casting Mod Is Str' : ''}
@@ -129,9 +203,9 @@ export default function Stats({functions}) {
                     onChange={handleChange}
                     />
                         {/* STAT MOD */}
-                <strong>DEX Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'dex') ? <span>{Math.ceil((((fetchData?.stats.dex + decideBonus('dex')) - 10) / 2))}</span> : <span>{fetchData?.mods.dex}</span>}
+                <strong>DEX Mod: </strong> <span>{fetchData?.mods.dex}</span>
                         {/* TOTAL STAT */}
-                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span> | <strong>Total STR: </strong>{parseInt(fetchData?.stats?.dex) + parseInt(decideBonus('dex'))}</span> : <span><strong> | Total DEX: </strong> {fetchData?.stats?.dex}</span>}
+                <span> | <strong>Total STR: </strong>{fetchData?.stats?.dex}</span>
                         {/* CASTING MOD */}
                 {castingMod === 'DEX' ? ' | Casting Mod Is Dex' :''}
                 </p>
@@ -167,9 +241,9 @@ export default function Stats({functions}) {
                     onChange={handleChange}
                     />
                         {/* STAT MOD */}
-                <strong>CON Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'con') ? <span>{Math.ceil((((fetchData?.stats.con + decideBonus('con')) - 10) / 2))}</span> : <span>{fetchData?.mods.con}</span>}
+                <strong>CON Mod: </strong><span>{fetchData?.mods.con}</span>
                         {/* TOTAL STAT */}
-                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'con') ? <span> | <strong>Total CON: </strong>{parseInt(fetchData?.stats?.con) + parseInt(decideBonus('con'))}</span> : <span><strong> | Total CON: </strong> {fetchData?.stats?.con}</span>}
+                <span> | <strong>Total CON: </strong>{parseInt(fetchData?.stats?.con)}</span>
                         {/* CASTING MOD */}
                 {castingMod === 'Con' ? ' | Casting Mod Is CON' :''}
                 </p>
@@ -205,9 +279,9 @@ export default function Stats({functions}) {
                     onChange={handleChange}
                     />
                     {/* STAT MOD */}
-                <strong>INT Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'int') ? <span>{Math.ceil((((fetchData?.stats.int + decideBonus('int')) - 10) / 2))}</span> : <span>{fetchData?.mods.int}</span>}
+                <strong>INT Mod: </strong><span>{fetchData?.mods?.int}</span>
                     {/* TOTAL STAT */}
-                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span> | <strong>Total INT: </strong>{parseInt(fetchData?.stats?.int) + parseInt(decideBonus('int'))}</span> : <span><strong> | Total INT: </strong> {fetchData?.stats?.int}</span>}
+                <span> | <strong>Total INT: </strong>{fetchData?.stats?.int}</span>
                         {/* CASTING MOD */}
                 {castingMod === 'INT' ? ' | Casting Mod Is INT' :''}
             </p>
@@ -243,9 +317,9 @@ export default function Stats({functions}) {
                     onChange={handleChange}
                     />
                     {/* STAT MOD */}
-                <strong>WIS Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'wis') ? <span>{Math.ceil((((fetchData?.stats.wis + decideBonus('wis')) - 10) / 2))}</span> : <span>{fetchData?.mods.wis}</span>}
+                <strong>WIS Mod: </strong><span>{fetchData?.mods.wis}</span>
                     {/* TOTAL STAT */}
-                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span> | <strong>Total WIS: </strong>{parseInt(fetchData?.stats?.wis) + parseInt(decideBonus('wis'))}</span> : <span><strong> | Total WIS: </strong> {fetchData?.stats?.wis}</span>}
+                <span> | <strong>Total WIS: </strong>{fetchData?.stats?.wis}</span>
                     {/* CASTING MOD */}
                 {castingMod === 'WIS' ? ' | Casting Mod Is Wis' : ''}
                 {/* RACIAL BONUS */}
@@ -280,9 +354,9 @@ export default function Stats({functions}) {
                     onChange={handleChange}
                     />
                     {/* STAT MOD */}
-                <strong>CHA Mod: </strong> {fetchData?.race?.ability_bonuses?.some(obj => obj.ability_score?.index === 'cha') ? <span>{Math.ceil((((fetchData?.stats.cha + decideBonus('cha')) - 10) / 2))}</span> : <span>{fetchData?.mods.cha}</span>}
+                <strong>CHA Mod: </strong> <span>{fetchData?.mods.cha}</span>
                     {/* TOTAL STAT */}
-                {fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span> | <strong>Total CHA: </strong>{Math.ceil(parseInt(fetchData?.stats?.cha) + parseInt(decideBonus('cha')))}</span> : <span><strong> | Total CHA: </strong> {fetchData?.stats?.cha}</span>}
+                <span> | <strong>Total CHA: </strong>{fetchData?.stats?.cha}</span>
                     {/* CASTING MOD */}
                 {castingMod === 'CHA' ? ' | Casting Mod Is CHA' :''}
                 </p>

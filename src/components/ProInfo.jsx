@@ -39,18 +39,18 @@ export default function ProInfo ({functions}) {
                                     <p className='class_title'>
                                         <strong>{choice.desc}</strong>
                                     </p>
-
+                                    {console.log('choice', choice)}
                                     {choice.from.options.map((option, j) => {
-
-                                        const chosenPro = (fetchData?.primary_class[`chosen_pro_${i}`])
+                                        // {console.log('option', option)}
+                                        const chosenPro = (fetchData?.primary_class?.[`chosen_pro_${i}`])
                                         const max = choice?.choose
                                
-                                        const isChecked = chosenPro?.some(obj => obj?.name === option?.item?.name)
-                                        const isDisabled = chosenPro?.length >= max && !isChecked
+                                        // const isChecked = chosenPro?.some(obj => obj?.name === option?.item?.name)
+                                        const isDisabled = chosenPro?.length >= max && !chosenPro?.some(obj => obj?.name === option?.item?.name)
                           
                                         const handleCheck = (e) => {
                                             const beenChecked = e.target.checked
-
+                                            console.log('beenChecked', beenChecked)
                                             if(beenChecked){
 
                                                 setFetchData(prevData => ({
@@ -85,13 +85,14 @@ export default function ProInfo ({functions}) {
                                             return(
                                                 <div className='classChoices' key={j}>
                                                     <p>
+                                                        {console.log('option', option)}
                                                     <input
-                                                        type='checkbox'
-                                                        value={option?.item?.name}
-                                                        checked={isChecked}
+                                                        type={choice.choose === 1 ? 'radio' : 'checkbox'}
+                                                        value={option?.item?.name || ''}
+                                                        // checked={isChecked}
                                                         name={option?.item?.index}
                                                         onChange={handleCheck}
-                                                        disabled={isChecked ? false : isDisabled}
+                                                        disabled={isDisabled}
                                                         data-url={option?.item?.url}
                                                         />
                                                     <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={option?.item?.index}>{option?.item?.name}</label>
@@ -99,25 +100,40 @@ export default function ProInfo ({functions}) {
                                                 </div>
                                             )
                                         }else if(option.option_type === 'choice'){
-
+                                            console.log('choiceOption', option)
                                             return(
                                                 <div>
                                                     {option?.choice?.from?.options?.map((item, k) => {
+                                                        console.log(item)
+
+                                                        const handleRadio = (checked) => {
+                                                            if(checked){
+                                                                setFetchData(prevData => ({
+                                                                    ...prevData,
+                                                                    primary_class:{
+                                                                        ...prevData.primary_class,
+                                                                        [`chosen_pro_${i}`]:item.item
+                                                                    }
+                                                                    
+                                                                }))
+                                                            }
+                                                        }
+                                                        
                                                         return(
                                                             <p key={k}>
                                                                 <input
-                                                                    type='checkbox'
+                                                                    type='radio'
                                                                     value={item?.item?.name}
-                                                                    checked={isChecked}
-                                                                    name={item?.item?.index}
-                                                                    onChange={handleCheck}
-                                                                    disabled={isChecked ? false : isDisabled}
+                                                                    // checked={isChecked}
+                                                                    name={`pro_${i}`}
+                                                                    onChange={(e) => {handleRadio(e.target.checked)}}
+                                                                    // disabled={isChecked && choice.choose === 1 ? false : isDisabled}
                                                                     data-url={item?.item?.url}
                                                                     />
-                                                                <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${j}`)}} onMouseOut={handleMouseOut} htmlFor={item?.item?.index}>{item?.item?.name}</label>
+                                                                <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${k}`)}} onMouseOut={handleMouseOut} htmlFor={item?.item?.index}>{item?.item?.name}</label>
                                                             </p>
                                                         )
-                                                    })}
+                                                    })} 
                                                 </div>
                                             )
                                         }
@@ -137,7 +153,7 @@ export default function ProInfo ({functions}) {
     useEffect(() => {
         const primaryPro = () => {
 
-            const primary = fetchData?.primary_class?.proficiencies?.starting_proficiencies
+            const primary = fetchData?.primary_class?.proficiencies?.starting_proficiencies || []
 
                 setPrimaryProDiv(
                     <div id='proficiencies_parent'>
