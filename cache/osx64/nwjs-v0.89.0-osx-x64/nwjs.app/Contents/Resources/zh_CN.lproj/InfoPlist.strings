@@ -1,0 +1,9 @@
+"Chromium Shortcut" = "Chromium 快捷方式";
+CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSBluetoothAlwaysUsageDescription = "一旦 Chromium 获得了使用权限，网站便能请求您向其授予使用权限。";
+NSBluetoothPeripheralUsageDescription = "一旦 Chromium 获得了使用权限，网站便能请求您向其授予使用权限。";
+NSCameraUsageDescription = "一旦 Chromium 获得了使用权限，网站便能请求您向其授予使用权限。";
+NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSLocationUsageDescription = "一旦 Chromium 获得了使用权限，网站便能请求您向其授予使用权限。";
+NSMicrophoneUsageDescription = "一旦 Chromium 获得了使用权限，网站便能请求您向其授予使用权限。";
+NSWebBrowserPublicKeyCredentialUsageDescription = "一旦 Chromium 获得了使用权限，网站便能请求您向其授予使用权限。";

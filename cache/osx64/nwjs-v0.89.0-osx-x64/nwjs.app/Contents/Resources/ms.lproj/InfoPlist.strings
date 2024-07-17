@@ -1,0 +1,9 @@
+"Chromium Shortcut" = "Pintasan Chromium";
+CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSBluetoothAlwaysUsageDescription = "Sebaik sahaja Chromium mendapat akses, laman web akan dapat meminta akses daripada anda.";
+NSBluetoothPeripheralUsageDescription = "Sebaik sahaja Chromium mendapat akses, laman web akan dapat meminta akses daripada anda.";
+NSCameraUsageDescription = "Sebaik sahaja Chromium mendapat akses, laman web akan dapat meminta akses daripada anda.";
+NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSLocationUsageDescription = "Sebaik sahaja Chromium mendapat akses, laman web akan dapat meminta akses daripada anda.";
+NSMicrophoneUsageDescription = "Sebaik sahaja Chromium mendapat akses, laman web akan dapat meminta akses daripada anda.";
+NSWebBrowserPublicKeyCredentialUsageDescription = "Sebaik sahaja Chromium mendapat akses, laman web akan dapat meminta akses daripada anda.";

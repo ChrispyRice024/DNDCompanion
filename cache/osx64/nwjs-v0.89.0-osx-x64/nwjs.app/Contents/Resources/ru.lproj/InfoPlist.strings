@@ -1,0 +1,9 @@
+"Chromium Shortcut" = "Ярлык Chromium";
+CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSBluetoothAlwaysUsageDescription = "Когда вы предоставите доступ Chromium, веб-сайты также смогут запрашивать у вас доступ.";
+NSBluetoothPeripheralUsageDescription = "Когда вы предоставите доступ Chromium, веб-сайты также смогут запрашивать у вас доступ.";
+NSCameraUsageDescription = "Когда вы предоставите доступ Chromium, веб-сайты также смогут запрашивать у вас доступ.";
+NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSLocationUsageDescription = "Когда вы предоставите доступ Chromium, веб-сайты также смогут запрашивать у вас доступ.";
+NSMicrophoneUsageDescription = "Когда вы предоставите доступ Chromium, веб-сайты также смогут запрашивать у вас доступ.";
+NSWebBrowserPublicKeyCredentialUsageDescription = "Когда вы предоставите доступ Chromium, веб-сайты также смогут запрашивать у вас доступ.";

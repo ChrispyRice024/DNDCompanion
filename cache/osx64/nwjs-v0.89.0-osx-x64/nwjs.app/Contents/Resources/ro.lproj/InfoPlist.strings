@@ -1,0 +1,9 @@
+"Chromium Shortcut" = "Comandă rapidă pentru Chromium";
+CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSBluetoothAlwaysUsageDescription = "Odată ce Chromium are acces, site-urile web îți vor putea solicita accesul.";
+NSBluetoothPeripheralUsageDescription = "Odată ce Chromium are acces, site-urile web îți vor putea solicita accesul.";
+NSCameraUsageDescription = "Odată ce Chromium are acces, site-urile web îți vor putea solicita accesul.";
+NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSLocationUsageDescription = "Odată ce Chromium are acces, site-urile web îți vor putea solicita accesul.";
+NSMicrophoneUsageDescription = "Odată ce Chromium are acces, site-urile web îți vor putea solicita accesul.";
+NSWebBrowserPublicKeyCredentialUsageDescription = "Odată ce Chromium are acces, site-urile web îți vor putea solicita accesul.";

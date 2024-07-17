@@ -1,0 +1,9 @@
+"Chromium Shortcut" = "Prečac za Chrome";
+CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSBluetoothAlwaysUsageDescription = "Kada Chromium dobije pristup, web-lokacije će vas moći tražiti pristup.";
+NSBluetoothPeripheralUsageDescription = "Kada Chromium dobije pristup, web-lokacije će vas moći tražiti pristup.";
+NSCameraUsageDescription = "Kada Chromium dobije pristup, web-lokacije će vas moći tražiti pristup.";
+NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSLocationUsageDescription = "Kada Chromium dobije pristup, web-lokacije će vas moći tražiti pristup.";
+NSMicrophoneUsageDescription = "Kada Chromium dobije pristup, web-lokacije će vas moći tražiti pristup.";
+NSWebBrowserPublicKeyCredentialUsageDescription = "Kada Chromium dobije pristup, web-lokacije će vas moći tražiti pristup.";

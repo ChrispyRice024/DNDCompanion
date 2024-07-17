@@ -1,0 +1,9 @@
+"Chromium Shortcut" = "Chromiumi otsetee";
+CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSBluetoothAlwaysUsageDescription = "Kui annate Chromiumile juurdepääsu, saavad veebisaidid küsida teilt juurdepääsuluba.";
+NSBluetoothPeripheralUsageDescription = "Kui annate Chromiumile juurdepääsu, saavad veebisaidid küsida teilt juurdepääsuluba.";
+NSCameraUsageDescription = "Kui annate Chromiumile juurdepääsu, saavad veebisaidid küsida teilt juurdepääsuluba.";
+NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
+NSLocationUsageDescription = "Kui annate Chromiumile juurdepääsu, saavad veebisaidid küsida teilt juurdepääsuluba.";
+NSMicrophoneUsageDescription = "Kui annate Chromiumile juurdepääsu, saavad veebisaidid küsida teilt juurdepääsuluba.";
+NSWebBrowserPublicKeyCredentialUsageDescription = "Kui annate Chromiumile juurdepääsu, saavad veebisaidid küsida teilt juurdepääsuluba.";
