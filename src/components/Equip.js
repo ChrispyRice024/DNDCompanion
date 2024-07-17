@@ -80,7 +80,7 @@ export default function Equip({ functions }) {
               <strong>Starting Equipment For {fetchData?.primary_class?.name}</strong>
             </p>
             <span>
-              {fetchData.primary_class.equip.starting_equip?.map((item, i) => {
+              {fetchData?.primary_class?.equip?.starting_equip?.map((item, i) => {
 
                 return(
                   <div key={`1_${i}`}>
@@ -146,7 +146,7 @@ export default function Equip({ functions }) {
                                     type='radio'
                                     name={i}
                                     className='optionsArray multiple'
-                                    onChange={(e) => {handleCheck(e, choice, i)}}/>
+                                    onChange={(e) => {handleChange(e, choice, i)}}/>
 
                               {choice.items.map((item, k) => (
                                 <span key={`k_${k}`}>
@@ -166,7 +166,7 @@ export default function Equip({ functions }) {
                                     <InfoCard 
                                       functions={{
                                         isHovering: isHovering,
-                                        url: choice.items[0].of.url,
+                                        url: choice?.items[0]?.of?.url,
                                       }}/>
                                   : ''}
                             </p>

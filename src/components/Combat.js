@@ -71,7 +71,7 @@ const {setCharacter, character, sendCharacter, fetchData} = functions
                 
             </div>
         )
-    }, fetchData)
+    }, [fetchData])
 
     return(
         <div>

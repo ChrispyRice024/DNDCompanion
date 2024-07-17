@@ -1,19 +1,23 @@
+/* FULL PAGE */
 .App{
     text-align:center;
 }
-
 body{
     background-color: #1E1E1E;
 }
-/* background-color:#2E2E2E */
 * input[type=number]{
     width:32px;
 }
-
 * strong, h2, h3{
     color:#FFD700;
 }
+#outerParent{
+    display:flex;
+    justify-content:center;
+    position:relative;
+}
 
+/* MISC */
 #name,
 #race,
 #raceInfo,
@@ -31,32 +35,62 @@ body{
     background-color:#2E2E2E;
     color:white;
     width:700px;
-    margin:10px 10px 15px 10px;
+    /* margin:10px 10px 15px 10px; */
     padding:3px;
     border-radius:15px;
-    /* display:flex;
-    justify-content:center; */
+    /* display:flex; */
+    justify-content:space-between;
+    box-shadow:5px 5px #AAAAAA;
+    margin:10px;
+    position:relative;
+}
+.infoCard{
+    position:absolute;
+    width:400px;
+    border-style:groove;
+    border-radius:15px;
+    border-color:#FFD700;
+    background-color:#1E1E1E;
+    color:white;
+    transform: translate(50%, -100%);
+    z-index:99;
 }
 
+/* RACE/CLASS */
+#raceSet,
+#primaryClassList{
+    width:150px;
+    color:black;
+}
+
+#race_class{
+    display:flex;
+    width:95%;
+    justify-content:center;
+}
+
+/* RACE */
 #raceInfo{
+    display:flex;
     /* background-color:#001480; */
+    /* display:inline-block; */
+    /* overflow:auto; */
+    justify-content:center;
+    width:95%;
+    margin-left:10px;
+    box-shadow:none;
+    border-style:dashed;
 }
 #raceInfoInner{
-    width:90%;
+    margin:10px;
+    /* width:100%; */
+    /* align-content:center; */
 }
-
 #raceInfoInner p{
     /* border-style:groove; */
     border-radius:15px;
     /* margin:40px; */
     padding:8px;
-}
-
-#raceInfoInner p:nth-child(odd){
-    /* background-color:#0028ff; */
-}
-#raceInfoInner p:nth-child(even){
-    /* background-color:#0092ff; */
 }
 .raceName{
     background-color:#0028ff;
@@ -90,7 +124,6 @@ body{
     box-shadow:3px 2px black;
     margin:0px 5px 20px;
 }
-
 #raceSize{
     text-align:center;
     background-color:#0092ff;
@@ -114,17 +147,11 @@ body{
     background-color:#159e00;
     border-style:groove;
 }
-
 #raceInfoOuter{
     display:flex;
     justify-content:center;
+    width:90%;
 }
-
-#outerParent{
-    display:flex;
-    justify-content:center;
-}
-
 .racialTraitsParent{
     background-color:#0092ff;
     border-radius:15px;
@@ -142,6 +169,138 @@ body{
     border-radius:15px;
     box-shadow:3px 2px black;
     width:40%;
+}
+
+/* CLASS */
+#classFeatures{
+    width:95%;
+    display:flex;
+    justify-content:center;
+    /* overflow:auto; */
+    box-shadow:none;
+    border-style:dashed;
+}
+.features p{
+    padding:15px;
+}
+#skillsInner{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+#skillsInner p{
+    width:200px;
+    margin:10px;
+}
+.proficiency_choice{
+    display:flex;
+    /* flex-direction:column;  */
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    width:100%;
+}
+.primary_pro{
+    background-color:#0092ff;
+    border-style:groove;
+    margin:10px;
+    border-radius:15px;
+    padding:5px;
+    padding-top:10px;
+    /* text-align:center; */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:90%;
+}
+.class_title{
+    background-color:#0028ff;
+    /* margin-top:0px; */
+    margin:0px;
+    padding:10px;
+    border-radius:15px;
+    border-style:groove;
+}
+.classChoices{
+    border-style:groove;
+    width:50%;
+    border-radius:15px;
+    margin:5px;
+    justify-content:center;
+    background-color:#159e00;
+    display:flex;
+}
+.proficiencies{
+    background-color:#0092ff;
+    border-style:groove;
+    margin:10px;
+    border-radius:15px;
+    padding:5px;
+    padding-top:10px;
+    /* text-align:center; */
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    /* align-items:center; */
+    height:auto;
+}
+.classProficiencies{
+    background-color:#159e00;
+    /* margin-top:0px; */
+    margin:5px;
+    padding:10px;
+    border-radius:15px;
+    border-style:groove;
+    /* width:100px; */
+}
+#proficiencies_parent{
+    background-color:#0092ff;
+    border-style:groove;
+    margin:10px;
+    border-radius:15px;
+    padding:5px;
+    padding-top:10px;
+    /* text-align:center; */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    /* width:50%; */
+    /* flex:1 1 50%; */
+}
+.primary_pro, .classChoices{
+    box-sizing:border-box;
+    flex:1 1 50%;
+}
+#classInfo{
+    display:flex;
+    flex-wrap:wrap;
+    /* width:95%; */
+
+}
+#proInfo{
+    /* width:40%; */
+    /* overflow:auto; */
+    /* padding:15px; */
+    /* align-items:stretch; */
+    box-shadow:none;
+    border-style:dashed;
+}
+#classChoice2{
+    flex:1 1 100%;
+    box-sizing:border-box;
+}
+#class > div{
+    width:95%;
+    /* color:blue; */
+    /* position:absolute; */
+}
+
+/* STATS/COMBAT */
+#statsAndSuch{
+    justify-content:center;
+    display:flex;
+    flex-wrap:wrap;
 }
 .str,
 .dex,
@@ -190,100 +349,27 @@ body{
 .cha strong{
     color:#003FaF;
 }
-
 .statLabel{
     border-style:hidden;
     padding-right:5px;
 }
 
-#skillsInner{
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-    justify-content:center;
+/* SPELLCASTING */
+#spellcasting{
+    
 }
-#skillsInner p{
-    width:200px;
-    margin:10px;
-}
-
-.proficiency_choice{
-    display:flex;
-    flex-direction:column; 
-    justify-content:center;
-    align-items:center; 
-    width:50%;
-}
-
-.primary_pro{
+.spell_info_item{
     background-color:#0092ff;
     border-style:groove;
-    margin:10px;
+    /* border-bottom:dashed; */
     border-radius:15px;
-    padding:5px;
-    padding-top:10px;
-    /* text-align:center; */
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    width:100%;
+    margin:10px;
 }
-
-.class_title{
+.spell_info_item p{
+    margin: 15px;
+}
+.spell_title{
     background-color:#0028ff;
-    /* margin-top:0px; */
-    margin:0px;
+    border-radius:15px;
     padding:10px;
-    border-radius:15px;
-    border-style:groove;
-}
-
-.classChoices{
-    border-style:groove;
-    width:50%;
-    border-radius:15px;
-    margin:5px;
-    justify-content:center;
-    background-color:#159e00;
-    display:flex;
-}
-.proficiencies{
-    background-color:#0092ff;
-    border-style:groove;
-    margin:10px;
-    border-radius:15px;
-    padding:5px;
-    padding-top:10px;
-    /* text-align:center; */
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-    /* align-items:center; */
-    height:600px;
-}
-.classProficiencies{
-    background-color:#159e00;
-    /* margin-top:0px; */
-    margin:0px;
-    padding:10px;
-    border-radius:15px;
-    border-style:groove;
-    /* width:100px; */
-}
-#proficiencies_parent{
-    background-color:#0092ff;
-    border-style:groove;
-    margin:10px;
-    border-radius:15px;
-    padding:5px;
-    padding-top:10px;
-    /* text-align:center; */
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    width:50%;
-}
-
-#classInfo{
-    display:flex;
 }

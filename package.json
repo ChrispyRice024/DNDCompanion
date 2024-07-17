@@ -1,58 +1,63 @@
 {
-  "name": "dndcompanion",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "lodash": "^4.17.21",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.10.0",
-    "nodemon": "^3.1.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3",
-    "sequelize": "^6.37.3",
-    "sqlite3": "^5.1.7",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "server": "cd server && nodemon server.js",
-    "vite": "vite"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "vite": "^5.3.1"
-  }
+      "name": "dnd_companion",
+      "version": "0.1.0",
+      "private": true,
+      "dependencies": {
+            "@testing-library/jest-dom": "^5.17.0",
+            "@testing-library/react": "^13.4.0",
+            "@testing-library/user-event": "^13.5.0",
+            "nw-react-scripts": "5.1.1",
+            "react": "^18.3.1",
+            "react-app-rewired": "^2.2.1",
+            "react-dom": "^18.3.1",
+            "react-router-dom": "^6.24.1",
+            "web-vitals": "^2.1.4"
+      },
+      "devDependancies": {
+            "nw": "^0.86.0"
+      },
+      "scripts": {
+            "start": "nw-react-scripts start",
+            "build": "nw-react-scripts build",
+            "test": "nw-react-scripts test",
+            "eject": "nw-react-scripts eject"
+      },
+      "eslintConfig": {
+            "extends": [
+                  "nw-react-app",
+                  "nw-react-app/jest"
+            ]
+      },
+      "browserslist": {
+            "production": [
+                  ">0.2%",
+                  "not dead",
+                  "not op_mini all"
+            ],
+            "development": [
+                  "last 1 chrome version",
+                  "last 1 firefox version",
+                  "last 1 safari version"
+            ]
+      },
+      "main": "index.html",
+      "nwbuilds": {
+            "//": "https://nwutils.io/nw-builder/",
+            "platforms": [
+                  "osx64",
+                  "win32",
+                  "win64"
+            ],
+            "version": "latest",
+            "flavor": "normal",
+            "outDir": "./out",
+            "cacheDir": "./cache",
+            "app": {
+                  "name": "dnd_companion",
+                  "icon": "./src/logo.icns"
+            }
+      },
+      "devDependencies": {
+            "customize-cra": "^1.0.0"
+      }
 }

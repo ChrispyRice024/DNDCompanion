@@ -1,5 +1,6 @@
 import react from 'react'
 import {useState, useEffect} from 'react'
+import {lazy} from 'react'
 import Stats from '../components/Stats'
 import Combat from '../components/Combat'
 import Skills from '../components/Skills'
@@ -12,6 +13,7 @@ import Spellcasting from '../components/Spellcasting'
 import Equip from '../components/Equip'
 import InfoCard from '../components/InfoCard'
 import ClassFeatures from '../components/ClassFeatures'
+const fs = require("fs");
 
 export default function CharCreator () {
 
@@ -216,6 +218,10 @@ export default function CharCreator () {
     })
 
     const [fetchData, setFetchData] = useState({
+        primary_class:{
+          chosen_pro_0:[],
+          chosen_pro_1:[]
+        },
         stats:{
             str:10,
             dex:10,
@@ -326,6 +332,54 @@ export default function CharCreator () {
           },
     })
 
+    // fetches the list of races
+    useEffect(() => {
+      const fetchCall = async () => {
+          try{
+              const res = await fetch('https://www.dnd5eapi.co/api/races')
+              const data = await res.json()
+  
+              setFetchData(prevData => ({
+                  ...prevData,
+                  race_list:data.results
+              }))
+          // console.log('been fetched')
+          }catch(err){
+              console.error('Error fetching data: ', err)
+          }
+      }
+      fetchCall()
+    })
+
+    //fetches the list of classes
+  useEffect(() => {
+    const classList = async () => {
+        try{
+            const res = await fetch(`https://dnd5eapi.co/api/classes`)
+            const data = await res.json()
+
+            setFetchData(prevData => ({
+                ...prevData,
+                class_list:data
+            }))
+        }catch(err){
+            console.error(err, err.message)
+        }
+    }
+    
+    classList()
+  }, [])
+
+  const handleName = (e) => {
+    e.preventDefault()
+
+    setFetchData(prevData => ({
+      ...prevData,
+      char_name:e.target.value
+    }))
+
+    console.log(fetchData?.char_name)
+  }
     //class fetch
     const classFetchCall = async (url, targetKey) => { 
         try{
@@ -366,7 +420,7 @@ export default function CharCreator () {
                     const featureData = await featureRes.json()
                     features.push(featureData)
                 }
-                // console.log('classFeatures', classFeatures)
+
                 setFetchData(prevData => ({
                     ...prevData,
                     [targetKey]:{
@@ -408,6 +462,8 @@ export default function CharCreator () {
                 ...prevData,
                 race:data
             }))
+            
+            console.log(fetchData)
         }catch(err){
             console.error(err)
         }
@@ -418,99 +474,202 @@ export default function CharCreator () {
         console.log('fetchData', fetchData)
     }
 
+    const [div, setDiv] = useState(
+      <div>
+        <button onClick={(e) => {handleNewChar(e, 'class/race')}}>Create Character</button>
+      </div>
+    )
+
+    
+    const handleNewChar = (e, newDiv) => {
+      e.preventDefault()
+      // setCount(prevCount => prevCount + 1)
+
+      if(newDiv === 'class/race'){
+        setFetchData(prevData => ({
+          ...prevData,
+          isCreatingNewChar:'class/race'
+        }))
+      }else if(newDiv === 'spellcasting' && fetchData?.primary_class?.spellcasting){
+
+        setFetchData(prevData => ({
+          ...prevData,
+          isCreatingNewChar:'spellcasting'
+        }))
+      }else if((newDiv === 'spellcasting' && !fetchData?.primary_class?.spellcasting) || (newDiv === 'equip')){
+
+        setFetchData(prevData => ({
+          ...prevData,
+          isCreatingNewChar:'equip'
+        }))
+      }else if(newDiv === 'stats'){
+        setFetchData(prevData => ({
+          ...prevData,
+          isCreatingNewChar:'stats'
+        }))
+      }else if(newDiv === 'name'){
+        setFetchData(prevData => ({
+          ...prevData,
+          isCreatingNewChar:'name'
+        }))
+      }
+      
+    }
+
+    const handleSubmit = (e) => {
+      e.preventDefault()
+
+      // const saveFile = () => {
+        fs.readFile('./save.json', 'utf8', (err, data) => {
+
+          if(err){
+            console.error(err)
+          }else if(data === '' || data.length === 0){
+            const charArray = [fetchData]
+            const charArrayString = JSON.stringify(charArray)
+
+            fs.appendFile('save.json', charArrayString, (err) => {
+              if(err){
+                console.error(err)
+              }else{
+                console.log('success. array empty on initilization')
+              }
+            })
+          }else{
+            const jsonData = JSON.parse(data)
+            jsonData.push(fetchData)
+
+            const stringData = JSON.stringify(jsonData)
+
+            fs.writeFile('./save.json', stringData, (err) => {
+              if(err){
+                console.error(err)
+              }else{
+                console.log('success. array not empty on initilization')
+              }
+            })
+          }
+        })
+        // window.location.reload()
+      // }
+      // saveFile()
+    }
+
+
+
     return(
         <div id='outerParent'>
+          <div>
+
+            {!(fetchData?.isCreatingNewChar) ? 
+              <button onClick={(e) => {handleNewChar(e, 'class/race')}}>Create Character</button>    
+            :''}
+        
+      </div>
             <form>
-                <div id='name'>
-                  <p>
-                    <label htmlFor='charName'>Character Name</label>
-                    <input name='charName' id='charName' className='race'placeholder='Character Name' />
-                  </p>
-                </div>
-                <div id='race'>
-                    <Race functions={{raceFetch: raceFetch,
-                                    fetchData:fetchData}} />
-                </div>
-                {fetchData?.race?.name?
-                  <div id='raceInfo'>
-                    <RaceInfo functions={{setCharacter: setCharacter,
-                                        character:character,
-                                        fetchData:fetchData,
-                                        setFetchData:setFetchData}} />
-                  </div>
-                :''}
-                
-
-                <div id='class'>
-                    <Class functions={{
-                                        
-                                        fetchData:fetchData,
-                                        setFetchData:setFetchData,
-                                        classFetchCall:classFetchCall}} />
-                </div>
-                {fetchData?.primary_class?.name ? 
-                <div>
-                  <div id='classFeatures'>
-                    <ClassFeatures functions={{fetchData,
-                                                setFetchData}}/>
-                  </div>
-
-                  <div id='proInfo'>
-                      <ProInfo functions={{character: character,
-                                          setCharacter: setCharacter,
-                                          fetchData:fetchData,
-                                          setFetchData:setFetchData}} />
-                  </div>
-  
-                  {fetchData.primary_class || fetchData.secondary_class ? 
-                      <div id='spellcasting'>
-                          <Spellcasting functions={{character: character,
+              {/* {div} */}
+              {fetchData?.isCreatingNewChar === 'class/race' ? 
+              
+                  <div>
+                    <div id='race_class'>
+                        <div id='race'>
+                          <Race functions={{setFetchData:setFetchData,
+                                          raceFetch: raceFetch,
+                                          fetchData:fetchData}} />
+                        </div>
+                        <div>
+                          <div id='class'>
+                            <Class functions={{fetchData:fetchData,
+                                            setFetchData:setFetchData,
+                                            classFetchCall:classFetchCall}} />
+                          
+                          
+                          <div id='classFeatures' style={{display:fetchData?.primary_class?.name ? '' : 'none'}}>
+                            <ClassFeatures functions={{fetchData,
+                                                        setFetchData}}/>
+                          </div>
+        
+                          <div id='proInfo' style={{display:fetchData?.primary_class?.name ? '' : 'none'}}>
+                              <ProInfo functions={{character: character,
                                                   setCharacter: setCharacter,
                                                   fetchData:fetchData,
                                                   setFetchData:setFetchData}} />
-                      </div>
-                  :''} 
-
-
-                  <div id='equip'>
-                      <Equip functions={{character: character,
-                                      setCharacter: setCharacter,
-                                      fetchData:fetchData,
-                                      setFetchData:setFetchData}} />
-                  </div>
+                          </div>
+                          </div>
+                          
+                        </div>
+                        
+                    </div>
+                  <button onClick={(e) => {handleNewChar(e, 'spellcasting')}}>Next</button>
                 </div>
-                :''}
-                
-                <div id='statsAndSuch'>
-                  <div id='stats'>
-                      <Stats functions={{setCharacter: setCharacter,
+
+              : fetchData?.isCreatingNewChar === 'spellcasting' ?
+
+
+                <div>
+                    <div id='spellcasting'>
+                      <Spellcasting functions={{character: character,
+                                              setCharacter: setCharacter,
+                                              fetchData:fetchData,
+                                              setFetchData:setFetchData}} />
+                    </div>
+                  <button onClick={(e) => {handleNewChar(e, 'equip')}}>Next</button>
+                </div>
+            : fetchData?.isCreatingNewChar === 'equip' ?
+            <div id='equip'>
+              <Equip functions={{character: character,
+                                setCharacter: setCharacter,
+                                fetchData:fetchData,
+                                setFetchData:setFetchData}} />
+              <button onClick={(e) => {handleNewChar(e, 'stats')}}>Next</button>
+            </div>
+            : fetchData?.isCreatingNewChar === 'stats' ? 
+
+
+            <div id='statsAndSuch'>
+              <div id='stats'>
+                  <Stats functions={{setCharacter: setCharacter,
+                                  character:character,
+                                  fetchData:fetchData,
+                                  setFetchData:setFetchData}} />
+              </div>
+
+              <div id='savingThrows'>
+                  <SavingThrows functions= {{fetchData:fetchData,
+                                              character: character
+                  }}/>
+              </div>
+
+              <div id='combat'>
+                  <Combat functions={{setCharacter: setCharacter,
                                       character:character,
                                       fetchData:fetchData,
                                       setFetchData:setFetchData}} />
-                  </div>
+              </div>
 
-                  <div id='savingThrows'>
-                      <SavingThrows functions= {{fetchData:fetchData,
-                                                  character: character
-                      }}/>
-                  </div>
-
-                  <div id='combat'>
-                      <Combat functions={{setCharacter: setCharacter,
-                                          character:character,
-                                          fetchData:fetchData,
-                                          setFetchData:setFetchData}} />
-                  </div>
-
-                  <div id='skills'>
-                      <Skills functions={{character:character,
-                                          setCharacter: setCharacter,
-                                          fetchData:fetchData,
-                                          setFetchData:setFetchData}}/>
-                  </div>
-                </div>
-                
-                
+              <div id='skills'>
+                  <Skills functions={{character:character,
+                                      setCharacter: setCharacter,
+                                      fetchData:fetchData,
+                                      setFetchData:setFetchData}}/>
+                <button onClick={(e) => {handleNewChar(e, 'name')}}>Finish and Name</button>
+              </div>
+            
+            </div>
+          : fetchData?.isCreatingNewChar === 'name' ?
+            <div id='name'>
+              <p>
+              </p>
+              <label htmlFor='name'>Name</label>
+              <input
+                type='text'
+                name='name'
+                onChange={handleName}/>
+              <p>
+                <button onClick={handleSubmit}>Finish Character</button>
+              </p>
+            </div>
+          :''}
                 <p>
                     {/* <input type='submit' onClick/> */}
                     <button onClick={logs}>fetchData</button>
