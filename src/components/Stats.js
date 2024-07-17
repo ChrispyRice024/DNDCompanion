@@ -46,8 +46,7 @@ export default function Stats({functions}) {
                 statBonus = bonus?.bonus
             }
         })
-        console.log(statBonus)
-        return(parseInt(statBonus))
+
     }
 
     const handleChange = (e) => {

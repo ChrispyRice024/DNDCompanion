@@ -84,19 +84,24 @@ export default function Class ({functions}) {
         setOptionDiv(
             <div>
                 <div>
-                    <label htmlFor='primaryClass'>Primary Class</label>
+                    <p>
+                        <h2>Primary Class</h2>
+                    </p>
                     {/* <input name='primaryClass' list='primaryClassList' onChange={verifyInput} autoComplete='on' id='primaryClass' className='class' placeholder='Class' /> */}
-                    <select name='primaryClass' onChange={verifyInput} id='primaryClassList' defaultValue=''>
-                        <option value='' disabled>Select A Class</option>
-                        {fetchData?.class_list?.results?.map((item, i) => (
-                            <option
-                            key={i}
-                            data-url={item.url}
-                            value={item.name}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </select>
+                    <p>
+                        <select name='primaryClass' onChange={verifyInput} id='primaryClassList' defaultValue=''>
+                            <option value='' disabled>Select A Class</option>
+                            {fetchData?.class_list?.results?.map((item, i) => (
+                                <option
+                                key={i}
+                                data-url={item.url}
+                                value={item.name}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
+                    </p>
+                    
                 </div>
             </div>
         )

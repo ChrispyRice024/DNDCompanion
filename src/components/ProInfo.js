@@ -14,6 +14,8 @@ export default function ProInfo ({functions}) {
     const [isHovering, setIsHovering] = useState(false)
 	const [hoveredKey, setHoveredKey] = useState(null)
 
+    const isHidden = fetchData?.primary_class?.name ? '' : 'none'
+
     const handleMouseOver = (e, key) => {
 		setIsHovering(true)
 		setHoveredKey(key)
@@ -31,7 +33,7 @@ export default function ProInfo ({functions}) {
             const primaryChoices = fetchData?.primary_class?.proficiencies?.proficiency_choices 
 
                 setPrimaryProChoiceDiv(
-                    <div className='proficiency_choice'>
+                    <div className='proficiency_choice'  >
                         {primaryChoices?.map((choice, i) => {
                             return(
                                 <div className='primary_pro' key={i}>
@@ -99,10 +101,11 @@ export default function ProInfo ({functions}) {
                                                 </p>    
                                                 </div>
                                             )
-                                        }else if(option.option_type === 'choice'){
+                                        }
+                                        if(option.option_type === 'choice'){
                                             console.log('choiceOption', option)
                                             return(
-                                                <div>
+                                                <div id='classChoice2'>
                                                     {option?.choice?.from?.options?.map((item, k) => {
                                                         console.log(item)
 
@@ -120,18 +123,20 @@ export default function ProInfo ({functions}) {
                                                         }
                                                         
                                                         return(
-                                                            <p key={k}>
-                                                                <input
-                                                                    type='radio'
-                                                                    value={item?.item?.name}
-                                                                    // checked={isChecked}
-                                                                    name={`pro_${i}`}
-                                                                    onChange={(e) => {handleRadio(e.target.checked)}}
-                                                                    // disabled={isChecked && choice.choose === 1 ? false : isDisabled}
-                                                                    data-url={item?.item?.url}
-                                                                    />
-                                                                <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${k}`)}} onMouseOut={handleMouseOut} htmlFor={item?.item?.index}>{item?.item?.name}</label>
-                                                            </p>
+                                                            <div className='classChoices'>
+                                                                <p key={k}>
+                                                                    <input
+                                                                        type='radio'
+                                                                        value={item?.item?.name}
+                                                                        // checked={isChecked}
+                                                                        name={`pro_${i}`}
+                                                                        onChange={(e) => {handleRadio(e.target.checked)}}
+                                                                        // disabled={isChecked && choice.choose === 1 ? false : isDisabled}
+                                                                        data-url={item?.item?.url}
+                                                                        />
+                                                                    <label onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}${k}`)}} onMouseOut={handleMouseOut} htmlFor={item?.item?.index}>{item?.item?.name}</label>
+                                                                </p>
+                                                            </div>
                                                         )
                                                     })} 
                                                 </div>
@@ -162,9 +167,8 @@ export default function ProInfo ({functions}) {
                         
 
                         {primary.map((element, i) => (
-                            
 
-                            <div key={`sec_pro_${i}`}>
+                            <div className='single_proficiency' key={`sec_pro_${i}`}>
                                 <p onMouseOver={(e) => {handleMouseOver(e, `primary_pro_${i}`)}} onMouseOut={handleMouseOut} key={i} className='classProficiencies' >
                                     {element.name}
                                 </p>
@@ -184,7 +188,7 @@ export default function ProInfo ({functions}) {
 
 //final return statement
     return (
-        <div id='classInfo'>
+        <div id='classInfo' style={{display:isHidden}}>
             
                 {primaryProDiv}
                 {primaryProChoiceDiv}

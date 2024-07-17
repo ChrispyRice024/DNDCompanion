@@ -99,10 +99,10 @@ export default function Spellcating ({functions}) {
                 {console.log(fetchData?.primary_class?.spellcasting?.info)}
                 {fetchData?.primary_class?.spellcasting?.info?.map((item, i) => {
                     return(
-                        <div id='spell_info_item' key={i}>
-                            <p>
+                        <div className='spell_info_item' key={i}>
+                            <div className='spell_title'>
                                 <strong>{item.name}</strong>
-                            </p>
+                            </div>
                             <p>
                                 {item.desc}
                             </p>
@@ -110,13 +110,13 @@ export default function Spellcating ({functions}) {
                     )
                 })}
             </div>
-            <div id='spell_info'>
+            <div className='spell_info'>
                 {fetchData?.primary_class?.features?.map((feature, i) => {
                     return(
-                        <div key={i} id='spell_info_item'>  
-                        <p>
+                        <div key={i} className='spell_info_item'>  
+                        <div className='spell_title'>
                             <strong>{feature.name}</strong>
-                        </p>
+                        </div>
                         {feature?.desc?.map((desc, i) => 
                             <p>
                                 {desc}
@@ -147,7 +147,7 @@ export default function Spellcating ({functions}) {
                 <div id='cantrip_section'>
                     {/* CANTRIPS */}
                     <h3>Cantrips</h3>
-                    {fetchData?.primary_class?.spells?.level_0_spells?.map((spell, i) => {
+                    {fetchData?.primary_class?.spells?.level_0_spells?.length > 0 ?? fetchData?.primary_class?.spells?.level_0_spells?.map((spell, i) => {
 
                         const maxCantrips = fetchData?.primary_class?.level_data[0]?.spellcasting?.cantrips_known
                         const chosenSpell = (fetchData?.primary_class?.chosen_spells?.spell_0)
@@ -155,6 +155,7 @@ export default function Spellcating ({functions}) {
                         const isChecked = chosenSpell?.some(obj => obj.index === spell.index)
                         const isDisabled = chosenSpell?.length >= maxCantrips && !isChecked
 
+                        
                         return(
                             <div id='cantrips' key={i}>
                                 <p>
