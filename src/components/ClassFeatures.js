@@ -12,17 +12,19 @@
 
         return(
             <div id='feature_parent' style={{display:isHidden}} >
-                <div id='feature'>
+                <div>
                     {features?.map((feature, i) => {
                         return(
-                            <span key={i}>
-                                <strong>{feature?.name}</strong>
+                            <div className='feature' key={i}>
+                                <p className='feature_title'>
+                                    <strong>{feature?.name}</strong>
+                                </p>
                                 {feature?.desc?.map((desc, j) => (
                                     <p key={j}>
                                         {desc}
                                     </p>
                                 ))}
-                            </span>
+                            </div>
                         )
                     })}
                 </div>

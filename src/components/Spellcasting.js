@@ -77,6 +77,7 @@ export default function Spellcating ({functions}) {
             
             
         }else if (!beenChecked){
+            console.log(e.target.name)
             setFetchData((prevData) => ({
                 ...prevData,
                 primary_class:{
@@ -146,19 +147,24 @@ export default function Spellcating ({functions}) {
             <div id='spell_sections'>
                 <div id='cantrip_section'>
                     {/* CANTRIPS */}
-                    <h3>Cantrips</h3>
-                    {fetchData?.primary_class?.spells?.level_0_spells?.length > 0 ?? fetchData?.primary_class?.spells?.level_0_spells?.map((spell, i) => {
+                    {fetchData?.primary_class?.spells?.level_0_spells?.length > 0 ?
+                        <div>
+                            <h3>Cantrips</h3>
+                        </div>
+                    :''}
+                    
+                    {fetchData?.primary_class?.spells?.level_0_spells?.length > 0 ? fetchData?.primary_class?.spells?.level_0_spells?.map((spell, i) => {
 
                         const maxCantrips = fetchData?.primary_class?.level_data[0]?.spellcasting?.cantrips_known
                         const chosenSpell = (fetchData?.primary_class?.chosen_spells?.spell_0)
 
                         const isChecked = chosenSpell?.some(obj => obj.index === spell.index)
                         const isDisabled = chosenSpell?.length >= maxCantrips && !isChecked
-
+console.log('has cantrips', spell)
                         
                         return(
                             <div id='cantrips' key={i}>
-                                <p>
+                                <p className='spell'>
                                     <input
                                         type='checkbox'
                                         name={spell.index}
@@ -180,69 +186,26 @@ export default function Spellcating ({functions}) {
                             </div>
                             
                         )
-                    })}
+                    }) :''}
                 </div>
                 <div id='level_1_spells_section'>
                     <h3>Level 1</h3>
                     {fetchData?.primary_class?.spells?.level_1_spells?.map((spell, i) => {
 
-                        // const maxSpells = fetchData.primary_class.level_data[0].spellcasting.spells_known
                         const chosenSpell = (fetchData?.primary_class?.chosen_spells?.spell_1)
                         console.log(chosenSpell)
-                        // console.log(maxSpells)
                         
                         const isChecked = chosenSpell?.some(obj => obj.index === spell.index)
                         const isDisabled = chosenSpell?.length >= determineMaxSpells(fetchData?.primary_class?.name) && !isChecked
-                        
-                        // const handleCheck = (e) => {
-                        //     const beenChecked = e.target.checked
-
-                        //     if(beenChecked){
-                            
-                        //         setFetchData(prevData => ({
-                        //             ...prevData,
-                        //             primary_class: {
-                        //                 ...prevData.primary_class,
-                        //                 chosen_spells:[
-                        //                         ...(prevData.primary_class.chosen_spells || []),
-                        //                     {
-                        //                         url:e.target.getAttribute('data-url'),
-                        //                         index:e.target.name
-                        //                     }    
-                        //                 ]
-                        //             }
-                        //         }))
-                                
-                        //     }else if (!beenChecked){
-
-                        //         setFetchData((prevData) => ({
-                        //             ...prevData,
-                        //             primary_class:{
-                        //                 ...prevData.primary_class,
-                        //                 chosen_spells:[
-                        //                     ...prevData.primary_class.chosen_spells.filter((x) => x.index !== e.target.index)
-                        //                 ]
-                        //             }
-                        //         }))
-                        //     }
-                            
-                        // }
 
                         return(
                             <div id='spells' key={i}>
                                 {fetchData?.primary_class?.name === 'Paladin' ?
-                                    <p>
+                                    <p className='spell'>
                                         <label onMouseOver={(e) => {handleMouseOver(e, `primary_spell_${i}`)}} onMouseOut={handleMouseOut} htmlFor={spell.index}>{spell.name}</label>
-                                        {isHovering && hoveredKey === `primary_spell_${i}` ?
-                                            <InfoCard
-                                                functions={{
-                                                    hoveredKey: hoveredKey,
-                                                    url: spell.url,
-                                        }}/>
-                                        : ''}
                                     </p>
                                 :
-                                <p>
+                                <p className='spell'>
                                     <input
                                         type='checkbox'
                                         name={spell.index}
@@ -251,7 +214,7 @@ export default function Spellcating ({functions}) {
                                         disabled={isChecked ? false : isDisabled}
                                         data-url={spell.url}
                                         />
-                                    <label onMouseOver={(e) => {handleMouseOver(e, `primary_spell_${i}`)}} onMouseOut={handleMouseOut} htmlFor={spell.index}>{spell.name}</label>
+                                    <label onMouseOver={(e) => {handleMouseOver(e, `primary_spell_${i}`); console.log(e.target)}} onMouseOut={handleMouseOut} htmlFor={spell.index}>{spell.name}</label>
                                 </p>} 
                                 {isHovering && hoveredKey === `primary_spell_${i}` ?
                                     <InfoCard
@@ -271,3 +234,4 @@ export default function Spellcating ({functions}) {
         </div>
     )
 }
+

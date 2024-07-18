@@ -110,14 +110,15 @@ export default function Equip({ functions }) {
 
                   return (
                     <div key={`2_${i}`} className='equip_options'>
-                      <p>
+                      
+                      <h4 className='equip_title'>
                         Choose 1
-                      </p>
+                      </h4>
                       {option.from.options.map((choice, j) => {
                         if(choice.option_type === 'counted_reference'){
                           return(
-                            
-                            <p key={`j_${i}_${j}`}>
+                            <div className='equip_option_parent'>
+                            <p className='equip_option' key={`j_${i}_${j}`}>
                               <input
                                   type='radio'
                                   name={i}
@@ -138,10 +139,12 @@ export default function Equip({ functions }) {
                                     }}/>
                                 : ''}
                             </p>
+                            </div>
                           )
                         }else if(choice.option_type === 'multiple'){
                           return(
-                            <p key={`j_${i}_${j}`}>
+                            <div className='equip_option_parent'>
+                            <p className='equip_option' key={`j_${i}_${j}`}>
                               <input
                                     type='radio'
                                     name={i}
@@ -150,7 +153,7 @@ export default function Equip({ functions }) {
 
                               {choice.items.map((item, k) => (
                                 <span key={`k_${k}`}>
-                                  
+                                  {console.log('multiple', item)}
                                   <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_multiple_${i}`)}} onMouseOut={handleMouseOut} htmlFor={i}>{item?.count} {item?.of?.name}{item?.count > 1 ? 's': ''} {k !== choice.items.length - 1 ? ' and ' :''}</label>
                                   
                                 </span>
@@ -170,6 +173,7 @@ export default function Equip({ functions }) {
                                       }}/>
                                   : ''}
                             </p>
+                            </div>
                           )
                         }else if(choice.option_type === 'choice'){
                           if(!choiceData[`choice${i}_${j}`]){
@@ -178,7 +182,8 @@ export default function Equip({ functions }) {
                           return(
                             <>
                               {choiceData[`choice${i}_${j}`]?.equipment?.map((item, k) => (
-                                <p key={`i_j_${i}_${j}_${k}`}>
+                                <div className='equip_option_parent'>
+                                <p className='equip_option' key={`i_j_${i}_${j}_${k}`}>
                                   <input
                                     type='radio'
                                     name={i}
@@ -200,6 +205,7 @@ export default function Equip({ functions }) {
                                         }}/>
                                   : ''}
                                 </p>
+                                </div>
                               ))}
                             </>
                           )
@@ -223,10 +229,14 @@ export default function Equip({ functions }) {
                   }
                   console.log('choiceData', choiceData)
                   return(
-                    <>
+                    <div className='equip_options'>
+                      <h4 className='equip_title'>
+                        Choose 1
+                      </h4>
                     
                     {choiceData?.[`choice${i}`]?.equipment.map((choice, j) => (
-                      <p>
+                      <div className='equip_option_parent'>
+                      <p className='equip_option'>
                         <input
                           type='radio'
                           name={i}
@@ -241,8 +251,9 @@ export default function Equip({ functions }) {
                               }}/>
                         : ''}
                       </p>
+                      </div>
                     ))}
-                    </>
+                    </div>
                   )
                 }
               })}

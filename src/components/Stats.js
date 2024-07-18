@@ -46,6 +46,7 @@ export default function Stats({functions}) {
                 statBonus = bonus?.bonus
             }
         })
+        return statBonus
 
     }
 
@@ -114,38 +115,6 @@ export default function Stats({functions}) {
             }))
         }
 
-        // fetchData?.race?.ability_bonuses?.forEach((obj) => {
-        //     if(obj.ability_score.index === e.target.name){
-        //         console.log(e.target.name, 'has racial bonus')
-        //         setFetchData(prevData => ({
-        //             ...prevData,
-        //             stats: {
-        //                 ...prevData.stats,
-        //                 [e.target.name]: statValue
-        //             },
-        //             mods:{
-        //                 ...prevData.mods,
-        //                 [`${e.target.name}`]:Math.floor(((statValue + obj.bonus) - 10) / 2)
-        //             }
-        //         }))
-        //     }else{
-        //         console.log(e.target.name, 'no racial bonus')
-        //         setFetchData(prevData => ({
-        //             ...prevData,
-        //             stats: {
-        //                 ...prevData.stats,
-        //                 [e.target.name]: statValue
-        //             },
-        //             mods: {
-        //                 ...prevData.mods,
-        //                 [`${e.target.name}`]: parseInt((statValue - 10) / 2)
-        //             },
-        //         }))
-        //     }
-        // })
-
-        
-
     };
 
     return(
@@ -172,7 +141,7 @@ export default function Stats({functions}) {
                 </p>
                 <p>
                 {/* RACIAL MOD */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span><strong>STR Bonus From {fetchData?.race?.name}: </strong> {decideBonus('str')} | </span> :''}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'str') ? <span><strong>STR Bonus From {fetchData?.race?.name}: </strong> {decideBonus('str')} </span> :''}
 
                     {/* PREREQUISITES */}
                 <span>
@@ -210,7 +179,7 @@ export default function Stats({functions}) {
                 </p>
                 <p>
                 {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span><strong>DEX Bonus From {fetchData?.race?.name}: </strong> {decideBonus('dex')} | </span> :''}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'dex') ? <span><strong>DEX Bonus From {fetchData?.race?.name}: </strong> {decideBonus('dex')}</span> :''}
 
                         {/* PREREQUISITES */}
                 <span>
@@ -286,7 +255,7 @@ export default function Stats({functions}) {
             </p>
             <p>
                 {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span><strong>INT Bonus From {fetchData?.race?.name}: </strong> {decideBonus('int')} | </span> :''}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'int') ? <span><strong>INT Bonus From {fetchData?.race?.name}: </strong> {decideBonus('int')}</span> :''}
 
                         {/* PREREQUISITES */}
                 <span>
@@ -322,7 +291,7 @@ export default function Stats({functions}) {
                     {/* CASTING MOD */}
                 {castingMod === 'WIS' ? ' | Casting Mod Is Wis' : ''}
                 {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span><strong>WIS Bonus From {fetchData?.race?.name}: </strong> {decideBonus('wis')} | </span> :''}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'wis') ? <span><strong>WIS Bonus From {fetchData?.race?.name}: </strong> {decideBonus('wis')}</span> :''}
                 </p>
                 <p>
                     {/* PREREQUISITES */}
@@ -361,7 +330,7 @@ export default function Stats({functions}) {
                 </p>
                 <p>
                 {/* RACIAL BONUS */}
-                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span><strong>CHA Bonus From {fetchData?.race?.name}: </strong> {decideBonus('cha')} | </span> :''}
+                {fetchData?.race?.name && fetchData?.race?.ability_bonuses.some(obj => obj.ability_score?.index === 'cha') ? <span><strong>CHA Bonus From {fetchData?.race?.name}: </strong> {decideBonus('cha')}</span> :''}
 
                     {/* PREREQUISITES */}
                 <span>

@@ -16,6 +16,9 @@ body{
     justify-content:center;
     position:relative;
 }
+#nav_bar{
+    color:white;
+}
 
 /* MISC */
 #name,
@@ -43,6 +46,7 @@ body{
     box-shadow:5px 5px #AAAAAA;
     margin:10px;
     position:relative;
+    perspective:200px;
 }
 .infoCard{
     position:absolute;
@@ -52,17 +56,16 @@ body{
     border-color:#FFD700;
     background-color:#1E1E1E;
     color:white;
-    transform: translate(50%, -100%);
+    transform: translate(100%, -100%);
     z-index:99;
+    padding:15px;
 }
-
 /* RACE/CLASS */
 #raceSet,
 #primaryClassList{
     width:150px;
     color:black;
 }
-
 #race_class{
     display:flex;
     width:95%;
@@ -179,9 +182,28 @@ body{
     /* overflow:auto; */
     box-shadow:none;
     border-style:dashed;
+    outline:solid;
+    outline-offset:2px;
+    margin-bottom:20px;
 }
-.features p{
-    padding:15px;
+/* #classFeatures p{
+    border-style:solid;
+} */
+.feature{
+    /* padding:15px; */
+    border-style:inset;
+    border-radius:15px;
+    margin:10px;
+    background-color:#0092FF;
+}
+.feature_title{
+    background-color:#0028ff;
+    margin:0px;
+    padding:8px;
+    border-radius:15px;
+}
+.feature strong{
+
 }
 #skillsInner{
     display:flex;
@@ -285,10 +307,16 @@ body{
     /* align-items:stretch; */
     box-shadow:none;
     border-style:dashed;
+    outline:solid;
+    margin-top:10px;
+    outline-offset:2px;
 }
 #classChoice2{
     flex:1 1 100%;
     box-sizing:border-box;
+    display:flex;
+    flex-wrap:wrap;
+    width:50%;
 }
 #class > div{
     width:95%;
@@ -372,4 +400,109 @@ body{
     background-color:#0028ff;
     border-radius:15px;
     padding:10px;
+}
+#spell_slots{
+    background-color:#0028ff;
+    padding:10px;
+    margin:5px;
+    border-radius:15px;
+    border-style:inset;
+}
+#level_1_spells_section{
+    background-color:#0092FF;
+    border-radius:15px;
+    border-style:inset;
+    margin:10px;
+}
+#level_1_spells_section h3{
+    background-color:#0028ff;
+    padding:10px;
+    border-radius:15px;
+    margin:0px;
+}
+#cantrip_section{
+    background-color:#0092FF;
+    border-radius:15px;
+    border-style:inset;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    margin:10px;
+}
+#cantrip_section h3{
+    background-color:#0028ff;
+    padding:10px;
+    border-radius:15px;
+    margin:0px;
+}
+.spell{
+    background-color:#159e00;
+    /* margin-top:0px; */
+    margin:5px;
+    padding:10px;
+    border-radius:15px;
+    border-style:groove;
+    width:50%;
+}
+#spell_sections{
+    justify-content:center;
+}
+#cantrips{
+    display:flex;
+    justify-content:center;
+}
+#spells{
+    display:flex;
+    justify-content:center;
+}
+
+/* EQUIP */
+.equip_options{
+    background-color:#0092FF;
+    border-radius:15px;
+    border-style:inset;
+    margin:10px;
+    display:flex;
+    justify-content:center;
+    flex-direction:column;
+}
+.equip_title{
+    background-color:#0028ff;
+    padding:10px;
+    border-radius:15px;
+    margin:0px;
+    color:#FFD700;
+}
+.equip_option{
+    background-color:#159e00;
+    /* margin-top:0px; */
+    margin:5px;
+    padding:10px;
+    border-radius:15px;
+    border-style:groove;
+    width:50%;
+}
+.equip_option_parent{
+    justify-content:center;
+    display:flex;
+    /* width:200px; */
+    /* flex-direction:column; */
+}
+
+/* CHARACTER LIST */
+.stats_grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:10px;
+    border-style:inset;
+    width:30%;
+}
+.stat{
+    padding:5px;
+}
+.char_footnote{
+    width:550px;
+    color:white;
+    background-color:#2E2E2E;
+    border-style:solid
 }

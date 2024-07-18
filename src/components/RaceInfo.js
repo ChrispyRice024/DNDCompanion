@@ -136,12 +136,15 @@ export default function RaceInfo({ functions }) {
 							</p>
 							{/* <span> */}
 								{racialInfo?.starting_proficiency_options?.from?.options?.map(
-								(option, i) => (
+								(option, i) => {
+									const isChecked = fetchData?.race?.chosen_pro === option.item ? true : false
+									return(
 									<div id='raceOptionsList' key={i}>
 										<p className='raceOption'>
 											<input
 												type="radio"
 												name={racialInfo.name}
+												checked={isChecked}
 												onChange={(e) => {handleCheck(e, option)}}
 											/>
 											<label
@@ -175,7 +178,7 @@ export default function RaceInfo({ functions }) {
 											''
 										)}
 									</div>
-								)
+								)}
 							)}
 							{/* </span> */}
 						</div>
