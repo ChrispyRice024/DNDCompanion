@@ -16,7 +16,7 @@
       "nw": "^0.86.0"
     },
     "scripts": {
-      "start": "react-app-rewired start",
+      "start": "nw-react-scripts start",
       "build": "nw-react-scripts build",
       "test": "nw-react-scripts test",
       "eject": "nw-react-scripts eject"

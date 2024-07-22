@@ -10,6 +10,13 @@ export default function Stats({functions}) {
     const castingMod = fetchData?.primary_class?.spellcasting?.spellcasting_ability?.name
 
     useEffect(() => {
+        setFetchData(prevData => ({
+            ...prevData,
+            hp: parseInt(fetchData.mods.con + fetchData?.primary_class?.hit_die)
+        }))
+    }, [fetchData?.mods, fetchData?.primary_class])
+    
+    useEffect(() => {
         console.log(fetchData)
         
         for(const [stat, value] of Object.entries(fetchData?.stats)){

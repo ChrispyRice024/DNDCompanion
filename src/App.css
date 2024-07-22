@@ -490,11 +490,17 @@ body{
 }
 
 /* CHARACTER LIST */
+#char_list{
+    flex-direction:right;
+    flex-wrap:wrap;
+}
 .stats_grid{
     display:grid;
     grid-template-columns: repeat(2, 1fr);
     gap:10px;
+    background-color:#1E1E1E;
     border-style:inset;
+    border-radius:15px;
     width:30%;
 }
 .stat{
@@ -504,5 +510,111 @@ body{
     width:550px;
     color:white;
     background-color:#2E2E2E;
-    border-style:solid
+    border-style:outset;
+    
+    margin:15px;
+    
+    justify-content:space-between;
+    border-radius:15px;
+}
+.combat{
+    text-align:right;
+    border-style:inset;
+    background-color:#1E1E1E;
+    width:30%;
+    padding-right:10px;
+    border-radius:15px;
+}
+.combat > *{
+    /* border-style:inset; */
+    padding:5px;
+}
+.ac{
+    /* width:50px; */
+    /* border-style:solid; */
+}
+#char_list{
+    display:flex;
+    justify-content:space-around;
+}
+.name{
+    
+}
+.skills{
+    text-align:left;
+    padding:15px;
+    border:inset;
+    border-left:none;
+    background-color:#1E1E1E;
+    width:155px;
+    border-radius:15px;
+}
+.pro{
+    
+}
+.traits{
+
+}
+.traits_pro{
+    display:flex;
+    justify-content:space-around;
+    margin:10px;
+}
+.hit_die{
+    padding:5px;
+    padding-right:0px;;
+}
+.hp{
+    padding-top:5px;
+}
+.stats_combat{
+    display:flex;
+    justify-content:space-around;
+}
+.identity{
+    display:flex;
+    justify-content:space-around;
+}
+.identity *{
+    padding:5px;
+}
+.char_img{
+    border:inset;
+    width:60%;
+    margin-left:15px;
+    border-radius:15px;
+}
+.skills_img{
+    display:flex;
+    margin-bottom:10px;
+}
+/* SINGLE CHARACTER */
+#single_char{
+    border:inset;
+    border-radius:15px;
+    margin:40px 80px;
+    color:white;
+    background-color:#2E2E2E;
+}
+/* #single_char{
+    background-color:#1E1E1E;
+} */
+#char_sheet{
+    width:35%;
+    margin:5%;
+    margin-top:15px;
+    border:dashed;
+    border-radius:15px;
+}
+.skills_sheet{
+    background-color:#1E1E1E;
+    text-align:left;
+    padding:15px;
+    border:inset;
+    width:155px;
+    border-radius:15px;
+    margin-left:50px;
+}
+.skills_img > .char_img{
+    margin-right:10px;
 }

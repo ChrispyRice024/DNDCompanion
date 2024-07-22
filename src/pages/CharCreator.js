@@ -14,6 +14,7 @@ import Equip from '../components/Equip'
 import InfoCard from '../components/InfoCard'
 import ClassFeatures from '../components/ClassFeatures'
 const fs = require("fs");
+const path = require('path')
 
 export default function CharCreator () {
 
@@ -300,9 +301,68 @@ export default function CharCreator () {
     
   }
 
+  // nw.App.on('file-upload', (fileData, fileName) => {
+
+  //   const base64Data = fileData.replace(/^data:image\/jpeg;base64,/, '')
+  //   const savePath = path.join('./char_img', fileName)
+  // })
+
+  const handleImage = (e) => {
+    e.preventDefault()
+
+    // fs.readFile(e.target.value, (err, data) => {
+    //   if(err){
+    //     console.error(err)
+    //     return
+    //   }
+
+    //   const reader = new FileReader()
+
+    //   const base64Img = data.toString('base64')
+    //   console.log('base64Img', base64Img)
+    //   setFetchData(prevData => ({
+    //     ...prevData,
+    //     char_img:base64Img
+    //   }))
+    // })
+
+    
+  }
+
+  const fetchEquip = async () => {
+    let equip = fetchData?.primary_class?.equip.starting_equip.map((item, i) => {
+      return `https://www.dnd5eapi.co${item.equipment.url}`
+    })
+    console.log(equip)
+    try{
+      const urls = await equip.map((url, i) => {
+        return fetch(url)
+      })
+      const res = await Promise.all(urls)
+      console.log('res', res)
+      
+      const jsonPromises = await res.map((res, i) => {
+        return res.json()
+      })
+
+      const data = await Promise.all(jsonPromises)
+      console.log('data', data)
+      setFetchData(prevData => ({
+        ...prevData,
+        equip:[
+          ...fetchData.chosen_equip,
+          ...data
+        ]
+      }))
+    }catch(err){
+      console.error(err)
+    }
+  }
+
   const handleSubmit = (e) => {
       e.preventDefault()
 
+      fetchEquip()
         fs.readFile('./save.json', 'utf8', (err, data) => {
 
           if(err){
@@ -378,7 +438,7 @@ export default function CharCreator () {
                         
                     </div>
                   <button onCLick={(e) => {handleNewChar(e, '')}}>Cancel</button>
-                  <button onClick={(e) => {handleNewChar(e, 'stats')}}>Next</button>
+                  <button onClick={(e) => {handleNewChar(e, 'equip')}}>Equipment</button>
                 </div>
 
 
@@ -407,8 +467,11 @@ export default function CharCreator () {
                   </div>
               
                 </div>
-                <button onClick={(e) => {handleNewChar(e, 'class/race')}}>Class/Race</button>
-                <button onClick={(e) => {handleNewChar(e, 'spellcasting')}}>Next</button>
+                <button onClick={(e) => {handleNewChar(e, 'equip')}}>Class/Race</button>
+                {fetchData?.primary_class?.spellcasting ? 
+                  <button onClick={(e) => {handleNewChar(e, 'spellcasting')}}>Spellcasting</button> :
+                  <button onClick={(e) => {handleNewChar(e, 'name')}}>Finish and Name</button>}
+                
               </div>
               : fetchData?.isCreatingNewChar === 'spellcasting' ?
 
@@ -419,7 +482,7 @@ export default function CharCreator () {
                                               setFetchData:setFetchData}} />
                     </div>
                   <button onCLick={(e) => {handleNewChar(e, 'stats')}}>Stats</button>
-                  <button onClick={(e) => {handleNewChar(e, 'equip')}}>Next</button>
+                  <button onClick={(e) => {handleNewChar(e, 'name')}}>Finish and Name</button>
                 </div>
 
 
@@ -430,8 +493,8 @@ export default function CharCreator () {
                 <Equip functions={{fetchData:fetchData,
                                   setFetchData:setFetchData}} />
               </div>
-              <button onCLick={(e) => {handleNewChar(e, 'spellcasting')}}>Spellcasting</button>
-              <button onClick={(e) => {handleNewChar(e, 'name')}}>Next</button>
+              <button onCLick={(e) => {handleNewChar(e, 'race/class')}}>Race/Class</button>
+              <button onClick={(e) => {handleNewChar(e, 'stats')}}>Stats</button>
             </div>
 
           : fetchData?.isCreatingNewChar === 'name' ?
@@ -445,6 +508,9 @@ export default function CharCreator () {
                 type='text'
                 name='name'
                 onChange={handleName}/>
+              <p>
+                <input type='file' accept='.jpeg, .jpg, .png, .psd, .raw, .svg' onChange={(e) => {handleImage(e)}}/>
+              </p>
               <p>
                 <button onCLick={(e) => {handleNewChar(e, 'equip')}}>Equip</button>
                 <button onClick={handleSubmit}>Finish Character</button>

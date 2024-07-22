@@ -46,8 +46,8 @@ export default function ProInfo ({functions}) {
                                         // {console.log('option', option)}
                                         const chosenPro = (fetchData?.primary_class?.[`chosen_pro_${i}`])
                                         const max = choice?.choose
-                               
-                                        const isChecked = chosenPro?.some(obj => obj?.name === option?.item?.name)
+                                        console.log('chosenPro', chosenPro)
+                                        // const isChecked = chosenPro ? chosenPro?.some(obj => obj?.name === option?.item?.name) : false
                                         const isDisabled = chosenPro?.length >= max && !chosenPro?.some(obj => obj?.name === option?.item?.name)
                           
                                         const handleCheck = (e) => {
@@ -94,7 +94,7 @@ export default function ProInfo ({functions}) {
                                                         // checked={isChecked}
                                                         name={option?.item?.index}
                                                         onChange={handleCheck}
-                                                        checked={isChecked}
+                                                        // checked={isChecked}
                                                         disabled={isDisabled}
                                                         data-url={option?.item?.url}
                                                         />

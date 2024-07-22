@@ -3,31 +3,18 @@ import {useState, useEffect} from 'react'
 
 export default function Combat ({functions}) {
 
-const {setCharacter, character, sendCharacter, fetchData} = functions
+const {fetchData} = functions
 
-    const [div, setDiv] = useState()
 
     const [baseAc, setBaseAc] = useState(10 + parseInt(fetchData.mods.dex))
 
     useEffect(() => {
 
-        const decideAC = async () => {
+        const decideAC = async (data) => {
             if(fetchData?.chosen_equip?.length > 0){
-                const equipUrls = fetchData?.chosen_equip?.map((item, i) => {
-                    return item.url
-                })
-                console.log(equipUrls)
-                try{
-                    const fetchUrls = equipUrls.map((url, i) => fetch(`https://www.dnd5eapi.co${url}`))
-                    const res = await Promise.all(fetchUrls)
 
-                    res.forEach(res => {
-                        if(!res){
-                            throw new Error(`failed to fetch from ${res.url}`)
-                        }
-                    })
-                    const data = await Promise.all(res.map(res => res.json()))
-                    data.map((item, i) => {
+                    fetchData?.chosen_equip.map((item, i) => {
+                        console.log('item', item)
                         if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
                             console.log('light armor')
                             setBaseAc(parseInt(item.armor_class.base) + parseInt(fetchData.mods.dex))
@@ -43,38 +30,17 @@ const {setCharacter, character, sendCharacter, fetchData} = functions
                         }
                     })
                     console.log('data', data)
-                }catch(err){
-                    console.error(err)
-                }
-            }else{
+
                 console.log('goodbye')
             }
         }
         decideAC()
-    }, [fetchData.chosen_equip])
+    }, [fetchData.chosen_equip, fetchData?.stats?.dex])
     
-    const handleChange = (e) => {
-        const statValue = parseInt(e.target.value, 10)
-
-        setCharacter(prevCharacter => ({
-            ...prevCharacter,
-            combat: {
-                ...prevCharacter.combat,
-                [e.target.name]: statValue
-            }
-        }))
-    }
-
-    useEffect(() => {
-        setDiv(
-            <div>
-                
-            </div>
-        )
-    }, [fetchData])
 
     return(
         <div>
+            <button onClick={(e) => {e.preventDefault();console.log(fetchData.chosen_equip)}}>ChosenEquip</button>
             <h2>Combat</h2>
             <p>
                 {fetchData?.primary_class?.name ? <span><strong>Hit Die: </strong>1d{fetchData?.primary_class?.hit_die}</span> :''}

@@ -6,5 +6,7 @@
     "prettier.tabWidth": 4,
     "gitlens.mode.statusBar.enabled": false,
     "editor.hover.above": false,
-    "editor.hover.enabled": false
+    "editor.hover.enabled": false,
+    "reactSnippets.settings.prettierEnabled": false,
+    "prettier.configPath": "C:\\Users\\chris\\OneDrive\\Documents\\Repositories\\DNDCompanion\\prettier.config.js"
 }

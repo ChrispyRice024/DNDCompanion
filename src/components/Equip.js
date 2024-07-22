@@ -19,35 +19,120 @@ export default function Equip({ functions }) {
     setIsHovering(false);
   };
 
-  const handleChange = (e, choice, index) => {
+  const [baseAc, setBaseAc] = useState(10 + parseInt(fetchData.mods.dex))
+  // useEffect(() => {
+
+  //   const decideAC = async () => {
+  //       if(fetchData?.chosen_equip?.length > 0){
+  //           const equipUrls = fetchData?.chosen_equip?.map((item, i) => {
+  //               return item.url
+  //           })
+  //           console.log(equipUrls)
+  //           try{
+  //               const fetchUrls = equipUrls.map((url, i) => fetch(`https://www.dnd5eapi.co${url}`))
+  //               const res = await Promise.all(fetchUrls)
+
+  //               res.forEach(res => {
+  //                   if(!res){
+  //                       throw new Error(`failed to fetch from ${res.url}`)
+  //                   }
+  //               })
+  //               const data = await Promise.all(res.map(res => res.json()))
+  //               console.log('chosen equip data', data)
+  //               data.map((item, i) => {
+  //                   if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
+  //                       console.log('light armor')
+  //                       setBaseAc(parseInt(item.armor_class.base) + parseInt(fetchData.mods.dex))
+  //                       console.log('AC', baseAc)
+  //                   }else if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && item.armor_class.max_bonus > 0 && fetchData?.mods.dex >= 2){
+  //                       console.log('medium armor')
+  //                       setBaseAc(parseInt(item.armor_class.base) + parseInt(item.armor_class.max_bonus))
+  //                       console.log('AC', baseAc)
+  //                   }else if(item.equipment_category.name === 'Armor' && !item.armor_class.dex_bonus){
+  //                       console.log('heavy armor')
+  //                       setBaseAc(item.armor_class.base)
+  //                       console.log('AC', baseAc)
+  //                   }
+
+  //                   for(let i=0; i < fetchData?.chosen_equip?.length; i++){
+  //                     // for(let j=0; j < data.length; i++){
+  //                     //   if(data[j].index === fetchData?.chosen_equip[i]?.index){
+
+  //                     //   }
+  //                     // }
+  //                     const chosenEquip = fetchData?.chosen_equip
+
+  //                     // chosenEquip.filter
+  //                   }
+  //               })
+
+
+  //               console.log('data', data)
+  //           }catch(err){
+  //               console.error(err)
+  //           }
+  //       }else{
+  //           console.log('goodbye')
+  //       }
+  //   }
+  //   decideAC()
+  // }, [fetchData.chosen_equip])
+
+  // const [equipStorage, setEquipStorage] = useState([]) 
+  // const equipFetch = (e, choice, i) => {
+  //   console.log('choice', choice)
+  //   try{
+  //     const res = fetch(`https://dnd5eapi.co${choice?.of?.url}`)
+  //     const data = res.json()
+
+  //     console.log(data)
+  //     // if(fetchData) 
+  //   }catch(err){
+  //     console.error(err)
+  //   }
+  // }
+
+  const handleChange = async (e, choice, option, i) => {
     console.log('choice', choice)
-    const choiceIndex = {
-      ...choice.of || choice,
-      index:index
+    console.log('option', option)
+
+    // if(option.from.option_set_type === 'options_array' && option.from)
+    try{
+      const res = await fetch(`https://dnd5eapi.co${choice?.of?.url}`)
+      console.log('res', res)
+      const data = await res.json()
+      
+      // ADDING INDEX TO CHOICE
+      const dataIndex = {
+        ...data,
+        index:i
+      }
+      // REMOVING ANY ITEM THAT SHARES AN INDEX
+      const isChosen = fetchData?.chosen_equip?.some(item => item.i === i)
+      // IF YOURE CHANGING YOUR SELECTION FOR THAT CHOICE
+      if(isChosen){
+        setFetchData(prevData => ({
+          ...prevData,
+          chosen_equip:[
+            ...prevData.chosen_equip.filter(x => x.index !== i),
+            dataIndex
+          ]
+        }))
+        console.log('hello')
+      // IF YOU HAVE NOT MADE A PREVIOUS SELECTION FOR THAT CHOICE
+      }else{
+        setFetchData(prevData => ({
+          ...prevData,
+          chosen_equip:[
+            ...prevData.chosen_equip || [],
+            dataIndex
+          ]
+        }))
+      }
+      console.log(fetchData?.chosen_equip)
+    }catch(err){
+      console.error(err)
     }
-    const isChosen = fetchData?.chosen_equip?.some(item => item.index === index)
-    console.log('choiceIndex', choiceIndex, choice)
-    // console.log(fetchData?.chosen_equip.filter(x => x.index !== index))
-    if(isChosen){
-      setFetchData(prevData => ({
-        ...prevData,
-        chosen_equip:[
-          ...prevData.chosen_equip.filter(x => x.index !== index),
-          choiceIndex
-        ]
-      }))
-      console.log('hello')
-    }else{
-      setFetchData(prevData => ({
-        ...prevData,
-        chosen_equip:[
-          ...prevData.chosen_equip || [],
-          choiceIndex
-        ]
-      }))
-    }
-    console.log(choice, e.target)
-    
   }
 
   const choiceFetch = async (url, targetKey) => {
@@ -110,7 +195,7 @@ export default function Equip({ functions }) {
 
                   return (
                     <div key={`2_${i}`} className='equip_options'>
-                      
+                      options_arrray
                       <h4 className='equip_title'>
                         Choose 1
                       </h4>
@@ -123,7 +208,8 @@ export default function Equip({ functions }) {
                                   type='radio'
                                   name={i}
                                   className='optionsArray equipChoice'
-                                  onChange={(e) => {handleChange(e, choice, i)}}/>
+                                  // equipFetch(e, choice, i)
+                                  onChange={(e) => {handleChange(e, choice, option, i); }}/>
                                 <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_${i}_${j}`)}} onMouseOut={handleMouseOut} htmlFor={choice?.of?.name}>{choice.count} {choice?.of?.name}</label>
                                 {/* {console.log(option)} */}
                                 {choice?.prerequisites?.length > 0 ? choice?.prerequisites?.map((prereq, j) =>(
@@ -144,12 +230,13 @@ export default function Equip({ functions }) {
                         }else if(choice.option_type === 'multiple'){
                           return(
                             <div className='equip_option_parent'>
+                              multiple
                             <p className='equip_option' key={`j_${i}_${j}`}>
                               <input
                                     type='radio'
                                     name={i}
                                     className='optionsArray multiple'
-                                    onChange={(e) => {handleChange(e, choice, i)}}/>
+                                    onChange={(e) => {handleChange(e, choice, option, i)}}/>
 
                               {choice.items.map((item, k) => (
                                 <span key={`k_${k}`}>
@@ -183,12 +270,13 @@ export default function Equip({ functions }) {
                             <>
                               {choiceData[`choice${i}_${j}`]?.equipment?.map((item, k) => (
                                 <div className='equip_option_parent'>
+                                  choice
                                 <p className='equip_option' key={`i_j_${i}_${j}_${k}`}>
                                   <input
                                     type='radio'
                                     name={i}
                                     className='optionsArray choice'
-                                    onChange={(e) => {handleChange(e, item, i)}}/>
+                                    onChange={(e) => {handleChange(e, item, option, i)}}/>
                                   <label onMouseOver={(e) => {handleMouseOver(e, `primary_equip_${i}_${j}_${k}`)}} onMouseOut={handleMouseOut} htmlFor={i}>{item.name}</label>
 
                                   {choice?.prerequisites?.length > 0 ? choice?.prerequisites?.map((prereq, j) =>(
@@ -230,7 +318,7 @@ export default function Equip({ functions }) {
                   console.log('choiceData', choiceData)
                   return(
                     <div className='equip_options'>
-                      <h4 className='equip_title'>
+                      choice<h4 className='equip_title'>
                         Choose 1
                       </h4>
                     
