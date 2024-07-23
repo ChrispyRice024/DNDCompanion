@@ -7,7 +7,43 @@ export default function CharDisplay({functions}) {
 	const location = useLocation()
 	const {char} = location.state
 
+	const lvl = 0
 
+	let [spells, setSpells] = useState({})
+	useEffect(() => {
+			const decideSpells = () => {
+				if (char.primary_class.name === 'Paladin') {
+					const spellsForLvl =
+						char.primary_class.level_data[lvl].spellcasting
+
+					Object.entries(spellsForLvl).forEach(([key, value], i) => {
+						console.log(key, value)
+						// if (value > 0) {
+							const spellLvl = key.slice(-1)
+							const spellsOfLvl = `level_${spellLvl}_spells`
+							console.log('spellLvl', spellLvl)
+							console.log('spellsOfLvl', spellsOfLvl)
+							console.log(
+								char.primary_class.spells.level_1_spells
+							)
+							setSpells((prevSpells) => ({
+								...prevSpells,
+								[spellsOfLvl]:
+									char.primary_class.spells[
+										`level_${spellLvl}_spells`
+									]
+							}))
+						// }
+					})
+					console.log('spells', spells)
+				}
+			}
+	}, [])
+
+
+	useEffect(() => {
+		console.log('spells', spells)
+	}, [spells])
 
     const equipment = [...char.chosen_equip]
     console.log('equipment', equipment)
@@ -130,19 +166,35 @@ export default function CharDisplay({functions}) {
 					</div>
 					<div className='char_img'></div>
 				</div>
+				<button
+					onClick={(e) => {
+						e.preventDefault()
+						console.log(char)
+					}}
+				>
+					Character Log
+				</button>
 			</div>
 
 			<div id='char_equip'>
 				{equipment.map((item, i) => (
 					<div className='single_equip'>
-						{item?.equipment_category?.name === 'Weapon' ? (
+						{item?.equipment_category?.name === 'Weapon' ? ( //still other equip types i need to get. must fix the equip component first
 							<div className='char_weapon'>
 								<p>
-                                    {console.log(item.two_handed_damage)}
+									{console.log(item.two_handed_damage)}
 									{item.name} / {item.damage.damage_dice}
 									{item.properties.some(
 										(x) => x.name === 'Versatile'
-									) ? <>({item.two_handed_damage.damage_dice})</>:''}{' '}
+									) ? (
+										<>
+											(
+											{item.two_handed_damage.damage_dice}
+											)
+										</>
+									) : (
+										''
+									)}{' '}
 									{item.damage.damage_type.name}
 								</p>
 								<>
@@ -167,31 +219,89 @@ export default function CharDisplay({functions}) {
 										</>
 									))}
 								</p>
-                                <p>
-                                    {item.cost.quantity} {item.cost.unit} | {item.weight} lbs
-                                </p>
+								<p>
+									{item.cost.quantity} {item.cost.unit} |{' '}
+									{item.weight} lbs
+								</p>
 							</div>
 						) : item.equipment_category.name ===
 						  'Adventuring Gear' ? (
 							<div></div>
 						) : item.equipment_category.name === 'Armor' ? (
 							<div>
-                                {item.name} / {item.armor_class.base} {item.armor_class.dex_bonus ? <></>:''}
-                            </div>
+								{item.name} / {item.armor_class.base}{' '}
+								{item.armor_class.dex_bonus ? <></> : ''}
+							</div>
 						) : (
 							`${item.equipment_category.name}`
 						)}
 					</div>
 				))}
 			</div>
-			<button
-				onClick={(e) => {
-					e.preventDefault()
-					console.log(char)
-				}}
-			>
-				Character Log
-			</button>
+
+			<div id='spell_char_desc'>
+				{char.primary_class?.spellcasting
+					? char.primary_class?.spellcasting?.info.map((desc, i) => ( //might move to spellbook component once i get that up
+							<div className='spell_desc'>
+								<h3>{desc.name}</h3>
+								{desc.desc}
+							</div>
+					  ))
+					: ''}
+			</div>
+			<div id='char_spells'>
+				{char?.primary_class?.spellcasting?.length > 0 ? ( // not sure why i did this. spellcasting isnt even an array, although it does have the casting mod, so keep for future reference
+					<div>
+						{char.primary_class?.chosen_spells.spell_0?.map(
+							(spell, i) => (
+								<div>{spell.name}</div>
+							)
+						)}
+					</div>
+				) : (
+					''
+				)}
+				<div id='char_spells_list'>
+					{char.primary_class.name === 'Paladin' //probably dont need this conditional. should decide if paladin in decideSpells()
+						? Object.keys(spells).map((lvl, i) => {
+							console.log('lvl', lvl)
+							spells[lvl].map((spell, j) => (
+								<div>
+									{spell.name}
+								</div>
+							))
+						})
+					:''}
+
+					{char?.primary_class?.level_data[lvl]?.spellcasting //this displays the spellslots, so i may need to move it
+						? Object.entries(
+								char?.primary_class?.level_data[0]?.spellcasting
+						  ).map(([key, value], i) => {
+								if (value !== 0) {
+									const entries = Object.entries(
+										char.primary_class?.level_data[0]
+											?.spellcasting
+									)
+									const nextValue = entries[i + 1]
+
+									return (
+										<span>
+											<strong style={{color: '#FFD700'}}>
+												{key
+													.replace(/_/g, ' ')
+													.replace(/\b\w/g, (char) =>
+														char.toUpperCase()
+													)}
+											</strong>{' '}
+											({value}){' '}
+											{nextValue[1] !== 0 ? '| ' : ''}
+										</span>
+									)
+								}
+						  })
+						: ''}
+				</div>
+			</div>
 		</div>
 	)
 }

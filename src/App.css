@@ -501,7 +501,7 @@ body{
     background-color:#1E1E1E;
     border-style:inset;
     border-radius:15px;
-    width:30%;
+    width:35%;
 }
 .stat{
     padding:5px;
@@ -588,6 +588,7 @@ body{
     display:flex;
     margin-bottom:10px;
 }
+
 /* SINGLE CHARACTER */
 #single_char{
     border:inset;
@@ -595,14 +596,14 @@ body{
     margin:40px 80px;
     color:white;
     background-color:#2E2E2E;
+    display:flex;
 }
 /* #single_char{
     background-color:#1E1E1E;
 } */
 #char_sheet{
     width:35%;
-    margin:5%;
-    margin-top:15px;
+    margin:15px 0px 10px 2%;
     border:dashed;
     border-radius:15px;
 }
@@ -617,4 +618,38 @@ body{
 }
 .skills_img > .char_img{
     margin-right:10px;
+}
+#char_equip{
+    width:30%;
+    border-style:inset;
+    border-radius:15px;
+    margin:15px 0px 10px 2%;
+}
+#char_equip > div{
+    border:outset;
+    margin:10px;
+    border-radius:15px;
+}
+#char_spells{
+    width:20%;
+    border:groove;
+    padding:10px;
+    border-radius:15px;
+    margin:15px 15px 10px 2%;
+}
+#spell_char_desc{
+    width:30%;
+    border:inset;
+    border-radius:15px;
+    padding:15px;
+    font-size:15px;
+    line-height:1.5;
+    margin:15px 0px 10px 2%;
+}
+.spell_desc > h3{
+    margin:5px;
+}
+.spell_desc{
+    margin:3px;
+    border-bottom:groove;
 }
