@@ -97,6 +97,8 @@ export default function ClassInfo ({ functions }) {
             getPro()
     }, [character.class])
 
+    
+
     return(
         <div>
             {proDivs}

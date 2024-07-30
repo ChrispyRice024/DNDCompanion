@@ -186,6 +186,8 @@ export default function ProInfo ({functions}) {
             primaryPro()
         }
     }, [fetchData, isHovering])
+    
+
 
 //final return statement
     return (

@@ -15,6 +15,43 @@ export default function Class ({functions}) {
     }, [fetchData?.class_list])
     //sets the multiclass logic for the secondary class
     const [multiClassDiv, setMultiClassDiv] = useState()
+
+        const [equipChoiceData, setEquipChoiceData] = useState()
+
+    //Fetching the equip choices 
+    useEffect(() => {
+        let choiceUrls = []
+        console.log(fetchData?.primary_class?.equip?.equip_options)
+        const options = fetchData?.primary_class?.equip?.equip_options
+        // const choice = options.find(obj => obj.)
+        for(let i=0; i < options?.length; i++){
+            
+            if(options[i].from.option_set_type === 'options_array'){
+            
+                for(let j=0; j < options[i]?.from?.options?.length; i++){
+            
+                    const item = options[i]?.from?.options[j]
+                    if(item.option_type === 'multiple'){
+                        for(let k=0; k < item.items.length; i++){
+                            if(item.items[k].option_type === 'choice'){
+                                
+                            }
+                        }
+                        console.log('hello')
+                        choiceUrls.push(item?.choice?.from?.equipment_category?.url)
+                        console.log('choiceUrls', choiceUrls)
+                    }
+                }
+            }
+        }
+        const choiceFetch = async () => {
+            try{
+                const res = await fetch()
+            }catch(err){
+                console.error(err)
+            }
+        }
+    }, [fetchData.primary_class.className])
     
     // const multiClassFetch = async () => {
         
