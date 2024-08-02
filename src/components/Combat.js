@@ -10,6 +10,26 @@ const {fetchData} = functions
 
     useEffect(() => {
 
+        const equipFetch = async () => {
+            const startingEquip = Object.values(fetchData.primary_class.equip.starting_equip)
+            const equip = [...fetchData.chosen_equip]
+            startingEquip.forEach((item, i) => {
+                
+                
+                item.equipment.choose = item.quantity
+                console.log('item combat', item)
+                equip.push(item.equipment)
+                console.log(equip)
+            })
+            console.log('combat equip', equip)
+            console.log('startingEquip', startingEquip)
+            try{
+
+            }catch(err){
+                console.error(err)
+            }
+        }
+        equipFetch()
         const decideAC = async (data) => {
             if(fetchData?.chosen_equip?.length > 0){
 
@@ -17,7 +37,7 @@ const {fetchData} = functions
                         console.log('item', item)
                         if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
                             console.log('light armor')
-                            setBaseAc(parseInt(item.armor_class.base) + parseInt(fetchData.mods.dex))
+                             setBaseAc(parseInt(item.armor_class.base) + parseInt(fetchData.mods.dex))
                             console.log('AC', baseAc)
                         }else if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && item.armor_class.max_bonus > 0 && fetchData?.mods.dex >= 2){
                             console.log('medium armor')
@@ -34,7 +54,7 @@ const {fetchData} = functions
                 console.log('goodbye')
             }
         }
-        decideAC()
+        // decideAC()
     }, [fetchData.chosen_equip, fetchData?.stats?.dex])
     
 
