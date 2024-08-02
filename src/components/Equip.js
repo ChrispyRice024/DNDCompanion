@@ -19,44 +19,89 @@ export default function Equip({ functions }) {
 		setIsHovering(false);
 	};
 
-	const handleMultipleChange = (e, i, choice) => {
+	const handleMultipleChange = (e, i, choice, item) => {
 
-		let items
+		let cReffItem = choice.items.filter(x => x.option_type !== 'choice')
+		let mappedItems = []
+		console.log(item)
+		console.log(choice)
+		// ITEM ONLY EXISTS IF ONE OF THE OPTION_TYPES IS CHOICE
+		if(item){
+			const itemChoice = choice.items.find(x => x.option_type === 'choice')
+			console.log(itemChoice)
+			item.count = itemChoice.choice.choose
+			item.option = i
+			// BY THIS POINT ITEM SHOULD BE COMPLETE
+			console.log(item)
+		}else if(cReffItem.length > 1){
+			cReffItem.map((reffItem, j) => {
+				reffItem.of.option = i
+				reffItem.of.count = reffItem.count
+				mappedItems.push(reffItem.of)
+			})
+		}
+		console.log(mappedItems)
+		// ITEM CARRIES OVER THE NEW VALUES FROM THE IF STATEMENT
+		console.log('item 38', item)
+		console.log(choice)
+		choice.items.map((item, j) => {
+			let selection = []
+
+		})
 
 		choice.items.map((item, j) => {
 			// item.of.count =  
-			items.push(item.of)
+			// items.push(item.of)
 		})
 		
 		console.log(choice)
 
-		let choiceItem = choice.items.filter(x => x.option_type === 'choice')
-		let secondItem = choice.items.filter(x => x.option_type !== 'choice')
+		// let choiceItem = choice.items.filter(x => x.option_type === 'choice')
+		
 
-		secondItem[0].of.option = i
-		secondItem[0].of.count = secondItem[0].count
+		// cReffItem[0].of.option = i
+		// cReffItem[0].of.count = cReffItem[0].count
+
+		// cReffItem[1].of.option = i
+		// cReffItem[1].of.count = cReffItem[1].count
 
 		// item.option = i
 		// item.count = choiceItem[0].choice.choose
 	
 		const isChosen = fetchData?.chosen_equip?.some(item => item.option !== i)
-		if(isChosen){
+		if(isChosen && item){
 
 			setFetchData(prevData => ({
 				...prevData,
 				chosen_equip:[
 					...prevData.chosen_equip.filter(x => x.option !== i),
-					secondItem[0].of,
-					// item
+					...mappedItems,
+					item
 				]
 			}))
-		}else{
+		}else if(isChosen && !item){
+			setFetchData(prevData => ({
+				...prevData,
+				chosen_equip: [
+					...prevData.chosen_equip.filter(x => x.option !== i),
+					...mappedItems
+				]
+			}))
+
+		}else if(!isChosen && item){
 			console.log('not chosen')
 			setFetchData(prevData => ({
 				...prevData,
 				chosen_equip:[
-					secondItem[0].of,
-					// item
+					...mappedItems,
+					item
+				]
+			}))
+		}else if(!isChosen && !item){
+			setFetchData(prevData => ({
+				...prevData,
+				chosen_equip: [
+					...mappedItems
 				]
 			}))
 		}
@@ -221,14 +266,14 @@ export default function Equip({ functions }) {
 																	{console.log(choiceData?.[`choice_${i}_${j}`]?.equipment)}
 																	
 																	{choiceData?.[`choice_${i}_${j}`]?.equipment.map((item, k) => {
-
+																		console.log('multiple with choice', choice)
 																		return(
 																			<p className='equip_option' key={`j_${i}_${j}_${k}`}>
 																				<input
 																					type='radio'
 																					name={i}
 																					className='choice multiple'
-																					onChange={(e) => {handleChange(e, item, i, choice)}}/>
+																					onChange={(e) => {handleMultipleChange(e, i, choice, item)}}/>
 																				<label onMouseOver={(e) => { handleMouseOver(e, `primary_equip_multiple_${i}`) }} onMouseOut={handleMouseOut} htmlFor={i}>
 																					{item.name} and {countedRefItem.of.name} multiple with choice
 																				</label>
