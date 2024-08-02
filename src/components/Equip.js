@@ -9,6 +9,13 @@ export default function Equip({ functions }) {
 
 	const [choiceData, setChoiceData] = useState({})
 
+	useEffect(() => {
+		if(fetchData.equipment){
+			delete fetchData.equipment
+		}
+		console.log(fetchData)
+	}, [])
+
 	const handleMouseOver = (e, key) => {
 		setIsHovering(true);
 		setHoveredKey(key);
@@ -22,6 +29,7 @@ export default function Equip({ functions }) {
 	const handleMultipleChange = (e, i, choice, item) => {
 
 		let cReffItem = choice.items.filter(x => x.option_type !== 'choice')
+		console.log(cReffItem)
 		let mappedItems = []
 		console.log(item)
 		console.log(choice)
@@ -107,9 +115,13 @@ export default function Equip({ functions }) {
 		}
 	}
 
-	const handleChange = (e, item, index, choice, count) => {
-		console.log('choice', item)
+	const handleChange = (e, item, index, choice, quantity) => {
+		// console.log('choice', choice.choose)
+		console.log('item', item)
 
+		const count = quantity || item.count
+		console.log('count 116', count)
+		// console.log(count)
 		// if(!item){
 		// 	let newChoice = []
 		// 	choice.items.map((selection, j) => {
@@ -127,17 +139,17 @@ export default function Equip({ functions }) {
 		// }
 		const choiceIndex = {
 			...item.of || item,
-			index: index,
+			option: index,
 			count:count
 		}
 		console.log('choiceIndex', choiceIndex)
-		const isChosen = fetchData?.chosen_equip?.some(item => item.index === index)
+		const isChosen = fetchData?.chosen_equip?.some(item => item.option === index)
 
 		if (isChosen) {
 			setFetchData(prevData => ({
 				...prevData,
 				chosen_equip: [
-					...prevData.chosen_equip.filter(x => x.index !== index),
+					...prevData.chosen_equip.filter(x => x.option !== index),
 					choiceIndex
 				]
 			}))
@@ -220,6 +232,7 @@ export default function Equip({ functions }) {
 													Choose 1
 												</h4>
 												{option.from.options.map((choice, j) => {
+													console.log(choice)
 													if (choice.option_type === 'counted_reference') {
 														return (
 															<div className='equip_option_parent'>
@@ -266,7 +279,7 @@ export default function Equip({ functions }) {
 																	{console.log(choiceData?.[`choice_${i}_${j}`]?.equipment)}
 																	
 																	{choiceData?.[`choice_${i}_${j}`]?.equipment.map((item, k) => {
-																		console.log('multiple with choice', choice)
+
 																		return(
 																			<p className='equip_option' key={`j_${i}_${j}_${k}`}>
 																				<input
@@ -395,7 +408,7 @@ export default function Equip({ functions }) {
 												<h4 className='equip_title'>
 													Choose 1
 												</h4>
-
+												{console.log(option)}
 												{choiceData?.[`choice${i}`]?.equipment.map((choice, j) => (
 													<div className='equip_option_parent'>
 														<p className='equip_option'>
@@ -404,7 +417,7 @@ export default function Equip({ functions }) {
 																type='radio'
 																name={i}
 																className='equip_cat choice'
-																onChange={(e) => { handleChange(e, undefined, i, choice) }} />
+																onChange={(e) => { handleChange(e, choice, i, undefined, option.choose) }} />
 															<label onMouseOver={(e) => { handleMouseOver(e, `primary_equip_${i}_${j}`) }} onMouseOut={handleMouseOut} htmlFor={i}>{choice?.name} choice</label>
 															{isHovering && hoveredKey === `primary_equip_${i}_${j}` ?
 																<InfoCard

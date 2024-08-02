@@ -11,8 +11,8 @@ function App() {
   const decideAc = (char) => {
     let baseAc = parseInt(10+char.mods.dex)
 
-    if(char?.chosen_equip.length > 0){
-        char?.chosen_equip.map((item, i) => {
+    if(char?.equipment.length > 0){
+        char?.equipment.map((item, i) => {
             console.log(item)
             if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
                 console.log('light armor')

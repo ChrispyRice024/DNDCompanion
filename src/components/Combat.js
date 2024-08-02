@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 
 export default function Combat ({functions}) {
 
-const {fetchData} = functions
+const {fetchData, setFetchData} = functions
 
 
     const [baseAc, setBaseAc] = useState(10 + parseInt(fetchData.mods.dex))
@@ -11,29 +11,55 @@ const {fetchData} = functions
     useEffect(() => {
 
         const equipFetch = async () => {
-            const startingEquip = Object.values(fetchData.primary_class.equip.starting_equip)
+            const startingEquip = fetchData.primary_class.equip.starting_equip
+            console.log(startingEquip)
             const equip = [...fetchData.chosen_equip]
             startingEquip.forEach((item, i) => {
-                
-                
-                item.equipment.choose = item.quantity
+
+                item.equipment.count = item.quantity
                 console.log('item combat', item)
                 equip.push(item.equipment)
-                console.log(equip)
             })
-            console.log('combat equip', equip)
-            console.log('startingEquip', startingEquip)
-            try{
+            let results
+            console.log(equip)
+            try {
+                const fetchUrls = equip.map(async (url) => {
+                    const res = await fetch(`https://dnd5eapi.co${url.url}`)
+                    if (!res) {
+                        console.error(`failed to fetch for ${url.name} at location ${url.url}`)
+                    }
+                    return res.json()
+                })
 
-            }catch(err){
+                results = await Promise.all(fetchUrls)
+
+
+            } catch (err) {
                 console.error(err)
+            } finally {
+                console.log('results', results)
+                const resFinal = results.map(res => {
+                    const count = equip.find((x) => x.name === res.name).count
+
+                    res.count = count
+                })
+                console.log(results)
+                setFetchData(prevData => ({
+                    ...prevData,
+                    equipment: results
+                }))
             }
         }
-        equipFetch()
-        const decideAC = async (data) => {
-            if(fetchData?.chosen_equip?.length > 0){
 
-                    fetchData?.chosen_equip.map((item, i) => {
+        equipFetch()
+    })
+
+    useEffect(() => {
+        
+        const decideAC = async (data) => {
+            if(fetchData?.equipment?.length > 0){
+
+                    fetchData?.equipment.map((item, i) => {
                         console.log('item', item)
                         if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
                             console.log('light armor')
@@ -54,8 +80,8 @@ const {fetchData} = functions
                 console.log('goodbye')
             }
         }
-        // decideAC()
-    }, [fetchData.chosen_equip, fetchData?.stats?.dex])
+        decideAC()
+    }, [fetchData.equipment, fetchData?.stats?.dex])
     
 
     return(

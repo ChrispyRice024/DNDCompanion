@@ -45,7 +45,7 @@ export default function CharDisplay({functions}) {
 		console.log('spells', spells)
 	}, [spells])
 
-    const equipment = [...char.chosen_equip]
+    const equipment = char.equipment
     console.log('equipment', equipment)
 	return (
 		<div id='single_char'>
