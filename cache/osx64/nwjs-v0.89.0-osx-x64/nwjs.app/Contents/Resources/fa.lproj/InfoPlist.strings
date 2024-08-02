@@ -1,9 +1,0 @@
-"Chromium Shortcut" = "‏میان‌بر Chromium";
-CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSBluetoothAlwaysUsageDescription = "‏وقتی Chromium دسترسی داشته باشد، وب‌سایت‌ها می‌توانند مجوز دسترسی درخواست کنند.";
-NSBluetoothPeripheralUsageDescription = "‏وقتی Chromium دسترسی داشته باشد، وب‌سایت‌ها می‌توانند مجوز دسترسی درخواست کنند.";
-NSCameraUsageDescription = "‏وقتی Chromium دسترسی داشته باشد، وب‌سایت‌ها می‌توانند مجوز دسترسی درخواست کنند.";
-NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSLocationUsageDescription = "‏وقتی Chromium دسترسی داشته باشد، وب‌سایت‌ها می‌توانند مجوز دسترسی درخواست کنند.";
-NSMicrophoneUsageDescription = "‏وقتی Chromium دسترسی داشته باشد، وب‌سایت‌ها می‌توانند مجوز دسترسی درخواست کنند.";
-NSWebBrowserPublicKeyCredentialUsageDescription = "‏وقتی Chromium دسترسی داشته باشد، وب‌سایت‌ها می‌توانند مجوز دسترسی درخواست کنند.";

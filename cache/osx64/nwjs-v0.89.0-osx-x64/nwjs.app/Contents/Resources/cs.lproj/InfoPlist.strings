@@ -1,9 +1,0 @@
-"Chromium Shortcut" = "Zkratka prohlížeče Chromium";
-CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSBluetoothAlwaysUsageDescription = "Až bude mít Chromium přístup, budou vás weby moci požádat o přístup.";
-NSBluetoothPeripheralUsageDescription = "Až bude mít Chromium přístup, budou vás weby moci požádat o přístup.";
-NSCameraUsageDescription = "Až bude mít Chromium přístup, budou vás weby moci požádat o přístup.";
-NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSLocationUsageDescription = "Až bude mít Chromium přístup, budou vás weby moci požádat o přístup.";
-NSMicrophoneUsageDescription = "Až bude mít Chromium přístup, budou vás weby moci požádat o přístup.";
-NSWebBrowserPublicKeyCredentialUsageDescription = "Až bude mít Chromium přístup, budou vás weby moci požádat o přístup.";

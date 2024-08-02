@@ -1,9 +1,0 @@
-"Chromium Shortcut" = "Odkaz na Chromium";
-CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSBluetoothAlwaysUsageDescription = "Keď Chromium získa prístup, weby vás budú môcť žiadať o prístup.";
-NSBluetoothPeripheralUsageDescription = "Keď Chromium získa prístup, weby vás budú môcť žiadať o prístup.";
-NSCameraUsageDescription = "Keď Chromium získa prístup, weby vás budú môcť žiadať o prístup.";
-NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSLocationUsageDescription = "Keď Chromium získa prístup, weby vás budú môcť žiadať o prístup.";
-NSMicrophoneUsageDescription = "Keď Chromium získa prístup, weby vás budú môcť žiadať o prístup.";
-NSWebBrowserPublicKeyCredentialUsageDescription = "Keď Chromium získa prístup, weby vás budú môcť žiadať o prístup.";

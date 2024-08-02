@@ -1,9 +1,0 @@
-"Chromium Shortcut" = "Pintasan Chromium";
-CFBundleGetInfoString = "nwjs 126.0.6478.57, Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSBluetoothAlwaysUsageDescription = "Setelah Chromium memiliki akses, situs dapat meminta akses dari Anda.";
-NSBluetoothPeripheralUsageDescription = "Setelah Chromium memiliki akses, situs dapat meminta akses dari Anda.";
-NSCameraUsageDescription = "Setelah Chromium memiliki akses, situs dapat meminta akses dari Anda.";
-NSHumanReadableCopyright = "Copyright 2024 The Chromium Authors, NW.js, Node.js. All rights reserved.";
-NSLocationUsageDescription = "Setelah Chromium memiliki akses, situs dapat meminta akses dari Anda.";
-NSMicrophoneUsageDescription = "Setelah Chromium memiliki akses, situs dapat meminta akses dari Anda.";
-NSWebBrowserPublicKeyCredentialUsageDescription = "Setelah Chromium memiliki akses, situs dapat meminta akses dari Anda.";
