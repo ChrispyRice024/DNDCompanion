@@ -13,7 +13,7 @@
 /out
 
 # caching
-/cache*
+cache/
 
 # misc
 .DS_Store
