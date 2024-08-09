@@ -21,7 +21,7 @@ export default function SavingThrows ({functions}) {
         })
 
         if(isProficient){
-            return statValue
+            return statValue + proBonus
         }else{
             return statValue
         }

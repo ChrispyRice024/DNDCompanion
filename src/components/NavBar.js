@@ -6,7 +6,7 @@ export default function NavBar () {
 
 
     return(
-        <div id='nav_bar'>
+        <div className='nav_bar'>
             <div>
                 <div className='nav_element'>
                     <Link to='/' className='nav_home'>
@@ -18,8 +18,8 @@ export default function NavBar () {
                         <strong>Character Creator</strong>
                     </Link>
                 </div>
-                <div className='nav_element'>
-                </div>
+                {/* <div className='nav_element'>
+                </div> */}
             </div>
         </div>
     )

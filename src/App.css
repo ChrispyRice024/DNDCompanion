@@ -1,6 +1,7 @@
 /* FULL PAGE */
 .App{
     text-align:center;
+    margin-top:35px;
 }
 body{
     background-color: #1E1E1E;
@@ -16,9 +17,22 @@ body{
     justify-content:center;
     position:relative;
 }
-#nav_bar{
+.nav_bar{
     color:white;
+    display:flex;
+    justify-content:center;
+    /* align-items:center; */
+    flex-direction:row;
+    position:fixed;
+    background-color:#1E1E1E;
+    border-radius:15px;
+    text-align:center;
+    top:0;
+    left:0;
+    right:0;
+    /* width:1000px; */
 }
+
 
 /* MISC */
 #name,
@@ -185,6 +199,15 @@ body{
     outline:solid;
     outline-offset:2px;
     margin-bottom:20px;
+}
+.feature_choices{
+    display:flex;
+    justify-content:center;
+    flex-direction:column;
+    border:groove;
+    border-radius:15px;
+    margin:10px;
+    background-color:#159e00;
 }
 /* #classFeatures p{
     border-style:solid;
@@ -597,10 +620,11 @@ body{
     color:white;
     background-color:#2E2E2E;
     display:flex;
+    height:900px;
 }
-/* #single_char{
-    background-color:#1E1E1E;
-} */
+#single_char > ::-webkit-scrollbar{
+    display:none;
+}
 #char_sheet{
     width:35%;
     margin:15px 0px 10px 2%;
@@ -620,10 +644,18 @@ body{
     margin-right:10px;
 }
 #char_equip{
-    width:30%;
-    border-style:inset;
+    /* width:30%; */
+    /* border-style:inset; */
+    /* height:90%; */
     border-radius:15px;
     margin:15px 0px 10px 2%;
+    /* display:flex;
+    flex-direction:column;
+    flex-wrap: */
+    overflow-y:auto;
+}
+#char_equip::-webkit-scrollbar{
+    display:none;
 }
 #char_equip > div{
     border:outset;
@@ -631,11 +663,25 @@ body{
     border-radius:15px;
 }
 #char_spells{
-    width:20%;
-    border:groove;
-    padding:10px;
+    /* width:20%; */
+    /* border:groove; */
+    /* padding:10px; */
+    text-align:center;
     border-radius:15px;
-    margin:15px 15px 10px 2%;
+    margin:35px 0px 0px 0px;
+}
+#char_spell > div{
+    margin:10px;
+    border-radius:15px;
+border:groove;
+}
+#char_features{
+    margin:30px 15px 10px 2%;
+}
+#char_features > div{
+    border-radius:15px;
+    margin:10px;
+    border:groove;
 }
 #spell_char_desc{
     width:30%;
@@ -645,6 +691,7 @@ body{
     font-size:15px;
     line-height:1.5;
     margin:15px 0px 10px 2%;
+    overflow:auto;
 }
 .spell_desc > h3{
     margin:5px;
@@ -652,4 +699,64 @@ body{
 .spell_desc{
     margin:3px;
     border-bottom:groove;
+}
+.single_equip{
+    /* display:flex; */
+}
+.char_nav{
+    width:20px;
+    margin:10px 25px;
+    width:33%;
+    position:relative;
+    top:0;
+    left:0;
+    right:0;
+    
+}
+#char_actions{
+    width:20%;
+    border:groove;
+    padding:0px 10px;
+    position:relative;
+    border-radius:15px;
+    margin:15px 15px 10px 2%;
+    overflow:auto;
+
+}
+.char_bar{
+    border:groove;
+    border-radius:15px;
+    position:fixed;
+    margin-bottom:15px;
+    background-color:#2E2E2E;
+}
+
+.char_single_spell{
+    border:groove;
+    border-radius:15px;
+    margin:10px 0px;
+    padding:10px;
+    text-align:center;
+}
+.char_single_spell > p{
+    margin:5px 0px;
+}
+
+/* .char_single_spell > p::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:50%;
+    width:40px;
+    border-bottom:2px groove white;
+    transform: translate(-50%); 
+} */
+.seperator{
+    border-bottom:groove;
+    width:50%;
+    align-items:center;
+    transform: translate(50%);
+}
+#char_spell_slots > p{
+    margin:10px 0px;
 }

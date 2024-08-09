@@ -48,33 +48,41 @@ export default function Spellcating ({functions}) {
         setIsHovering(false)
         setEvent(null)
         setSpawnCount((prevCount) => prevCount+1)
-
     }
 
-    console.log(fetchData?.primary_class?.level_data[0]?.spellcasting)
-
-    const handleCheck = (e, level) => {
-        const beenChecked = e.target.checked
-        
-        if(beenChecked){
+    const fetchDetails = async (spell, level) => {
+        try{
+            const res = await fetch(`https://dnd5eapi.co${spell.url}`)
+            const data = await res.json()
+            console.log('data', data)
 
             setFetchData(prevData => ({
                 ...prevData,
                 primary_class: {
                     ...prevData.primary_class,
-                    chosen_spells:{
+                    chosen_spells: {
                         ...prevData.primary_class.chosen_spells,
-                        [`spell_${level}`]:[
+                        [`spell_${level}`]: [
                             ...(prevData?.primary_class?.chosen_spells?.[`spell_${level}`] || []),
-                            {
-                                url:e.target.getAttribute('data-url'),
-                                index:e.target.name
-                            }
+                            data
                         ]
                     }
                 }
             }))
-            
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    console.log(fetchData?.primary_class?.level_data[0]?.spellcasting)
+
+    const handleCheck = (e, level, spell) => {
+        const beenChecked = e.target.checked
+        console.log('spell', spell)
+        
+        if(beenChecked){
+
+            fetchDetails(spell, level)    
             
         }else if (!beenChecked){
             console.log(e.target.name)
@@ -169,7 +177,7 @@ console.log('has cantrips', spell)
                                         type='checkbox'
                                         name={spell.index}
                                         className='spells'
-                                        onChange={(e) => {handleCheck(e, spell.level)}}
+                                        onChange={(e) => {handleCheck(e, spell.level, spell)}}
                                         disabled={isChecked ? false : isDisabled}
                                         data-url={spell.url}
                                         />
@@ -210,7 +218,7 @@ console.log('has cantrips', spell)
                                         type='checkbox'
                                         name={spell.index}
                                         className='spells'
-                                        onChange={(e) => {handleCheck(e, spell.level)}}
+                                        onChange={(e) => {handleCheck(e, spell.level, spell)}}
                                         disabled={isChecked ? false : isDisabled}
                                         data-url={spell.url}
                                         />

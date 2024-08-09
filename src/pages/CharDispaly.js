@@ -1,5 +1,11 @@
 import {useState, useEffect} from 'react'
-import {useLocation, useParams} from 'react-router-dom'
+import {useLocation, useParams, Link} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SimpleBar from 'simplebar-react'
+import 'simplebar-react/dist/simplebar.min.css'
+import CharFeatures from '../components/CharFeatures.js'
+import CharSpells from '../components/CharSpells.js'
+import CharEquip from '../components/CharEquip.js'
 
 export default function CharDisplay({functions}) {
 	const {decideAc} = functions
@@ -7,48 +13,45 @@ export default function CharDisplay({functions}) {
 	const location = useLocation()
 	const {char} = location.state
 
-	const lvl = 0
-
-	let [spells, setSpells] = useState({})
-	useEffect(() => {
-			const decideSpells = () => {
-				if (char.primary_class.name === 'Paladin') {
-					const spellsForLvl =
-						char.primary_class.level_data[lvl].spellcasting
-
-					Object.entries(spellsForLvl).forEach(([key, value], i) => {
-						console.log(key, value)
-						// if (value > 0) {
-							const spellLvl = key.slice(-1)
-							const spellsOfLvl = `level_${spellLvl}_spells`
-							console.log('spellLvl', spellLvl)
-							console.log('spellsOfLvl', spellsOfLvl)
-							console.log(
-								char.primary_class.spells.level_1_spells
-							)
-							setSpells((prevSpells) => ({
-								...prevSpells,
-								[spellsOfLvl]:
-									char.primary_class.spells[
-										`level_${spellLvl}_spells`
-									]
-							}))
-						// }
-					})
-					console.log('spells', spells)
-				}
-			}
-	}, [])
+	const [actionPage, setActionPage] = useState('equip')
 
 
-	useEffect(() => {
-		console.log('spells', spells)
-	}, [spells])
+	// function findObjectsWithThreeEntries(obj) {
+	// 	let result = [];
+
+	// 	function traverse(current) {
+	// 		if (typeof current === 'object' && current !== null) {
+	// 			if (Array.isArray(current)) {
+	// 				// If it's an array, recursively check each element
+	// 				current.forEach(element => traverse(element));
+	// 			} else {
+	// 				// Check if the current object has exactly 3 entries
+	// 				if (Object.keys(current).length === 3) {
+	// 					result.push(current);
+	// 				}
+	// 				// Recursively check each property
+	// 				for (let key in current) {
+	// 					if (current.hasOwnProperty(key)) {
+	// 						traverse(current[key]);
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+
+	// 	traverse(obj);
+	// 	console.log('result', result)
+	// 	return result;
+	// }
+
+	// findObjectsWithThreeEntries(char)
+	
 
     const equipment = char.equipment
     console.log('equipment', equipment)
 	return (
 		<div id='single_char'>
+
 			<div id='char_sheet'>
 				<div className='identity'>
 					<div className='race'>{char.race.name}</div>
@@ -176,132 +179,40 @@ export default function CharDisplay({functions}) {
 				</button>
 			</div>
 
-			<div id='char_equip'>
-				{equipment.map((item, i) => (
-					<div className='single_equip'>
-						{item?.equipment_category?.name === 'Weapon' ? ( //still other equip types i need to get. must fix the equip component first
-							<div className='char_weapon'>
-								<p>
-									{console.log(item.two_handed_damage)}
-									{item.name} / {item.damage.damage_dice}
-									{item.properties.some(
-										(x) => x.name === 'Versatile'
-									) ? (
-										<>
-											(
-											{item.two_handed_damage.damage_dice}
-											)
-										</>
-									) : (
-										''
-									)}{' '}
-									{item.damage.damage_type.name}
-								</p>
-								<>
-									{item.desc.map((desc, j) => (
-										<p>{desc}</p>
-									))}
-								</>
-								<p>
-									{item.special.length > 0 ??
-										item.special.map((special, j) => (
-											<>{special}</>
-										))}
-								</p>
-								<p>
-									{item.category_range} ({item.range.normal}
-									ft) |{' '}
-									{item.properties.map((prop, j) => (
-										<>
-											{prop.name}{' '}
-											{item.properties.length > j ??
-												' | '}
-										</>
-									))}
-								</p>
-								<p>
-									{item.cost.quantity} {item.cost.unit} |{' '}
-									{item.weight} lbs
-								</p>
-							</div>
-						) : item.equipment_category.name ===
-						  'Adventuring Gear' ? (
-							<div></div>
-						) : item.equipment_category.name === 'Armor' ? (
-							<div>
-								{item.name} / {item.armor_class.base}{' '}
-								{item.armor_class.dex_bonus ? <></> : ''}
-							</div>
-						) : (
-							`${item.equipment_category.name}`
-						)}
-					</div>
-				))}
-			</div>
+			<div id='char_actions'>
+				<div className='char_bar'>
+					<strong className='char_nav equip' onClick={(e) => { setActionPage('char_equip') }}>Equipment</strong>
+					{char.primary_class.spellcasting ? <strong className='char_nav spells' onClick={(e) => { setActionPage('char_spells') }}>Spells</strong> : ''}
+					<strong className='char_nav features' onClick={(e) => { setActionPage('char_features') }}>Features</strong>
+				</div>
+				<div id={setActionPage}>
 
-			<div id='spell_char_desc'>
-				{char.primary_class?.spellcasting
-					? char.primary_class?.spellcasting?.info.map((desc, i) => ( //might move to spellbook component once i get that up
+					
+					{
+						actionPage === 'char_equip' ?
+							<CharEquip char={char} />
+							: actionPage === 'char_spells' ?
+								<CharSpells char={char} />
+								: actionPage === 'char_features' ?
+									<CharFeatures char={char} /> 
+										: <CharEquip char={char}/>
+					}
+				</div>
+			</div >
+			
+			{char.primary_class.spellcasting ? 
+				<div id='spell_char_desc'>
+					{char.primary_class?.spellcasting
+						? char.primary_class?.spellcasting?.info.map((desc, i) => ( //might move to spellbook component once i get that up
 							<div className='spell_desc'>
 								<h3>{desc.name}</h3>
 								{desc.desc}
 							</div>
-					  ))
-					: ''}
-			</div>
-			<div id='char_spells'>
-				{char?.primary_class?.spellcasting?.length > 0 ? ( // not sure why i did this. spellcasting isnt even an array, although it does have the casting mod, so keep for future reference
-					<div>
-						{char.primary_class?.chosen_spells.spell_0?.map(
-							(spell, i) => (
-								<div>{spell.name}</div>
-							)
-						)}
-					</div>
-				) : (
-					''
-				)}
-				<div id='char_spells_list'>
-					{char.primary_class.name === 'Paladin' //probably dont need this conditional. should decide if paladin in decideSpells()
-						? Object.keys(spells).map((lvl, i) => {
-							console.log('lvl', lvl)
-							spells[lvl].map((spell, j) => (
-								<div>
-									{spell.name}
-								</div>
-							))
-						})
-					:''}
-
-					{char?.primary_class?.level_data[lvl]?.spellcasting //this displays the spellslots, so i may need to move it
-						? Object.entries(
-								char?.primary_class?.level_data[0]?.spellcasting
-						  ).map(([key, value], i) => {
-								if (value !== 0) {
-									const entries = Object.entries(
-										char.primary_class?.level_data[0]
-											?.spellcasting
-									)
-									const nextValue = entries[i + 1]
-
-									return (
-										<span>
-											<strong style={{color: '#FFD700'}}>
-												{key
-													.replace(/_/g, ' ')
-													.replace(/\b\w/g, (char) =>
-														char.toUpperCase()
-													)}
-											</strong>{' '}
-											({value}){' '}
-											{nextValue[1] !== 0 ? '| ' : ''}
-										</span>
-									)
-								}
-						  })
+						))
 						: ''}
 				</div>
-			</div>
+			:''}
+			
 		</div>
 	)
 }

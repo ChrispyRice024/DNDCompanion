@@ -41,18 +41,18 @@ export default function ProInfo ({functions}) {
                                     <p className='class_title'>
                                         <strong>{choice.desc}</strong>
                                     </p>
-                                    {console.log('choice', choice)}
+                             
                                     {choice.from.options.map((option, j) => {
-                                        // {console.log('option', option)}
+                   
                                         const chosenPro = (fetchData?.primary_class?.[`chosen_pro_${i}`])
                                         const max = choice?.choose
-                                        console.log('chosenPro', chosenPro)
+                              
                                         // const isChecked = chosenPro ? chosenPro?.some(obj => obj?.name === option?.item?.name) : false
                                         const isDisabled = chosenPro?.length >= max && !chosenPro?.some(obj => obj?.name === option?.item?.name)
                           
                                         const handleCheck = (e) => {
                                             const beenChecked = e.target.checked
-                                            console.log('beenChecked', beenChecked)
+                           
                                             if(beenChecked){
 
                                                 setFetchData(prevData => ({
@@ -87,7 +87,7 @@ export default function ProInfo ({functions}) {
                                             return(
                                                 <div className='classChoices' key={j}>
                                                     <p>
-                                                        {console.log('option', option)}
+                                                    
                                                     <input
                                                         type={choice.choose === 1 ? 'radio' : 'checkbox'}
                                                         value={option?.item?.name || ''}
@@ -104,11 +104,11 @@ export default function ProInfo ({functions}) {
                                             )
                                         }
                                         if(option.option_type === 'choice'){
-                                            console.log('choiceOption', option)
+                      
                                             return(
                                                 <div id='classChoice2'>
                                                     {option?.choice?.from?.options?.map((item, k) => {
-                                                        console.log(item)
+                                              
 
                                                         const handleRadio = (checked) => {
                                                             if(checked){

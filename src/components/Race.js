@@ -16,12 +16,12 @@ import RaceInfo from './RaceInfo'
                 try{
                     const res = await fetch('https://www.dnd5eapi.co/api/races')
                     const data = await res.json()
-                    console.log('useEffect is running', data)
+              
                     setFetchData(prevData => ({
                         ...prevData,
                         race_list:data.results
                     }))
-                    console.log(fetchData)
+      
                 }catch(err){
                     console.error('Error fetching data: ', err)
                 }
@@ -29,24 +29,12 @@ import RaceInfo from './RaceInfo'
             fetchCall()
         }, [])
 
-        //ONLY SHOWS THE INITIAL STATE
-        console.log('race list', fetchData?.race_list)
-
-        // useEffect(() => {
-        //     setDiv(
-        //         <>
-                    
-        //         </>
-        //     )
-        // }, [fetchData?.race_list])
-
         const verifyInput = (e) => {
             const input = e.target.value
 
             const selected = e.target.options[e.target.selectedIndex]
             const url = selected.getAttribute('data-url')
-            console.log('url', url)
-            
+
             const compare = fetchData?.race_list?.some(element => element.name === input) || fetchData?.race_list?.some(element => element.name.toLowerCase() === input)
 
                 raceFetch(url)
@@ -73,11 +61,7 @@ import RaceInfo from './RaceInfo'
                         </select>
                     </p>
                 :'Loading...'}
-                
-                {/* {div} */}
-                {/* <p>
-                    <button onClick={(e) => {e.preventDefault();console.log('race', fetchData)}}>Race FetchData</button>
-                </p> */}
+            
                 <div style={{display:isHidden}}>
                         <div id='raceInfo'>
                             <RaceInfo functions={{fetchData:fetchData,

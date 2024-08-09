@@ -52,7 +52,7 @@ const {fetchData, setFetchData} = functions
         }
 
         equipFetch()
-    })
+    }, [])
 
     useEffect(() => {
         
@@ -81,7 +81,7 @@ const {fetchData, setFetchData} = functions
             }
         }
         decideAC()
-    }, [fetchData.equipment, fetchData?.stats?.dex])
+    }, [fetchData?.stats?.dex])
     
 
     return(

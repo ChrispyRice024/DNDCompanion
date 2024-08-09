@@ -301,12 +301,6 @@ export default function CharCreator() {
 
   }
 
-  // nw.App.on('file-upload', (fileData, fileName) => {
-
-  //   const base64Data = fileData.replace(/^data:image\/jpeg;base64,/, '')
-  //   const savePath = path.join('./char_img', fileName)
-  // })
-
   const handleImage = (e) => {
     e.preventDefault()
 
@@ -329,40 +323,30 @@ export default function CharCreator() {
 
   }
 
-  const fetchEquip = async () => {
-    let equip = fetchData?.primary_class?.equip.starting_equip.map((item, i) => {
-      return `https://www.dnd5eapi.co${item.equipment.url}`
-    })
-    console.log(equip)
-    try {
-      const urls = await equip.map((url, i) => {
-        return fetch(url)
-      })
-      const res = await Promise.all(urls)
-      console.log('res', res)
-
-      const jsonPromises = await res.map((res, i) => {
-        return res.json()
-      })
-
-      const data = await Promise.all(jsonPromises)
-      console.log('data', data)
-      setFetchData(prevData => ({
-        ...prevData,
-        equip: [
-          ...fetchData.chosen_equip,
-          ...data
-        ]
-      }))
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    fetchEquip()
+    setFetchData(prevData => {
+      const copy = {...prevData}
+
+      if(copy.chosen_equip){
+        delete copy?.chosen_equip
+      }
+      if(copy.class_list){
+        delete copy.class_list
+      }
+      if(copy.race_list){
+        delete copy.race_list
+      }
+      if(copy.isCreatingNewChar){
+        delete copy.isCreatingNewChar
+      }
+
+      console.log(copy)
+      return copy
+    })
+
+    console.log(fetchData)
     fs.readFile('./save.json', 'utf8', (err, data) => {
 
       if (err) {

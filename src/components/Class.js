@@ -51,7 +51,7 @@ export default function Class ({functions}) {
                 console.error(err)
             }
         }
-    }, [fetchData.primary_class.className])
+    }, [fetchData?.primary_class?.className])
     
     // const multiClassFetch = async () => {
         

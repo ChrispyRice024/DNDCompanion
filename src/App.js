@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import SimpleBar from 'simplebar-react'
+import 'simplebar-react/dist/simplebar.min.css'
 import CharCreator from './pages/CharCreator.js'
 import CharacterList from './pages/CharacterList.js'
 import NavBar from './components/NavBar.js'
@@ -36,7 +38,7 @@ function App() {
     <Router>
       <div className="App">
         <div>
-          <NavBar/>
+          <NavBar /> {/* the className of this element is nav_bar */}
         </div>
         <div className="App">
           
