@@ -11,12 +11,12 @@ import CharDisplay from './pages/CharDispaly.js'
 function App() {
 
   const decideAc = (char) => {
-    let baseAc = parseInt(10+char.mods.dex)
+    let baseAc = parseInt(10+char?.mods?.dex)
 
-    if(char?.equipment.length > 0){
-        char?.equipment.map((item, i) => {
+    if(char?.equipment?.length > 0){
+        char?.equipment?.map((item, i) => {
             console.log(item)
-            if(item.equipment_category.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
+            if(item?.equipment_category?.name === 'Armor' && item.armor_class.dex_bonus && !item.armor_class.max_bonus){
                 console.log('light armor')
                 baseAc = (parseInt(item.armor_class.base) + parseInt(char.mods.dex))
                 console.log('AC', baseAc)

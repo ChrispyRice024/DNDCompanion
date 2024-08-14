@@ -329,6 +329,10 @@ export default function CharCreator() {
     setFetchData(prevData => {
       const copy = {...prevData}
 
+      copy.id = Date.now()
+      copy.primary_class.level = 1
+      copy.char_level = 1
+
       if(copy.chosen_equip){
         delete copy?.chosen_equip
       }
@@ -341,43 +345,43 @@ export default function CharCreator() {
       if(copy.isCreatingNewChar){
         delete copy.isCreatingNewChar
       }
-
+      console.log('copy.id', copy.id)
       console.log(copy)
+
+
+      fs.readFile('./save.json', 'utf8', (err, data) => {
+
+        if (err) {
+          console.error(err)
+        } else if (data === '' || data.length === 0) {
+          const charArray = [copy]
+          const charArrayString = JSON.stringify(charArray)
+
+          fs.writeFile('save.json', charArrayString, (err) => {
+            if (err) {
+              console.error(err)
+            } else {
+              console.log('success. array empty on initilization')
+            }
+          })
+        } else {
+          const jsonData = JSON.parse(data)
+          jsonData.push(copy)
+
+          const stringData = JSON.stringify(jsonData)
+
+          fs.writeFile('./save.json', stringData, (err) => {
+            if (err) {
+              console.error(err)
+            } else {
+              console.log('success. array not empty on initilization')
+            }
+          })
+        }
+      })
+      window.location.reload()
       return copy
     })
-
-    console.log(fetchData)
-    fs.readFile('./save.json', 'utf8', (err, data) => {
-
-      if (err) {
-        console.error(err)
-      } else if (data === '' || data.length === 0) {
-        const charArray = [fetchData]
-        const charArrayString = JSON.stringify(charArray)
-
-        fs.appendFile('save.json', charArrayString, (err) => {
-          if (err) {
-            console.error(err)
-          } else {
-            console.log('success. array empty on initilization')
-          }
-        })
-      } else {
-        const jsonData = JSON.parse(data)
-        jsonData.push(fetchData)
-
-        const stringData = JSON.stringify(jsonData)
-
-        fs.writeFile('./save.json', stringData, (err) => {
-          if (err) {
-            console.error(err)
-          } else {
-            console.log('success. array not empty on initilization')
-          }
-        })
-      }
-    })
-    window.location.reload()
   }
 
   return (
@@ -514,6 +518,7 @@ export default function CharCreator() {
                       <input type='file' accept='.jpeg, .jpg, .png, .psd, .raw, .svg' onChange={(e) => { handleImage(e) }} />
                     </p>
                     <p>
+                      <button onClick={(e) => { console.log(fetchData) }}>FetchData</button>
                       <button onCLick={(e) => { handleNewChar(e, 'equip') }}>Equip</button>
                       <button onClick={handleSubmit}>Finish Character</button>
                     </p>

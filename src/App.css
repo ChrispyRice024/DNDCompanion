@@ -601,13 +601,13 @@ body{
 .identity *{
     padding:5px;
 }
-.char_img{
+.char_saves{
     border:inset;
     width:60%;
     margin-left:15px;
     border-radius:15px;
 }
-.skills_img{
+.skills_saves{
     display:flex;
     margin-bottom:10px;
 }
@@ -648,7 +648,7 @@ body{
     /* border-style:inset; */
     /* height:90%; */
     border-radius:15px;
-    margin:15px 0px 10px 2%;
+    margin:35px 0px 10px 2%;
     /* display:flex;
     flex-direction:column;
     flex-wrap: */
@@ -721,7 +721,8 @@ border:groove;
     border-radius:15px;
     margin:15px 15px 10px 2%;
     overflow:auto;
-
+    display:flex;
+    justify-content:center;
 }
 .char_bar{
     border:groove;
@@ -759,4 +760,23 @@ border:groove;
 }
 #char_spell_slots > p{
     margin:10px 0px;
+}
+.char_features{
+    border:groove;
+    border-radius:15px;
+    margin:35px 0px;
+    padding:10px;
+    text-align:center;
+}
+.sub_feature{
+    border-top:dotted;
+    padding:5px;
+}
+#char_desc{
+    border:groove;
+    overflow:auto;
+    border-radius:15px;
+    width:20%;
+    margin:15px 15px 10px 2%;
+    padding:0px 10px; 
 }

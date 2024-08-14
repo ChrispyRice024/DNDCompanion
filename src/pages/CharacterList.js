@@ -1,7 +1,7 @@
 import react from 'react'
 import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
-const fs = require('fs')
+import fs from 'fs'
 
 export default function CharacterList({functions}) {
 	const {decideAc} = functions
@@ -11,9 +11,11 @@ export default function CharacterList({functions}) {
 
 	useEffect(() => {
 		fs.readFile('save.json', 'utf8', (err, data) => {
+			
 			if (err) {
 				console.error(err)
 			} else {
+				console.log(data)
 				setCharacterData(JSON.parse(data))
 			}
 		})
@@ -109,14 +111,14 @@ export default function CharacterList({functions}) {
 						return (
 							<div className='char_footnote'>
 								<Link
-									to={`/char/${char.char_name}`}
-									state={{char}}
+									to={`/char/${char.id}`}
+									state={char.id}
 									style={{
 										textDecoration: 'none',
 										color: 'inherit'
 									}}
 								>
-									<div className='identity'>
+			 						<div className='identity'>
 										<div className='race'>
 											{char.race.name}
 										</div>
