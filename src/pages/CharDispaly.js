@@ -105,7 +105,9 @@ console.log(id)
 				{isLevelingUp ?
 					<LevelUp functions={{
 						char,
-						setIsLevelingUp
+						setIsLevelingUp,
+						charChanges,
+						setCharChanges
 					}} />
 				:''}
 				<div id='char_sheet'>
