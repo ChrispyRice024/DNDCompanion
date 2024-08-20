@@ -8,6 +8,7 @@ export default function LevelUp ({functions}) {
 
     const [leveledChar, setLeveledChar] = useState(char)
 
+
     // HIT DIE
     const [hitDieRoll, setHitDieRoll] = useState(0)
     const [dieRollValue, setDieRollValue] = useState({
@@ -18,6 +19,16 @@ export default function LevelUp ({functions}) {
     const [classListData, setClassListData] = useState([])
     const [newFeatures, setNewFeatures] = useState()
     const [newLevels, setNewLevels] = useState()
+    const [selectedClass, setSelectedClass] = useState()
+    // classListData.find(x => x.name === char.primary_class) || leveledChar.primary_class
+    const [isMulticlassing, setIsMulticlassing] = useState(false)
+    const [leveledClass, setLeveledClass] = useState(char.primary_class)
+    const [fetchData, setFetchData] = useState()
+
+
+    // USING THE CURRENT LEVEL TO FIND THE INDEX, THEN UPDATING THE LEVEL AT THE END OF LEVEL UP
+    const levelData = selectedClass?.level_data?.[leveledClass.level]
+    // .level_data[leveledClass.level]
 
     // INITIAL FETCH
     useEffect(() => {
@@ -27,7 +38,7 @@ export default function LevelUp ({functions}) {
                 //FETCHING CLASS LIST
                 const res = await fetch(`https://www.dnd5eapi.co/api/classes`)
                 const data = await res.json()
-                // console.log(data)
+
                 //FETCHING CLASS DETAILS
                 const multiRes = await data.results.map(async endpoint => {
                     const res = await fetch(`https://www.dnd5eapi.co${endpoint.url}`)
@@ -42,8 +53,6 @@ export default function LevelUp ({functions}) {
                     const levelData = await levelFetch.json()
 
                     item.level_data = levelData
-                    console.log('item', item)
-                    console.log('levelData', levelData)
 
                     //FETCH THE FEATURES FOR EACH LEVEL
                     for (const level of item.level_data){
@@ -54,11 +63,9 @@ export default function LevelUp ({functions}) {
                         }))
 
                     }
-                    console.log('new item', item)
                     return item
                 })
                 const levelData = await Promise.all(levelRes)
-                console.log(multiData)
                 const spellRes = multiData.map( async (item) => {
                     if(item.spells){
                         const res = await fetch(`https://www.dnd5eapi.co${item.spells}`)
@@ -68,11 +75,9 @@ export default function LevelUp ({functions}) {
                         return data
                     }
                 })
-                console.log('multiData spells', multiData)
+
                 setClassListData(multiData)
                 
-                // testFetch(data.results)
-                // console.log(dataFetch(data.results, setClassListData))
                 return multiData
             } catch (err) {
                 console.error(err)
@@ -91,7 +96,6 @@ export default function LevelUp ({functions}) {
                 return data
             })
             const multiData = await Promise.all(multiRes)
-            console.log('multiData', multiData)
             if(setData){
                 setData(multiData)
             }
@@ -99,36 +103,16 @@ export default function LevelUp ({functions}) {
             
         }else{
             // SINGLE PROMISE
+            // return
+            const res = await fetch(`https://www.dnd5eapi.co${url}`)
+            const data = await res.json()
+
+            setData(prevData => ({
+                ...prevData,
+                [targetKey]:data
+            }))
         }
     }
-
-
-
-
-
-    // LEVEL DATA
-    const classLevel = (charClass, lvl) => {
-        if (charClass === char.primary_class.name) {
-            const levelData = char.primary_class.level_data[lvl]
-            // console.log('levelData', char.primary_class.level_data[lvl])
-            // setLevel(dataFetch(levelData.features))
-            // dataFetch(levelData.features, setLeveledChar)
-            return levelData
-        } else {
-            // Object.keys(char.secondary_classes)
-        }
-    }
-    console.log(leveledChar)
-
-    // const setLevel = (data) => {
-    //     setLeveledChar(prevChar => {
-    //         const copy = {...prevChar}
-    //         console.log(copy)
-    //         const classLvl = copy.primary_class.level
-    //         copy.primary_class.level_data[classLvl].features = data
-    //         console.log('copy', copy)
-    //     })
-    // }
 
     // PREREQUISITES
     useEffect(() => {
@@ -137,8 +121,6 @@ export default function LevelUp ({functions}) {
             classListData.map((item, i) => {
                 let text
                 text = item.name
-                // console.log(item.multi_classing)
-
                 text += ' - Requires '
 
                 if (item?.multi_classing?.prerequisites) {
@@ -147,7 +129,6 @@ export default function LevelUp ({functions}) {
                     }).join(' AND ')
                 } else if (item?.multi_classing?.prerequisite_options) {
                     text += item.multi_classing.prerequisite_options.from.options.map((option, j) => {
-                        // console.log('option', option.ability_score.name)
                         return `${option.minimum_score} ${option.ability_score.name}`
                     }).join(' OR ')
                 } else {
@@ -155,9 +136,8 @@ export default function LevelUp ({functions}) {
                 }
                 list.push(text)
             })
-            // console.log('text', list)
+
             setClassList(list)
-            // console.log(classList)
         }
         prerequisiteSetter()
     }, [classListData])
@@ -176,45 +156,38 @@ export default function LevelUp ({functions}) {
     // DIE ROLLER
     const reRoll = (die, targetKey) => {
         const rollDie = Math.floor(Math.random() * (die) + 1)
-        // console.log('rollDie', rollDie)
         setDieRollValue(prevValue => ({
             ...prevValue,
             [targetKey]: rollDie
         }))
     }
 
-
-
-
     // MULTICLASSING
     // FETCHING THE LEVEL DATA FOR THE NEW CLASS
     const fetchLevels = async (url) => {
-        // console.log('url', url)
         try{
             const res = await fetch(`https://www.dnd5eapi.co${url}`)
             const data = await res.json()
-            console.log(data)
         }catch(err){
             console.error(err)
         }
     }
-    
+
     const [prevMulticlassValue, setPrevMulticlassValue] = useState()
-    const [isMulticlassing, setIsMulticlassing] = useState(false)
-    const [leveledClass, setLeveledClass] = useState(char.primary_class)
 
     const handleMultiClass = (e) => {
         
         // dataFetch(e.target)
         const newClass = classListData.find(x => e.target.value.includes(x.name))
-        // console.log(newClass)
+        newClass.level = 0
+
+        setSelectedClass(newClass)
         setLeveledClass(newClass)
-        console.log('newClass', newClass)
+
         
         // DURRING *THIS* LEVEL UP YOU HAVE ONLY SELECTED A MULTICLASS ONCE
         // WITHOUT CHANGING YOUR SELECTION
         if (leveledChar.multiclass && prevMulticlassValue === undefined){
-            // console.log('if undefined')
             setLeveledChar(prevChar => ({
                 ...prevChar,
                 multiclass: [
@@ -224,7 +197,6 @@ export default function LevelUp ({functions}) {
             }))
         //DURRING *THIS* LEVEL UP YOU HAVE CHANGED THE SELECTION OF YOUR NEW CLASS
         } else if (leveledChar.multiclass && prevMulticlassValue && !char?.multiclass?.some(x => x.name === newClass.name) && !newClass.name === char.primary_class.name){
-            // console.log('else if')
             setLeveledChar(prevChar => ({
                 ...prevChar,
                 multiclass:[
@@ -235,11 +207,8 @@ export default function LevelUp ({functions}) {
         
         //WHEN YOU TRY TO SELECT A CLASS YOU ALREADY HAVE
         }else if(newClass.name === char.primary_class.name || char?.multiclass?.some(x => x.name === newClass.name)){
-            // console.log('included')
         // THIS IS YOUR FIRST MULTICLASS
         }else{
-            // console.log('else')
-            // console.log('leveledChar', leveledChar)
             setLeveledChar(prevChar => ({
                 ...prevChar,
                 multiclass:[
@@ -251,7 +220,6 @@ export default function LevelUp ({functions}) {
         fetchLevels(newClass.class_levels)
         // SAVES THE PREVIOUS VALUE OF THE MULTICLASS INPUT
         setPrevMulticlassValue(classListData.find(x => e.target.value.includes(x.name)))
-        // console.log('newClass', newClass)
     }
 
     const multiClassSpellSlotsTable = {
@@ -477,45 +445,230 @@ export default function LevelUp ({functions}) {
         }
 
     }
+    const [selectedChoices, setSelectedChoices] = useState([])
+    useEffect(() => {
+        // console.log(fetchData)
+        console.log('leveledChar', leveledChar)
+        console.log('selectedChoices', selectedChoices)
+    }, [fetchData, leveledChar])
+
+     
+    const handleOptionChange = (e, choice) => {
+        const beenChecked = e.target.checked
+        
+        if(beenChecked){
+            setSelectedChoices(prevSelection => ([
+                ...prevSelection,
+                choice
+            ]))
+            setLeveledChar(prevChar => ({
+                ...prevChar,
+                multiclass:prevChar.multiclass.map(x => 
+                    x.name === choice.class.name
+                    ? {...x, features:x.features
+                        ? [...x.features, choice]
+                        :[choice]
+                    }:x
+                )
+            }))
+        }else if(!beenChecked){
+            setSelectedChoices(prevSelection => (
+                prevSelection.filter(x => x.name !== choice.name)
+            ))
+            setLeveledChar(prevChar => ({
+                ...prevChar,
+                multiclass:prevChar.multiclass.map(x =>
+                    x.name === choice.class.name
+                    ?{...x, features:x.features.filter(x => x.name !== choice.name)}
+                    :[choice]
+                )
+            }))
+        }
+        
+    }
 
     const renderFeatures = () => {
-        // {
-        //     !isMulticlassing && newFeatures ?
-        //     <div>
-        //         {Object.keys(newFeatures).map(([key, value], i) => {
-
-        //             return (
-        //                 <p>
-        //                     {key} {value}
-        //                 </p>
-        //             )
-        //         })}
-        //     </div>
-        //     : 'no features'
-        // }
-        if(!isMulticlassing && newFeatures){
-            return(
+        const features = levelData?.features
+        // console.log(levelData)
+        return(
+            <div>
+                <h3>Class Features</h3>
                 <div>
-                    {Object.keys(newFeatures).map(([key, value], i) => (
-                        <div>
-                            {key} {value}
+                    {features?.map((feature, i) => (
+                        <div key={i}>
+                            <p>
+                                {feature?.name}
+                            </p>
+                            {feature?.prerequisites?.length > 0 ?
+                                <div>
+                                    {feature?.prerequisites?.map((pre, j) => {
+                                        if(pre.type === 'ability_score'){
+                                            return (
+                                                <p>
+                                                    Requires {pre?.minimum_score} {pre?.ability_score?.name} {feature.prerequisites.length = j+1 ? ' | ':''}
+                                                </p>
+                                            )
+                                        }
+                                        
+                                    })}
+                                </div>
+                            :''}
+                            <div>
+                                {feature?.desc?.map(desc => (
+                                    <p>
+                                        {desc}
+                                    </p>
+                                ))}
+                            </div>
+                            <div>
+                                {feature?.feature_specific?.subfeature_options ? 
+                                    <div className='subfeature_option_parent'>
+                                        <h3>Choose {feature?.feature_specific?.subfeature_options.choose} of the following</h3>
+                                        {feature?.feature_specific?.subfeature_options?.from?.options?.map((option, i) => {
+
+                                            if(!fetchData?.[`subfeature_option_${i}`]){
+                                                dataFetch(option.item.url, setFetchData, `subfeature_option_${i}`)
+                                            }
+                                            const choice = fetchData?.[`subfeature_option_${i}`]
+
+                                            const chosenFeatures = leveledChar.multiclass.features
+                                            const max = feature?.feature_specific?.subfeature_options.choose
+                                            console.log('choice', max)
+                                            const isFalse = selectedChoices.length >= max
+                                            const isDisabled = selectedChoices.length >= max && !selectedChoices?.some(obj => obj?.name === choice?.name)
+                                            console.log(selectedChoices, isFalse, isDisabled, choice)
+                                            return(
+                                                <div className='subfeature_option'>
+                                                    <p>
+                                                        <input
+                                                            type='checkbox'
+                                                            name='subfeature'
+                                                            disabled={isDisabled}
+                                                            onChange={(e) => {
+                                                                handleOptionChange(e, choice)
+                                                            }}/>
+                                                        <strong>{choice?.name}</strong>
+                                                    </p>
+                                                    <p>
+                                                        {choice?.desc?.map(desc => (
+                                                            <p>
+                                                                {desc}
+                                                            </p>
+                                                        ))}
+                                                    </p>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                :'hello'}
+                            </div>
                         </div>
                     ))}
+                    
+                </div>
+            </div>
+        )
+    }
+
+    // const renderProficiences = () => {
+    //     const proficiencies = 
+    // }
+
+    const renderClassSpecifics = () => {
+
+        const classSpecifics = levelData?.class_specific
+        if(selectedClass?.name === 'Rogue'){
+            return(
+                <div>
+                    <p>
+                        <strong>Sneak Attack: </strong>{classSpecifics?.sneak_attack?.dice_count}d{classSpecifics?.sneak_attack?.dice_value}
+                    </p>
+                </div>
+            )
+        }else if(selectedClass?.name === 'Druid'){
+            return(
+                <div>
+                    {classSpecifics?.wild_shape_max_cr > 1 ? 
+                        <div>
+                            <p>
+                                <strong>Max Wild-Shape CR: </strong> {levelData?.class_specific?.wild_shape_max_cr}
+                            </p>
+                            <p>
+                                {classSpecifics?.wild_shape_swim ? 'Can Swim in Wild-Shape' : 'Cannot Swim in Wild-Shape'}
+                            </p>
+                            <p>
+                                {classSpecifics?.wild_shape_fly ? 'Can Fly in Wild-Shape' : 'Cannot Fly in Wild-Shape'}
+                            </p>
+                        </div>
+                    : ''}
+                </div>
+            )
+        }else if(selectedClass?.name === 'Monk'){
+            return(
+                <div>
+                    {classSpecifics?.ki_points > 0 ? 
+                        <p>
+                            <strong>Ki Points: </strong> {classSpecifics?.ki_points}
+                        </p>
+                    :''}
+                    {classSpecifics?.unarmored_movement > 0 ? 
+                    <p>
+                            <strong>Unarmored Movement: </strong> {classSpecifics?.unarmored_movement}
+                    </p>:''}
+                    <p>
+                        <strong>Martial-Arts Die: </strong> {classSpecifics?.martial_arts_die?.dice_count}d{classSpecifics?.martial_arts_die?.dive_value}
+                    </p>
+                </div>
+            )
+        }else if(selectedClass?.name === 'Sorcerer'){
+            return(
+                <div>
+                    {classSpecifics?.creating_spell_slots?.map((item, i) =>{
+
+                        return(
+                            <p>
+                                {item?.sorcery_point_cost} Sorcery Points to Create 1 Level {item?.spell_slot_level} Spell Slot
+                            </p>
+                        )
+                    })}
+                    {classSpecifics?.metamagic_known > 0 ? 
+                        <p>
+                            <strong>Meta-Magic Known: </strong>{classSpecifics?.metamagic_known}
+                        </p>
+                    :''}
+                    {classSpecifics?.sorcery_points > 0 ? 
+                        <p>
+                            <strong>Sorcery Points: </strong> {classSpecifics?.sorcery_points}
+                        </p>
+                    :''}
                 </div>
             )
         }else{
+
             return(
                 <div>
-                    no features
+                    {classSpecifics ? 
+                        <div>
+                            {Object.entries(classSpecifics)?.map(([key, value], i) => {
+                                const newKey = key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
+                                return (
+                                    <div>
+                                        {value > 0 ?
+                                            <p>
+                                                <strong>{newKey}: </strong> {value}
+                                            </p> : ''}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    :''}
                 </div>
             )
         }
     }
 
-    // console.log(char)
-
     return(
-        <div>
+        <div id='level_up'>
             {/* HEALTH AND HIT DICE */}
             <div>
                 {/* YOU GAIN A NEW HIT DIE EACH CHARACTER LEVEL */}
@@ -547,7 +700,7 @@ export default function LevelUp ({functions}) {
                 {isMulticlassing ? 
                     <p>
                         <select name='multiClass' onChange={(e) => { handleMultiClass(e) }} id='multi_class_list' defaultValue=''>
-                            <option value='' disabled>Multi-Class?</option>
+                            <option value='' disabled>{classList.length > 0 ? 'Multi-Class?' : 'Loading Classes'}</option>
                             {classList.map((item, i) => {
 
                                 return (
@@ -562,27 +715,17 @@ export default function LevelUp ({functions}) {
                 
             </div>
             {/* CLASS LEVELS */}
+            <p>
+                {/* <strong>Adding A {levelData?.class?.name} Level</strong> */}
+            </p>
             <div>
             {/* CLASS SPECIFICS */}
-                {!isMulticlassing ? 
                     <div>
-                        {/* {console.log(Object.entries(classLevel(char.primary_class.name, char.primary_class.level).class_specific).map(([key, value], i) => {console.log(key, value)}))} */}
-                        {Object.entries(classLevel(char.primary_class.name, char.primary_class.level).class_specific).map(([key, value], i) => {
-                            const newKey = key.replace(/_/g, ' ').slice(' ').replace(/\b\w/g, (char) => char.toUpperCase())
-
-                            return(
-                                <p>
-                                    {newKey} | {value}
-                                </p>
-                            )
-                        })}
+                        {renderClassSpecifics()}
                     </div>
-                :''}
-            </div>
-            <div>
-                {/* {dataFetch(classLevel(char.primary_class.name, char.primary_class.level).class_specific.features, setNewFeatures)} */}
-
-            {/* {setTimeout(renderFeatures(), 5000)} */}
+                    <div>
+                        {renderFeatures()}
+                    </div>
             </div>
         </div>
     )

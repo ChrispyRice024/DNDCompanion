@@ -4,8 +4,6 @@ export default function Class ({functions}) {
 
     const {fetchData, setFetchData, classFetchCall} = functions
 
-    const [multiClassData, setMultiClassData] = useState([])
-
     const [optionDiv, setOptionDiv] = useState()
 
 
@@ -15,8 +13,6 @@ export default function Class ({functions}) {
     }, [fetchData?.class_list])
     //sets the multiclass logic for the secondary class
     const [multiClassDiv, setMultiClassDiv] = useState()
-
-        const [equipChoiceData, setEquipChoiceData] = useState()
 
     //Fetching the equip choices 
     useEffect(() => {
@@ -52,53 +48,6 @@ export default function Class ({functions}) {
             }
         }
     }, [fetchData?.primary_class?.className])
-    
-    // const multiClassFetch = async () => {
-        
-    //         try{
-    //             const res = await Promise.all(fetchData.class_list.results.map(url=> fetch(`https://www.dnd5eapi.co${url.url}`)))
-    //             const data = await Promise.all(res.map(res => res.json()))
-
-    //             const updates = data.map((entry) => ({
-    //                 name:entry.name,
-    //                 multi_classing:entry.multi_classing,
-    //                 url:entry.url
-    //             }))
-
-    //             setMultiClassData(updates)
-                
-    //             setMultiClassDiv(
-    //                 <div>
-    //                     <label htmlFor='secondaryClass'>Secondary Class</label>
-    //                         <input name='secondaryClass' list='secondaryClassList' autoComplete='on' onChange={verifyInput} id='secondaryClass' className='class' placeholder='Class' />
-    //                         <datalist id='secondaryClassList'>
-    //                             {
-    //                                 updates?.map((classData, i) => {
-    //                                     let text = classData.name
-
-    //                                         text += ' -Requires'
-    //                                         text += classData?.multi_classing?.prerequisites?.map(req => {
-    //                                             return`${req.minimum_score} ${req.ability_score.name}`
-    //                                         }).join(', ')
-
-    //                                     return(
-    //                                         <option key={`s_${i}`}
-    //                                             data-url={classData.url}
-    //                                             value={classData.name}>
-    //                                                 {text}
-    //                                             </option>
-    //                                     )
-    //                                 })
-    //                             }
-    //                         </datalist>
-    //                     </div>
-    //             )
-
-    //             classFetchCall()
-    //         }catch(err){
-    //             console.error(err)
-    //         }
-    // }
 
     const verifyInput = (e) => {
         const input = e.target.value

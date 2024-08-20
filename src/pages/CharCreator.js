@@ -186,8 +186,14 @@ export default function CharCreator() {
       const data = await res.json()
 
       // fetch spell data for the class
-      if (targetKey === 'primary_class' || targetKey === 'secondary_class') {
-
+      if (targetKey === 'primary_class') {
+        if(data.features){
+          data.features.forEach( async feature => {
+            const featureRes = await fetch(`https://www.dnd5eapi.co${feature.url}`)
+            const featureData = await featureRes.json()
+          })
+        }
+        console.log('data', data)
         // FETCH THE SPELL DATA
         let spells = {}
         if (data.spells) {
