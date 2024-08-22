@@ -219,11 +219,26 @@ export default function CharCreator() {
 
         let features = []
 
-        for (let item of levelsData[0]?.features) {
-          const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
-          const featureData = await featureRes.json()
-          features.push(featureData)
-        }
+        const updatedLevels = await Promise.all(levelsData.map(async level => {
+          const features = await Promise.all(level.features.map( async item => {
+            const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
+            return await featureRes.json()
+          }))
+          return {...level, features}
+        }))
+        console.log(updatedLevels)
+        // levelsData.forEach( async level => {
+        //   for (let item of level.features){
+        //     const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
+        //     const featureData = await featureRes.json()
+        //   }
+        // })
+        // console.log(levelsData)
+        // for (let item of levelsData[0]?.features) {
+        //   // const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
+        //   // const featureData = await featureRes.json()
+        //   features.push(featureData)
+        // }
 
         setFetchData(prevData => ({
           ...prevData,
@@ -245,7 +260,7 @@ export default function CharCreator() {
             saving_throws: data.saving_throws,
             spellcasting: data.spellcasting,
             spells: spells,
-            level_data: levelsData,
+            level_data: updatedLevels,
             url: data.url,
             spells_url: data.spells
           }

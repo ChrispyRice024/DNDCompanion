@@ -40,13 +40,6 @@ export default function Class ({functions}) {
                 }
             }
         }
-        const choiceFetch = async () => {
-            try{
-                const res = await fetch()
-            }catch(err){
-                console.error(err)
-            }
-        }
     }, [fetchData?.primary_class?.className])
 
     const verifyInput = (e) => {

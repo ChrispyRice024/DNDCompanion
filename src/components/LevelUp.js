@@ -17,18 +17,12 @@ export default function LevelUp ({functions}) {
     // CLASS lIST AND CLASS DATA
     const [classList, setClassList] = useState([])
     const [classListData, setClassListData] = useState([])
-    const [newFeatures, setNewFeatures] = useState()
-    const [newLevels, setNewLevels] = useState()
-    const [selectedClass, setSelectedClass] = useState()
-    // classListData.find(x => x.name === char.primary_class) || leveledChar.primary_class
+    const [selectedClass, setSelectedClass] = useState(char.primary_class)
     const [isMulticlassing, setIsMulticlassing] = useState(false)
-    const [leveledClass, setLeveledClass] = useState(char.primary_class)
     const [fetchData, setFetchData] = useState()
 
-
     // USING THE CURRENT LEVEL TO FIND THE INDEX, THEN UPDATING THE LEVEL AT THE END OF LEVEL UP
-    const levelData = selectedClass?.level_data?.[leveledClass.level]
-    // .level_data[leveledClass.level]
+    const levelData = selectedClass?.level_data?.[selectedClass.level]
 
     // INITIAL FETCH
     useEffect(() => {
@@ -103,7 +97,6 @@ export default function LevelUp ({functions}) {
             
         }else{
             // SINGLE PROMISE
-            // return
             const res = await fetch(`https://www.dnd5eapi.co${url}`)
             const data = await res.json()
 
@@ -160,6 +153,11 @@ export default function LevelUp ({functions}) {
             ...prevValue,
             [targetKey]: rollDie
         }))
+        setLeveledChar(prevChar => ({
+            ...prevChar,
+            hp:parseInt(char.hp + rollDie + char.mods.con)
+        }))
+        console.log(leveledChar)
     }
 
     // MULTICLASSING
@@ -182,9 +180,7 @@ export default function LevelUp ({functions}) {
         newClass.level = 0
 
         setSelectedClass(newClass)
-        setLeveledClass(newClass)
 
-        
         // DURRING *THIS* LEVEL UP YOU HAVE ONLY SELECTED A MULTICLASS ONCE
         // WITHOUT CHANGING YOUR SELECTION
         if (leveledChar.multiclass && prevMulticlassValue === undefined){
@@ -197,6 +193,7 @@ export default function LevelUp ({functions}) {
             }))
         //DURRING *THIS* LEVEL UP YOU HAVE CHANGED THE SELECTION OF YOUR NEW CLASS
         } else if (leveledChar.multiclass && prevMulticlassValue && !char?.multiclass?.some(x => x.name === newClass.name) && !newClass.name === char.primary_class.name){
+            console.log('changed')
             setLeveledChar(prevChar => ({
                 ...prevChar,
                 multiclass:[
@@ -207,8 +204,10 @@ export default function LevelUp ({functions}) {
         
         //WHEN YOU TRY TO SELECT A CLASS YOU ALREADY HAVE
         }else if(newClass.name === char.primary_class.name || char?.multiclass?.some(x => x.name === newClass.name)){
-        // THIS IS YOUR FIRST MULTICLASS
+            console.log('already have')
+            // THIS IS YOUR FIRST MULTICLASS
         }else{
+            console.log('first')
             setLeveledChar(prevChar => ({
                 ...prevChar,
                 multiclass:[
@@ -463,7 +462,7 @@ export default function LevelUp ({functions}) {
             ]))
             setLeveledChar(prevChar => ({
                 ...prevChar,
-                multiclass:prevChar.multiclass.map(x => 
+                multiclass:prevChar?.multiclass?.map(x => 
                     x.name === choice.class.name
                     ? {...x, features:x.features
                         ? [...x.features, choice]
@@ -477,7 +476,7 @@ export default function LevelUp ({functions}) {
             ))
             setLeveledChar(prevChar => ({
                 ...prevChar,
-                multiclass:prevChar.multiclass.map(x =>
+                multiclass:prevChar?.multiclass?.map(x =>
                     x.name === choice.class.name
                     ?{...x, features:x.features.filter(x => x.name !== choice.name)}
                     :[choice]
@@ -491,16 +490,16 @@ export default function LevelUp ({functions}) {
         const features = levelData?.features
         // console.log(levelData)
         return(
-            <div>
-                <h3>Class Features</h3>
+            <div id='features_lvl'>
+                <h3>{selectedClass.name} Class Features</h3>
                 <div>
                     {features?.map((feature, i) => (
                         <div key={i}>
-                            <p>
-                                {feature?.name}
+                            <p className='feature_title_lvl'>
+                                <strong>{feature?.name}</strong>
                             </p>
                             {feature?.prerequisites?.length > 0 ?
-                                <div>
+                                <div className='feature_pre_lvl'>
                                     {feature?.prerequisites?.map((pre, j) => {
                                         if(pre.type === 'ability_score'){
                                             return (
@@ -515,14 +514,14 @@ export default function LevelUp ({functions}) {
                             :''}
                             <div>
                                 {feature?.desc?.map(desc => (
-                                    <p>
+                                    <p className='feature_desc_lvl'>
                                         {desc}
                                     </p>
                                 ))}
                             </div>
                             <div>
                                 {feature?.feature_specific?.subfeature_options ? 
-                                    <div className='subfeature_option_parent'>
+                                    <div className='subfeature_option_parent_lvl'>
                                         <h3>Choose {feature?.feature_specific?.subfeature_options.choose} of the following</h3>
                                         {feature?.feature_specific?.subfeature_options?.from?.options?.map((option, i) => {
 
@@ -531,7 +530,7 @@ export default function LevelUp ({functions}) {
                                             }
                                             const choice = fetchData?.[`subfeature_option_${i}`]
 
-                                            const chosenFeatures = leveledChar.multiclass.features
+                                            const chosenFeatures = selectedClass?.features
                                             const max = feature?.feature_specific?.subfeature_options.choose
                                             console.log('choice', max)
                                             const isFalse = selectedChoices.length >= max
@@ -560,7 +559,7 @@ export default function LevelUp ({functions}) {
                                             )
                                         })}
                                     </div>
-                                :'hello'}
+                                :''}
                             </div>
                         </div>
                     ))}
@@ -570,9 +569,25 @@ export default function LevelUp ({functions}) {
         )
     }
 
-    // const renderProficiences = () => {
-    //     const proficiencies = 
-    // }
+    const renderProficiencies = () => {
+        const proficiencies = selectedClass.multi_classing.proficiencies
+        if(isMulticlassing && selectedClass.name !== char.primary_class.name){
+            return (
+                <div>
+                    <strong>Class Proficiencies</strong>
+                    {proficiencies.map(pro => {
+
+                        return (
+                            <p>
+                                {pro.name}
+                            </p>
+                        )
+                    })}
+                </div>
+            )
+        }
+        
+    }
 
     const renderClassSpecifics = () => {
 
@@ -667,6 +682,104 @@ export default function LevelUp ({functions}) {
         }
     }
 
+    const [boostedStats, setBoostedStats] = useState([])
+    const abilityBonus = () => {
+        if(levelData?.ability_score_bonuses === 0 && selectedClass.level_data?.[selectedClass?.level - 1]?.ability_score_bonuses === levelData?.ability_score_bonuses) {
+            // const bonus = levelData?.ability_score_bonuses
+            const bonus = 2
+            const numberOfUps = Object.values(boostedStats).reduce((sum, stat) => sum + (stat.value), 0);
+            console.log('numberOfUps', numberOfUps)
+            const handleStatUp = (e, stat, direction) => {
+                if(numberOfUps < bonus && direction === 'up'){
+                    console.log(direction)
+                    setBoostedStats(prevStats => ({
+                        ...prevStats,
+                        [stat]:{
+                            value:parseInt(prevStats[stat] + 1 || 1)
+                        }
+                    }))
+                    setLeveledChar(prevChar => ({
+                        ...prevChar,
+                        stats:{
+                            ...prevChar.stats,
+                            [stat]:parseInt(prevChar.stats[stat] + 1)
+                        },
+                        mods:{
+                            ...prevChar.mods,
+                            [stat]: parseInt(((prevChar.stats[stat] + 1) - 10)/2)
+                        }
+                    }))
+                }if(numberOfUps <= bonus && numberOfUps <= 0 && direction === 'down' && boostedStats[stat]){
+                    console.log(direction)
+                    setBoostedStats(prevStats => ({
+                        ...prevStats,
+                        [stat]:{
+                            value:(prevStats[stat]?.value || 0) - 1
+                        }
+                    }))
+                    setLeveledChar(prevChar => ({
+                        ...prevChar,
+                        stats: {
+                            ...prevChar.stats,
+                            [stat]: parseInt(prevChar.stats[stat] - 1)
+                        },
+                        mods: {
+                            ...prevChar.mods,
+                            [stat]: parseInt(Math.floor((prevChar.stats[stat] - 1 - 10) / 2))
+                        }
+                    }))
+                }
+            } 
+            return(
+                <div id='stats_lvl'>
+                    {/* PLACEHOLDER FOR OPTIONAL FEATS */}
+                    <p>
+                        <strong>STR: </strong> {leveledChar?.stats?.str}
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'str', 'up')}}>↑</button>
+                        <button
+                            onClick={(e) => {handleStatUp(e, 'str', 'down')}}>↓</button>
+                        <strong>INT:</strong> {leveledChar?.stats?.int}
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'int', 'up') }}>↑</button>
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'int', 'down') }}>↓</button>
+                    </p>
+                    <p>
+                        <strong>DEX: </strong> {leveledChar?.stats?.dex}
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'dex', 'up') }}>↑</button>
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'dex', 'down') }}>↓</button>
+                        <strong>WIS: </strong>{leveledChar?.stats?.wis}
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'wis', 'up') }}>↑</button>
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'wis', 'down') }}>↓</button>
+                    </p>
+                    <p>
+                        <strong>CON: </strong>{leveledChar?.stats?.con}
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'con', 'up') }}>↑</button>
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'con', 'down') }}>↓</button>
+                        <strong>CHA: </strong>{leveledChar?.stats?.cha}
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'cha', 'up') }}>↑</button>
+                        <button
+                            onClick={(e) => { handleStatUp(e, 'cha', 'down') }}>↓</button>
+                    </p>
+                </div>
+            )
+        }else {
+            console.log('goodbye')
+        }
+    }
+    
+
+    const handleSubmit = () => {
+        console.log(leveledChar)
+    }
     return(
         <div id='level_up'>
             {/* HEALTH AND HIT DICE */}
@@ -716,17 +829,27 @@ export default function LevelUp ({functions}) {
             </div>
             {/* CLASS LEVELS */}
             <p>
-                {/* <strong>Adding A {levelData?.class?.name} Level</strong> */}
+                {abilityBonus()}
             </p>
-            <div>
-            {/* CLASS SPECIFICS */}
-                    <div>
+            <div id='bottom_block_lvl'>
+                <p>
+                    <strong>Proficiency Bonus: </strong>{levelData.prof_bonus}
+                </p>
+                <p>
+                    {renderProficiencies()}
+                </p>
+                <div id='features_specifics_lvl'>
+                    {/* CLASS SPECIFICS */}
+                    <div id='specifics_parent'>
                         {renderClassSpecifics()}
                     </div>
-                    <div>
+                    <div id='features_parent'>
                         {renderFeatures()}
                     </div>
+                </div>
             </div>
+            
+            <button onClick={handleSubmit}>Finish Level Up</button>
         </div>
     )
 }
