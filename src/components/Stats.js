@@ -68,12 +68,7 @@ export default function Stats({functions}) {
             for(const skillName in updatedSkills){
                 const skill = updatedSkills[skillName]
                 const statMod = fetchData?.mods[`${skill.stat}`]
-                // const racialMod = fetchData?.race?.ability_bonuses?.find(obj => obj.ability_score?.index === skill.stat.toLowerCase())
-                // console.log('racialMod', racialMod)
-                // console.log(statMod)
-                // const isPro = character.proficiencies[`${skill.stat}Pro`]
-                
-                // if()
+
                 const proficiencyBonus =  0
 
                 updatedSkills[skillName] = {

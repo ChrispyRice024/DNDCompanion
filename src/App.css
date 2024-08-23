@@ -796,12 +796,20 @@ border:groove;
     justify-content:center;
     align-items:center;
 }#level_up{
-    position:fixed;
+    /* position:fixed; */
 }
 #bottom_block_lvl{
     display:flex;
     flex-direction:column;
     justify-content:center;
+}
+#skills_stats_lvl{
+    display:grid;
+    
+    /* flex-direction:column; */
+}
+#stats_skills_lvl > div{
+    margin:10px;
 }
 #features_lvl{
     border:groove;
@@ -817,6 +825,22 @@ border:groove;
 }
 #stats_lvl strong{
     padding-left:10px;
+}
+#stats_parent_lvl{
+    margin-top:100px;
+    grid-column-start:1;
+    grid-column-end:1;
+}
+#skills_parent_lvl{
+    padding:10px;
+    margin:10px;
+    grid-column-start:2;
+    grid-column-start:2;
+    border:groove;
+    border-radius:15px;
+}
+#health_lvl{
+    margin-top:150px;
 }
 .feature_title_lvl{
 

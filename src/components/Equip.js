@@ -49,32 +49,8 @@ export default function Equip({ functions }) {
 			})
 		}
 		console.log(mappedItems)
-		// ITEM CARRIES OVER THE NEW VALUES FROM THE IF STATEMENT
-		console.log('item 38', item)
-		console.log(choice)
-		choice.items.map((item, j) => {
-			let selection = []
-
-		})
-
-		choice.items.map((item, j) => {
-			// item.of.count =  
-			// items.push(item.of)
-		})
 		
 		console.log(choice)
-
-		// let choiceItem = choice.items.filter(x => x.option_type === 'choice')
-		
-
-		// cReffItem[0].of.option = i
-		// cReffItem[0].of.count = cReffItem[0].count
-
-		// cReffItem[1].of.option = i
-		// cReffItem[1].of.count = cReffItem[1].count
-
-		// item.option = i
-		// item.count = choiceItem[0].choice.choose
 	
 		const isChosen = fetchData?.chosen_equip?.some(item => item.option !== i)
 		if(isChosen && item){
@@ -116,27 +92,9 @@ export default function Equip({ functions }) {
 	}
 
 	const handleChange = (e, item, index, choice, quantity) => {
-		// console.log('choice', choice.choose)
-		console.log('item', item)
 
 		const count = quantity || item.count
-		console.log('count 116', count)
-		// console.log(count)
-		// if(!item){
-		// 	let newChoice = []
-		// 	choice.items.map((selection, j) => {
 
-		// 		const newSelection = {
-		// 			...selection.of,
-		// 			count:selection.count
-		// 		}
-		// 		console.log('newSelection', newSelection)
-		// 		newChoice = [
-		// 			...newChoice,
-
-		// 		]
-		// 	})
-		// }
 		const choiceIndex = {
 			...item.of || item,
 			option: index,
@@ -243,7 +201,6 @@ export default function Equip({ functions }) {
 																		className='optionsArray equipChoice'
 																		onChange={(e) => { handleChange(e, choice, i) }} />
 																	<label onMouseOver={(e) => { handleMouseOver(e, `primary_equip_${i}_${j}`) }} onMouseOut={handleMouseOut} htmlFor={choice?.of?.name}>{choice.count} {choice?.of?.name}</label>
-																	{/* {console.log(option)} */}
 																	{choice?.prerequisites?.length > 0 ? choice?.prerequisites?.map((prereq, j) => (
 																		<span>
 																			<strong style={{ color: '#8B0000' }}>{' '}Requires {prereq?.type.charAt(0).toUpperCase() + prereq?.type.slice(1)} in {prereq?.proficiency?.name} counted ref</strong>
@@ -294,15 +251,6 @@ export default function Equip({ functions }) {
 																			</p>
 																		)
 																	})}
-																	
-																	{/* {choiceData?.[`choice_${i}_${j}`]?.equipment?.forEach((item, k) => {
-																		console.log(item)
-																		return (
-																			<p>
-																				{item.name}
-																			</p>
-																		) 
-																	})} */}
 																</div>
 															)
 														

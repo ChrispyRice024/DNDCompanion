@@ -22,24 +22,6 @@
             }
         }) : undefined
 
-        // const featuresList = () => {
-        //     if(features){
-        //         features.forEach((feature, i) => {
-        //             if (feature.feature_specific.subfeature_options){
-        //                 feature.forEach((url, j) => {
-        //                     setUrlList(prevList => ([
-        //                         ...prevList[i],
-        //                         ...prevList
-
-        //                     ]))
-        //                 })
-        //             }
-        //         })
-        //     }
-        // }
-
-        // console.log('featuresList outside useeffect', featuresList)
-        // console.log(featuresList.constructor === Array, featuresList)
         useEffect(() => {
             console.log('hello')
             
@@ -82,8 +64,6 @@
                             primary_class: {
                                 ...prevData.primary_class,
                                 features: [
-                                    // ...prevData.primary_class.features,
-
                                     ...fetchData.primary_class.features.map((feature, i) =>
                                         index === i ?
                                             {
@@ -113,90 +93,11 @@
                     }
 
                 }
-                
 
-                // if (featuresList.length > 0) {
                     featuresList?.map((options, i) => {
-                        // if (options.constructor === Array) {
                             optionsFetch(options, i)
-                        // }
                     })
-                // }
-                // if (featuresList?.length > 0){
-                //     featuresList?.map(async (feature, i) => {
-                //         if (feature?.length > 0) {
-
-                //             try {
-
-                //                 const fetchUrls = await feature.map(async (url, j) => {
-                //                     console.log('url', url)
-                //                     const res = await fetch(`https://dnd5eapi.co${url}`)
-                //                     if (!res.ok) {
-                //                         console.error(`failed to fetch for ${url}`)
-                //                     }
-                //                     // const data = await res.json()
-                //                     // console.log('data in fetch', data)
-                //                     return await res.json()
-                //                     // stateSetter(data, `features[${i}]`)
-
-                //                 })
-                //                 setResults(fetchUrls)
-                //                 console.log('fetchUrls', Promise.all(fetchUrls))
-                //                 if (!results) {
-                //                     console.error(`failed to fetch`)
-                //                 }
-                //                 setFeatureData(prevData =>({
-                //                     ...prevData,
-                //                     [`feature_set_${i}`]:Promise.all(fetchUrls)
-                //                 }))
-                                
-                //                 // setFetchData(prevData => ({
-                //                 //     ...prevData,
-                //                 //     primary_class: {
-                //                 //         ...fetchData.primary_class,
-                //                 //         features:
-                //                 //             prevData.primary_class.features.map((feature, k) =>
-                //                 //                 k === i ? {
-                //                 //                     ...feature,
-                //                 //                     feature_specific: {
-                //                 //                         options: [...results]
-                //                 //                     }
-
-                //                 //                 } : feature.leecher)
-
-                //                 //     }
-                //                 // }))
-
-                //             } catch (err) {
-                //                 console.error(err)
-                //             } finally {
-                //                 console.log('results finally', fetchData.primary_class.features[0].feature_specific.options)
-
-                //             }
-                //         }else{
-                //             console.error(`there was an error${i}`, featuresList)
-                //         }
-                //     })
                 }
-                
-
-                // const stateSetter = (data, targetIndex) => {
-                //     setFetchData(prevData => ({
-                //         ...prevData,
-                //         primary_race:{
-                //             ...prevData.primary_race,
-                //             [targetIndex]:{
-                //                 ...fetchData.primary_class[targetIndex],
-                //                 feature_specific:{
-                //                     ...fetchData.primary_class[targetIndex].feature_specific,
-                //                     options:[data]
-                //                 }
-                //             }
-                //         }
-                //     }))
-                // }
-            
-console.log(fetchData?.primary_class?.name)
 
             if(fetchData.primary_class?.name){
                 featureFetch()
@@ -223,11 +124,6 @@ console.log(fetchData?.primary_class?.name)
                 }))
             }
         }
-
-        // useEffect(() => {
-        //     console.log('results', results)
-        //     console.log('featureData', featureData)
-        // }, [results, featureData])
 
         const isHidden = fetchData?.primary_class?.name ? '' : 'none'
 

@@ -107,7 +107,8 @@ console.log(id)
 						char,
 						setIsLevelingUp,
 						charChanges,
-						setCharChanges
+						setCharChanges,
+						decideAc
 					}} />
 				:''}
 				<div id='char_sheet'>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 export default function LevelUp ({functions}) {
 
-    const {char, setIsLevelingUp, charChanges} = functions
+    const {char, setIsLevelingUp, charChanges, decideAc} = functions
 
     const [leveledChar, setLeveledChar] = useState(char)
 
@@ -445,12 +445,6 @@ export default function LevelUp ({functions}) {
 
     }
     const [selectedChoices, setSelectedChoices] = useState([])
-    useEffect(() => {
-        // console.log(fetchData)
-        console.log('leveledChar', leveledChar)
-        console.log('selectedChoices', selectedChoices)
-    }, [fetchData, leveledChar])
-
      
     const handleOptionChange = (e, choice) => {
         const beenChecked = e.target.checked
@@ -683,107 +677,99 @@ export default function LevelUp ({functions}) {
     }
 
     const [boostedStats, setBoostedStats] = useState([])
-    const abilityBonus = () => {
-        if(levelData?.ability_score_bonuses === 0 && selectedClass.level_data?.[selectedClass?.level - 1]?.ability_score_bonuses === levelData?.ability_score_bonuses) {
-            // const bonus = levelData?.ability_score_bonuses
-            const bonus = 2
-            const numberOfUps = Object.values(boostedStats).reduce((sum, stat) => sum + (stat.value), 0);
-            console.log('numberOfUps', numberOfUps)
-            const handleStatUp = (e, stat, direction) => {
-                if(numberOfUps < bonus && direction === 'up'){
-                    console.log(direction)
-                    setBoostedStats(prevStats => ({
-                        ...prevStats,
-                        [stat]:{
-                            value:parseInt(prevStats[stat] + 1 || 1)
-                        }
-                    }))
-                    setLeveledChar(prevChar => ({
-                        ...prevChar,
-                        stats:{
-                            ...prevChar.stats,
-                            [stat]:parseInt(prevChar.stats[stat] + 1)
-                        },
-                        mods:{
-                            ...prevChar.mods,
-                            [stat]: parseInt(((prevChar.stats[stat] + 1) - 10)/2)
-                        }
-                    }))
-                }if(numberOfUps <= bonus && numberOfUps <= 0 && direction === 'down' && boostedStats[stat]){
-                    console.log(direction)
-                    setBoostedStats(prevStats => ({
-                        ...prevStats,
-                        [stat]:{
-                            value:(prevStats[stat]?.value || 0) - 1
-                        }
-                    }))
-                    setLeveledChar(prevChar => ({
-                        ...prevChar,
-                        stats: {
-                            ...prevChar.stats,
-                            [stat]: parseInt(prevChar.stats[stat] - 1)
-                        },
-                        mods: {
-                            ...prevChar.mods,
-                            [stat]: parseInt(Math.floor((prevChar.stats[stat] - 1 - 10) / 2))
-                        }
-                    }))
+
+    const abilityScoreBonus = () => {
+        const {mods:leveledMods, stats:leveledStats} = leveledChar
+
+        const bonus = 2
+        // KEEPING TRACK OF HOW MANY TIMES A STAT HAS BEEN RAISED
+        const numberOfUps = Object.values(boostedStats).reduce((sum, stat) => sum + (stat?.value || 0), 0)
+        
+        const handleStatChange = (stat, direction) => {
+            // KEEPING TRACK OF THE CURRENT STAT VALUE
+            const currentStatValue = leveledStats[stat] || 0
+            // KEEPING TRACK OF HOW MANY TIMES A STAT HAS BEEN RAISED
+            const boostedStatValue = boostedStats[stat]?.value || 0
+
+            if(direction === 'up' && numberOfUps < bonus){
+                updateStat(stat, boostedStatValue + 1, currentStatValue + 1)
+            }else if(direction === 'down' && boostedStatValue > 0){
+                updateStat(stat, boostedStatValue - 1, currentStatValue - 1)
+            }else{
+                console.log('nothing')
+            }
+
+        }
+
+        const updateStat = (stat, newBoostedStat, newStatValue) => {
+            setBoostedStats(prevStats => ({
+                ...prevStats,
+                [stat]:{value:newBoostedStat}
+            }))
+
+            setLeveledChar(prevChar => ({
+                ...prevChar,
+                stats:{
+                    ...prevChar.stats,
+                    [stat]:newStatValue
+                },
+                mods:{
+                    ...prevChar.mods,
+                    [stat]:Math.floor((newStatValue - 10) / 2)
                 }
-            } 
-            return(
-                <div id='stats_lvl'>
-                    {/* PLACEHOLDER FOR OPTIONAL FEATS */}
-                    <p>
-                        <strong>STR: </strong> {leveledChar?.stats?.str}
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'str', 'up')}}>↑</button>
-                        <button
-                            onClick={(e) => {handleStatUp(e, 'str', 'down')}}>↓</button>
-                        <strong>INT:</strong> {leveledChar?.stats?.int}
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'int', 'up') }}>↑</button>
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'int', 'down') }}>↓</button>
-                    </p>
-                    <p>
-                        <strong>DEX: </strong> {leveledChar?.stats?.dex}
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'dex', 'up') }}>↑</button>
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'dex', 'down') }}>↓</button>
-                        <strong>WIS: </strong>{leveledChar?.stats?.wis}
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'wis', 'up') }}>↑</button>
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'wis', 'down') }}>↓</button>
-                    </p>
-                    <p>
-                        <strong>CON: </strong>{leveledChar?.stats?.con}
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'con', 'up') }}>↑</button>
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'con', 'down') }}>↓</button>
-                        <strong>CHA: </strong>{leveledChar?.stats?.cha}
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'cha', 'up') }}>↑</button>
-                        <button
-                            onClick={(e) => { handleStatUp(e, 'cha', 'down') }}>↓</button>
-                    </p>
+            }))
+        }
+
+        const renderInputs = (statLabel, stat) => (
+            <>
+                <strong>{statLabel}: </strong> {leveledStats?.[stat]}
+                <button onClick={() => { handleStatChange(stat, 'up') }} >↑</button>
+                <button onClick={() => { handleStatChange(stat, 'down') }}>↓</button>
+            </>
+        )
+
+        return(
+            <div id='stats_lvl'>
+                <p>
+                    {renderInputs('STR', 'str')}
+                    {renderInputs('INT', 'int')}
+                </p>
+                <p>
+                    {renderInputs('DEX', 'dex')}
+                    {renderInputs('WIS', 'wis')}
+                </p>
+                <p>
+                    {renderInputs('CON', 'con')}
+                    {renderInputs('CHA', 'cha')}
+                </p>
+            </div>
+        )
+    }
+
+    const handleSkills = () => {
+        const skills = Object.entries(leveledChar.skills)
+        console.log('skills', skills)
+
+        return (
+            skills.map(([skill, details], i) => {
+                details.value = leveledChar.mods[details.stat]
+            return (
+                <div id='skills_lvl'>
+                    <strong>{skill}: </strong> {details.value}
                 </div>
             )
-        }else {
-            console.log('goodbye')
-        }
+        }))
     }
-    
+
 
     const handleSubmit = () => {
         console.log(leveledChar)
     }
+    
     return(
         <div id='level_up'>
             {/* HEALTH AND HIT DICE */}
-            <div>
+            <div id='health_lvl'>
                 {/* YOU GAIN A NEW HIT DIE EACH CHARACTER LEVEL */}
                 <strong>Roll Your Hit-Die or Use the Built-in Roller</strong>
                 <p>
@@ -828,13 +814,20 @@ export default function LevelUp ({functions}) {
                 
             </div>
             {/* CLASS LEVELS */}
-            <p>
-                {abilityBonus()}
-            </p>
+            <div id='skills_stats_lvl'>
+                {/* {abilityBonus()} */}
+                <div id='stats_parent_lvl'>
+                    {abilityScoreBonus()}
+                    <p>
+                        <strong>Proficiency Bonus: </strong>{levelData.prof_bonus}{' | '}
+                        <strong>AC: </strong>{decideAc(leveledChar)}
+                    </p>
+                </div>
+                <div id='skills_parent_lvl'>
+                    {handleSkills()}
+                </div>
+            </div>
             <div id='bottom_block_lvl'>
-                <p>
-                    <strong>Proficiency Bonus: </strong>{levelData.prof_bonus}
-                </p>
                 <p>
                     {renderProficiencies()}
                 </p>

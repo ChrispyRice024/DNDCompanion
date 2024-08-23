@@ -60,18 +60,6 @@ export default function Backstory ({functions}) {
         }
     }, [charChanges])
 
-    // {
-    //     "backstory": "was orphaned at a young age. while living on the streets, he got into a fight club and became very good at it. has beern fighting ever since.",
-    //         "traits": "",
-    //             "ideals": "dont dish out what you cant take in return.",
-    //                 "bonds": "has a childhood friend that he hasnt seen in years. maybe theyre still out there somewhere.",
-    //                     "flaws": "to quick to start a fight if he thinks someone is being out of line",
-    //                         "gender": "Male",
-    //                             "apperance": "Short and thin with lean muscles",
-    //                                 "height": "5'8",
-    //                                     "personality_traits": "tough, but also caring. he activley looks for bad people so he can fight them"
-    // }
-
     const handleSubmit = (e) => {
         e.preventDefault()
 

@@ -226,19 +226,6 @@ export default function CharCreator() {
           }))
           return {...level, features}
         }))
-        console.log(updatedLevels)
-        // levelsData.forEach( async level => {
-        //   for (let item of level.features){
-        //     const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
-        //     const featureData = await featureRes.json()
-        //   }
-        // })
-        // console.log(levelsData)
-        // for (let item of levelsData[0]?.features) {
-        //   // const featureRes = await fetch(`https://www.dnd5eapi.co${item.url}`)
-        //   // const featureData = await featureRes.json()
-        //   features.push(featureData)
-        // }
 
         setFetchData(prevData => ({
           ...prevData,
@@ -325,23 +312,8 @@ export default function CharCreator() {
   const handleImage = (e) => {
     e.preventDefault()
 
-    // fs.readFile(e.target.value, (err, data) => {
-    //   if(err){
-    //     console.error(err)
-    //     return
-    //   }
-
-    //   const reader = new FileReader()
-
-    //   const base64Img = data.toString('base64')
-    //   console.log('base64Img', base64Img)
-    //   setFetchData(prevData => ({
-    //     ...prevData,
-    //     char_img:base64Img
-    //   }))
-    // })
-
-
+    //MOVE THE IMAGE INTO THE ASSETS FOLDER AND 
+    //LINK TO THE LOCATION ON THE CHARACTER MODEL
   }
 
   const handleSubmit = (e) => {
